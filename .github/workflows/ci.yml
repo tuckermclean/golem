@@ -1,0 +1,35 @@
+name: ci
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  determinism:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+
+      # The architecture's superpower: everything is a golden-file test.
+      # tests/worldgen.test.js asserts e.g. seed "plagueis" room 0,0 is an
+      # archive containing a brass stylus — forever. A diff here means the
+      # world function changed and every existing save/seed just broke:
+      # that is a MAJOR version bump, not a bugfix.
+      - name: worldgen golden seeds
+        run: node --test tests/worldgen.test.js
+
+      # Replay a recorded event log through the reducer; assert the final
+      # delta map is byte-identical to the committed golden snapshot.
+      - name: reducer replay
+        run: node --test tests/replay.test.js
+
+  validator:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: grounding validator unit tests
+        run: python -m pytest tools/test_validate.py -q

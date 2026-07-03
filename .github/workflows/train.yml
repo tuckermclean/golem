@@ -1,0 +1,97 @@
+name: train
+on:
+  workflow_dispatch:
+    inputs:
+      corpus_tag:
+        description: "corpus version to train on, e.g. c7"
+        required: true
+      model_version:
+        description: "semver for the candidate model, e.g. 0.4.0"
+        required: true
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: train          # one GPU at a time; this is a hobby, not a lab
+  cancel-in-progress: false
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    timeout-minutes: 900
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.GHA_ROLE_ARN }}
+          aws-region: us-west-2
+
+      # ── Ephemeral GPU pattern: the runner has no GPU; it conjures one. ──
+      - name: launch spot trainer
+        id: launch
+        run: |
+          RUN_ID="run-${{ inputs.model_version }}-${GITHUB_SHA::7}"
+          echo "run_id=$RUN_ID" >> $GITHUB_OUTPUT
+          aws ec2 run-instances \
+            --launch-template LaunchTemplateId=${{ vars.TRAINER_LT_ID }} \
+            --tag-specifications "ResourceType=instance,Tags=[{Key=golem-run,Value=$RUN_ID}]" \
+            --query 'Instances[0].InstanceId' --output text > instance-id.txt
+          echo "instance_id=$(cat instance-id.txt)" >> $GITHUB_OUTPUT
+
+      - name: wait for checkpoint (DONE marker in S3)
+        run: |
+          PREFIX="checkpoints/${{ steps.launch.outputs.run_id }}"
+          for i in $(seq 1 180); do
+            if aws s3 ls "s3://${{ vars.MODELS_BUCKET }}/$PREFIX/DONE" >/dev/null 2>&1; then
+              echo "checkpoint ready"; exit 0
+            fi
+            sleep 300
+          done
+          echo "trainer never finished"; exit 1
+
+      - name: ensure instance is dead        # spot may already be gone; fine
+        if: always()
+        run: |
+          aws ec2 terminate-instances \
+            --instance-ids ${{ steps.launch.outputs.instance_id }} || true
+
+      # ── EVAL GATE: the model is rejected by CI like any broken build. ──
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: fetch candidate + held-out set
+        run: |
+          aws s3 sync s3://${{ vars.MODELS_BUCKET }}/checkpoints/${{ steps.launch.outputs.run_id }}/ work/ckpt/
+          aws s3 cp   s3://${{ vars.CORPUS_BUCKET }}/heldout/${{ inputs.corpus_tag }}.jsonl work/heldout.jsonl
+
+      - name: eval gate
+        run: |
+          pip install -r train/requirements-eval.txt
+          python tools/eval.py \
+            --model work/ckpt/model.pt \
+            --heldout work/heldout.jsonl \
+            --max-grounding-violation-rate 0.01 \
+            --require-exits-format 1.0 \
+            --max-ppl-regression-vs s3://${{ vars.MODELS_BUCKET }}/released/LATEST.metrics.json \
+            --report $GITHUB_STEP_SUMMARY
+          # exits nonzero on any gate failure -> nothing is published
+
+      # ── Package: quantize, content-address, publish immutably. ──
+      - name: quantize to int8
+        run: python train/quantize.py --in work/ckpt/model.pt --out work/golem.bin
+
+      - name: publish model artifact
+        run: |
+          SHA8=$(sha256sum work/golem.bin | cut -c1-8)
+          NAME="golem-v${{ inputs.model_version }}-$SHA8.bin"
+          # released weights are immutable: fail rather than overwrite
+          if aws s3 ls "s3://${{ vars.MODELS_BUCKET }}/released/weights/$NAME"; then
+            echo "artifact already exists — refusing to overwrite"; exit 1
+          fi
+          aws s3 cp work/golem.bin \
+            "s3://${{ vars.MODELS_BUCKET }}/released/weights/$NAME" \
+            --cache-control "public, max-age=31536000, immutable"
+          aws s3 cp work/ckpt/metrics.json \
+            "s3://${{ vars.MODELS_BUCKET }}/released/LATEST.metrics.json"
+          echo "published $NAME" >> $GITHUB_STEP_SUMMARY

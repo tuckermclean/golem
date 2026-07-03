@@ -1,0 +1,70 @@
+# CLAUDE.md — golem-grid
+
+Read SPEC.md for the full design. This file is the constitution and the
+working practices. When in doubt, the doctrine decides.
+
+## Doctrine
+
+1. The world is a pure function of the seed. Never stored, never sent.
+   Any change to worldgen output is a MAJOR version bump — golden-seed
+   tests exist to make this impossible to do by accident.
+2. The delta map is the only mutable truth. Save = seed + event log.
+3. One host sequences events; `applyEvent()` is deterministic and
+   identity-blind; clients are bit-identical by construction.
+4. The golem is a mouth. Control string in, prose out. It never decides,
+   never remembers, never touches state, and cannot lie about the world.
+   The only integration point is the ▶GOLEM-PLUG◀ seam.
+5. Prose sampling is seeded by (seed, eventSeq): identical hallucination
+   on every client; prose never crosses the wire.
+6. Determinism for what the world knows; private host entropy for what it
+   hides (traitor identity, when built).
+7. All meaning is authored upstream (tables, grammar, corpus). The
+   generator is a librarian, not a writer. Improve tables before
+   improving the generator.
+8. Hallucination is a failing test. Models are eval-gated build
+   artifacts: immutable, content-addressed, pinned by manifest.
+
+## Design tests for any new feature
+
+- Oatmeal: does it create a decision, a consequence, or a retellable
+  story? More world alone is rejected.
+- Teachability: if one line of golem prose can't teach the rule, the rule
+  is too complex.
+- Gauge redundancy: resources must be felt in the world, not only shown
+  in a meter.
+- One key, one meaning: no context-sensitive controls. Arrows are feet,
+  always, capture-phase.
+
+## Working practices
+
+- `make test` before and after everything. Golden files are exact-match;
+  if a golden diff is intended, it is a versioning event — say so.
+- Pure logic (rng, worldgen, reducer, solver) lives in shared modules
+  imported by both the page and node tools/tests. No logic forked
+  between browser and tooling.
+- The reducer never reads local identity. The host validates; clients
+  render. Perception (seen/lit) is client-local by design.
+- Keep the wire protocol at five message kinds (HELLO, SNAPSHOT, CMD,
+  EVENT, DENY). Transports are swappable behind send/onmsg.
+- Control-token schema changes are corpus-breaking: version them, and
+  update SPEC.md §5 in the same commit.
+- Single-file HTML deliverable stays runnable from file:// with two tabs
+  (BroadcastChannel + storage-event bridge). Do not break the demo path.
+- Respect prefers-reduced-motion in every effect. No localStorage for
+  game state (net shim only).
+- Never overwrite a published weight artifact. Rollback = repoint
+  manifest.
+
+## Commands
+
+- `make test` — determinism + validator tests
+- `make data-batch` — one generation batch through the validator
+- `make train-local` — 256K-param CPU smoke model (minutes)
+- `make wasm` — build the WASM runner
+- `make infra-plan` / `infra-apply` — Terraform (see infra/)
+
+## Current status
+
+v0.2 prototype (`golem-grid.html`) is working with a stub golem.
+Roadmap order in SPEC.md §8 — start at step 1 (repo-ify + shared
+modules), and keep the prototype playable at every step.

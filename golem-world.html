@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GOLEM/WORLD — seed-derived multiplayer text world</title>
+<style>
+  /* ── DOS TUI palette: amber phosphor output, Turbo-Vision blue chrome ── */
+  :root{
+    --ink:#ffb000;          /* P3 amber phosphor */
+    --ink-dim:#8a6200;
+    --ink-hot:#ffd75e;
+    --bg:#0a0a08;
+    --tui-blue:#1424a8;
+    --tui-cyan:#54d7d7;
+    --tui-white:#e8e8e0;
+    --engine:#6f7f6f;       /* dim green-grey for engine trace lines */
+    --deny:#e05a4e;
+    --mono:"IBM Plex Mono","Cascadia Mono",Consolas,"Liberation Mono",monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);color:var(--ink);font-family:var(--mono);
+    font-size:15px;line-height:1.45;display:flex;flex-direction:column;
+  }
+  /* faint scanlines, cheap */
+  body::after{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:9;
+    background:repeating-linear-gradient(0deg,transparent 0 2px,rgba(0,0,0,.14) 2px 3px);
+  }
+  @media (prefers-reduced-motion: reduce){ body::after{display:none} }
+
+  /* ── top bar: DOS editor chrome ── */
+  #topbar{
+    background:var(--tui-blue);color:var(--tui-white);
+    display:flex;gap:1.5em;align-items:center;padding:.25em .8em;
+    font-size:14px;flex-wrap:wrap;
+  }
+  #topbar .brand{color:var(--tui-cyan);font-weight:600;letter-spacing:.08em}
+  #topbar .kv b{color:var(--tui-cyan);font-weight:400}
+  #topbar .role-host{color:#ffe15e}
+  #main{flex:1;display:flex;min-height:0}
+  #outwrap{flex:1;display:flex;flex-direction:column;min-width:0}
+  #out{
+    flex:1;overflow-y:auto;padding:1em 1.2em;scrollbar-width:thin;
+    scrollbar-color:var(--ink-dim) transparent;
+  }
+  #out .prose{color:var(--ink);font-style:italic;white-space:pre-wrap}
+  #out .trace{color:var(--engine);font-size:13px;white-space:pre-wrap}
+  #out .echo{color:var(--ink-hot);white-space:pre-wrap}
+  #out .say{color:var(--tui-cyan);white-space:pre-wrap}
+  #out .deny{color:var(--deny);white-space:pre-wrap}
+  #out .sys{color:var(--tui-white);white-space:pre-wrap}
+  #out > div{margin:.15em 0}
+
+  /* ── sidebar: box-drawn panels ── */
+  #side{
+    width:250px;border-left:1px solid var(--ink-dim);padding:.8em;
+    display:flex;flex-direction:column;gap:1em;font-size:13.5px;overflow-y:auto;
+  }
+  #side h3{
+    color:var(--tui-cyan);font-size:12px;font-weight:400;letter-spacing:.15em;
+    border-bottom:1px solid var(--ink-dim);padding-bottom:.3em;margin-bottom:.4em;
+  }
+  #side .row{color:var(--ink);white-space:pre-wrap}
+  #side .dim{color:var(--ink-dim)}
+  @media (max-width:700px){ #side{display:none} }
+
+  /* ── input line ── */
+  #inrow{
+    display:flex;align-items:center;gap:.5em;
+    border-top:1px solid var(--ink-dim);padding:.5em .9em;
+  }
+  #inrow .ps1{color:var(--ink-hot)}
+  #cmd{
+    flex:1;background:transparent;border:0;outline:0;color:var(--ink-hot);
+    font:inherit;caret-color:var(--ink-hot);
+  }
+
+  /* ── start overlay ── */
+  #start{
+    position:fixed;inset:0;background:rgba(6,6,4,.94);z-index:20;
+    display:flex;align-items:center;justify-content:center;
+  }
+  #start .card{
+    border:2px double var(--ink);padding:1.6em 2em;max-width:440px;width:92%;
+    background:var(--bg);
+  }
+  #start h1{font-size:17px;color:var(--ink-hot);letter-spacing:.1em;margin-bottom:.2em}
+  #start p{color:var(--ink-dim);font-size:13px;margin:.6em 0 1em}
+  #start label{display:block;color:var(--tui-cyan);font-size:12px;letter-spacing:.12em;margin-top:.9em}
+  #start input{
+    width:100%;background:transparent;border:0;border-bottom:1px solid var(--ink-dim);
+    color:var(--ink-hot);font:inherit;padding:.2em 0;outline:0;
+  }
+  #start .btns{display:flex;gap:1em;margin-top:1.4em}
+  #start button{
+    flex:1;background:var(--tui-blue);color:var(--tui-white);border:1px solid var(--tui-cyan);
+    font:inherit;padding:.45em .6em;cursor:pointer;letter-spacing:.06em;
+  }
+  #start button:hover,#start button:focus-visible{background:#1c30c8;outline:1px solid var(--tui-cyan)}
+  #start .note{color:var(--engine);font-size:12px;margin-top:1.1em}
+  ::selection{background:var(--ink);color:var(--bg)}
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <span class="brand">GOLEM/WORLD 0.1</span>
+  <span class="kv">seed <b id="tb-seed">—</b></span>
+  <span class="kv">role <b id="tb-role">—</b></span>
+  <span class="kv">party <b id="tb-peers">0</b></span>
+  <span class="kv">events <b id="tb-seq">0</b></span>
+</div>
+
+<div id="main">
+  <div id="outwrap"><div id="out" aria-live="polite"></div></div>
+  <aside id="side">
+    <div><h3>ROOM FACTS</h3><div id="side-room" class="row dim">no world yet</div></div>
+    <div><h3>PARTY</h3><div id="side-party" class="row dim">—</div></div>
+    <div><h3>PACK</h3><div id="side-inv" class="row dim">—</div></div>
+    <div><h3>VERBS</h3><div class="row dim">look · n s e w · take X
+drop X · inv · say … · who</div></div>
+  </aside>
+</div>
+
+<div id="inrow">
+  <span class="ps1">&gt;</span>
+  <input id="cmd" autocomplete="off" spellcheck="false" placeholder="…" disabled aria-label="command">
+</div>
+
+<div id="start">
+  <div class="card">
+    <h1>▓▒░ GOLEM/WORLD ░▒▓</h1>
+    <p>A seed-derived world, an event-log truth, and a golem that only speaks.
+       Open this file in a second tab to join the same world.</p>
+    <label>YOUR NAME</label>
+    <input id="st-name" maxlength="16" value="">
+    <label>SEED (host only — blank for random)</label>
+    <input id="st-seed" maxlength="24" placeholder="e.g. plagueis">
+    <div class="btns">
+      <button id="bt-host">HOST WORLD</button>
+      <button id="bt-join">JOIN WORLD</button>
+    </div>
+    <div class="note" id="st-note">transport: probing…</div>
+  </div>
+</div>
+
+<script>
+"use strict";
+/* ════════════════════════════════════════════════════════════════════════
+   GOLEM/WORLD — architecture map
+   [RNG]      splittable deterministic hash streams: h(seed, …parts)
+   [GRAMMAR]  the generative substrate's tables (a few KB = the whole world)
+   [WORLDGEN] pure functions: (seed, coords) → room. Never stored, never sent.
+   [STATE]    the delta map. The ONLY mutable truth. Save = seed + event log.
+   [REDUCER]  applyEvent(): deterministic; identical on every client.
+   [GOLEM]    prose renderer. Stub grammar today; the WASM model drops in at
+              the single seam marked ▶GOLEM-PLUG◀. Sampling is seeded from
+              (seed, eventSeq) so every client hallucinates identical words.
+   [NET]      transport = 4 messages {HELLO, SNAPSHOT, CMD, EVENT}.
+              BroadcastChannel here; WebRTC/WebSocket swap in behind the
+              same interface.
+   [HOST]     validates intents against world+deltas, sequences, broadcasts.
+   [UI]       teletype output, sidebar, input.
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* ── [RNG] ─────────────────────────────────────────────────────────────── */
+function h32(str){
+  let h = 2166136261 >>> 0;
+  for (let i = 0; i < str.length; i++){
+    h ^= str.charCodeAt(i); h = Math.imul(h, 16777619);
+  }
+  h ^= h >>> 15; h = Math.imul(h, 2246822519);
+  h ^= h >>> 13; h = Math.imul(h, 3266489917);
+  h ^= h >>> 16;
+  return h >>> 0;
+}
+/* independent stream per (seed, facet, facet…) — the splittable property */
+function channel(...parts){
+  let s = h32(parts.join("\u001f")) || 1;
+  return function(){
+    s ^= s << 13; s >>>= 0;
+    s ^= s >>> 17;
+    s ^= s << 5;  s >>>= 0;
+    return s / 4294967296;
+  };
+}
+const pick   = (rng, arr) => arr[(rng() * arr.length) | 0];
+const chance = (rng, p)   => rng() < p;
+
+/* ── [GRAMMAR] — the substrate's entire vocabulary ─────────────────────── */
+const ROOM_TYPES = ["crypt","hall","cell","shrine","stair","cistern","archive","forge"];
+const TONES      = ["ominous","still","cold","ancient","watchful"];
+const LOOT = {
+  crypt:["rusted sword","funerary urn","bone charm"],
+  hall:["torn banner","iron sconce"],
+  cell:["shackle key","straw doll"],
+  shrine:["wax stub","silver bell","offering bowl"],
+  stair:["broken lantern"],
+  cistern:["green coin","fish hook"],
+  archive:["mildewed folio","brass stylus","cracked seal"],
+  forge:["cold hammer","slag ingot","leather apron"],
+};
+const MOBS = { crypt:"ghoul", cell:"rat swarm", cistern:"pale eel", forge:"ember wisp" };
+
+/* ── [WORLDGEN] — pure (seed, x, y) → room; costs zero bytes of state ──── */
+const DIRS = { n:[0,-1], s:[0,1], e:[1,0], w:[-1,0] };
+const OPP  = { n:"s", s:"n", e:"w", w:"e" };
+const rk = (x,y) => x + "," + y;
+function edgeKey(x1,y1,x2,y2){
+  const a = rk(x1,y1), b = rk(x2,y2);
+  return a < b ? a + "|" + b : b + "|" + a;
+}
+function edgeOpenRaw(seed, ek){ return chance(channel(seed,"edge",ek), 0.7); }
+/* a sealed room forces its highest-hash edge open — computed symmetrically,
+   so both endpoints of the edge agree without communicating */
+function forcedEdge(seed, x, y){
+  let best = null, bestH = -1, anyOpen = false;
+  for (const d in DIRS){
+    const [dx,dy] = DIRS[d];
+    const ek = edgeKey(x, y, x+dx, y+dy);
+    if (edgeOpenRaw(seed, ek)) { anyOpen = true; break; }
+    const hv = h32(seed + "\u001fforce\u001f" + ek);
+    if (hv > bestH){ bestH = hv; best = ek; }
+  }
+  return anyOpen ? null : best;
+}
+function edgeOpen(seed, x1,y1, x2,y2){
+  const ek = edgeKey(x1,y1,x2,y2);
+  return edgeOpenRaw(seed, ek)
+      || forcedEdge(seed, x1,y1) === ek
+      || forcedEdge(seed, x2,y2) === ek;
+}
+function genRoom(seed, x, y){
+  const r = channel(seed, "room", rk(x,y));
+  const type = pick(r, ROOM_TYPES);
+  const tone = pick(r, TONES);
+  const items = [];
+  const loot = LOOT[type];
+  if (chance(r, .55)) items.push(pick(r, loot));
+  if (chance(r, .20)) { const it = pick(r, loot); if (!items.includes(it)) items.push(it); }
+  const mob = (MOBS[type] && chance(r, .30)) ? MOBS[type] : null;
+  const exits = [];
+  for (const d in DIRS){
+    const [dx,dy] = DIRS[d];
+    if (edgeOpen(seed, x, y, x+dx, y+dy)) exits.push(d);
+  }
+  return { type, tone, items, mob, exits, x, y };
+}
+
+/* ── [STATE] — seed + delta map + log. This is the whole save file. ────── */
+const S = {
+  seed: null,
+  D: new Map(),        // delta overrides: key → value
+  log: [],             // committed events, in sequence
+  seq: 0,
+  me: null,            // this client's player id
+  isHost: false,
+};
+function dGet(k){ return S.D.get(k); }
+function itemsAt(x,y){
+  const k = "room:" + rk(x,y) + ":items";
+  return S.D.has(k) ? S.D.get(k) : genRoom(S.seed,x,y).items.slice();
+}
+function mobAt(x,y){
+  const k = "room:" + rk(x,y) + ":mob";
+  return S.D.has(k) ? S.D.get(k) : genRoom(S.seed,x,y).mob;
+}
+function players(){ 
+  const out = [];
+  for (const [k,v] of S.D) if (k.startsWith("player:")) out.push(v);
+  return out;
+}
+function playersAt(x,y){ return players().filter(p => p.x===x && p.y===y); }
+function getPlayer(id){ return dGet("player:" + id); }
+
+/* ── [REDUCER] — deterministic; never consults local identity ──────────── */
+function applyEvent(ev){
+  switch (ev.t){
+    case "JOIN":
+      S.D.set("player:"+ev.pid, { id:ev.pid, name:ev.name, x:ev.x, y:ev.y, inv:[] });
+      break;
+    case "LEAVE":
+      S.D.delete("player:"+ev.pid);
+      break;
+    case "MOVE": {
+      const p = getPlayer(ev.pid); if (!p) break;
+      p.x = ev.x; p.y = ev.y;
+      break;
+    }
+    case "TAKE": {
+      const p = getPlayer(ev.pid); if (!p) break;
+      const items = itemsAt(p.x, p.y);
+      const i = items.indexOf(ev.item);
+      if (i >= 0){ items.splice(i,1); S.D.set("room:"+rk(p.x,p.y)+":items", items); p.inv.push(ev.item); }
+      break;
+    }
+    case "DROP": {
+      const p = getPlayer(ev.pid); if (!p) break;
+      const i = p.inv.indexOf(ev.item);
+      if (i >= 0){
+        p.inv.splice(i,1);
+        const items = itemsAt(p.x,p.y); items.push(ev.item);
+        S.D.set("room:"+rk(p.x,p.y)+":items", items);
+      }
+      break;
+    }
+    case "SAY": break; // pure signal; no state change
+  }
+  S.seq = ev.seq;
+  S.log.push(ev);
+}
+
+/* ── [GOLEM] — the mouth. ▶GOLEM-PLUG◀ ─────────────────────────────────
+   Contract: controlString(ev) → prose string.
+   Today: seeded grammar templates. Tomorrow: serialize controlString as
+   trained control tokens, run the WASM int8 transformer with sampling RNG
+   = channel(seed, "prose", ev.seq), stream tokens out. Because sampling is
+   seeded per-event, every client generates IDENTICAL prose locally —
+   no text ever crosses the wire.                                        */
+function controlString(ev){
+  const p = getPlayer(ev.pid);
+  const room = p ? genRoom(S.seed, p.x, p.y) : null;
+  switch (ev.t){
+    case "JOIN": case "MOVE": case "LOOK":
+      return `ROOM:${room.type} TONE:${room.tone} EXITS:${room.exits.join(",")}` +
+             ` ITEMS:${itemsAt(p.x,p.y).join("+")||"none"} MOB:${mobAt(p.x,p.y)||"none"} EVENT:${ev.t.toLowerCase()}`;
+    case "TAKE": return `EVENT:take ITEM:${ev.item} ROOM:${room.type} TONE:${room.tone}`;
+    case "DROP": return `EVENT:drop ITEM:${ev.item} ROOM:${room.type}`;
+    default: return `EVENT:${ev.t.toLowerCase()}`;
+  }
+}
+const ADJ = {
+  crypt:["low-vaulted","niche-riddled","dust-choked"],
+  hall:["long","pillared","echoing"],
+  cell:["cramped","iron-doored","weeping"],
+  shrine:["candle-blackened","narrow","hushed"],
+  stair:["spiral","worn","tilting"],
+  cistern:["dripping","half-flooded","green-slicked"],
+  archive:["shelf-lined","paper-smelling","collapsing"],
+  forge:["soot-caked","cold","anvil-scarred"],
+};
+const TONE_LINE = {
+  ominous:["Something here does not want company.","The dark has a texture, like held breath."],
+  still:["Nothing has moved here for a very long time.","Even your footsteps sound apologetic."],
+  cold:["The cold gets into your teeth.","Breath hangs in front of you like a small ghost."],
+  ancient:["Whoever built this measured in centuries.","The stones remember older names for things."],
+  watchful:["You have the strong sense of being counted.","Somewhere, attention turns toward you."],
+};
+function golemProse(ev){
+  const g = channel(S.seed, "prose", String(ev.seq)); // ← deterministic sampler
+  const p = getPlayer(ev.pid);
+  switch (ev.t){
+    case "JOIN": case "MOVE": case "LOOK": {
+      const room = genRoom(S.seed, p.x, p.y);
+      const lines = [];
+      lines.push(`A ${pick(g,ADJ[room.type])} ${room.type}. ${pick(g,TONE_LINE[room.tone])}`);
+      const items = itemsAt(p.x,p.y);
+      if (items.length) lines.push(`Amid the ${pick(g,["dust","grit","shadow","litter"])}: ${items.join(", ")}.`);
+      const mob = mobAt(p.x,p.y);
+      if (mob) lines.push(`A ${mob} ${pick(g,["stirs","waits","regards you","pretends not to notice you"])}.`);
+      const others = playersAt(p.x,p.y).filter(q => q.id !== ev.pid);
+      if (others.length) lines.push(`${others.map(q=>q.name).join(" and ")} ${others.length>1?"are":"is"} here.`);
+      lines.push(`Ways out: ${room.exits.join(", ")}.`);
+      return lines.join("\n");
+    }
+    case "TAKE":
+      return `${p.name} ${pick(g,["lifts","prises free","pockets","claims"])} the ${ev.item}.`;
+    case "DROP":
+      return `${p.name} sets down the ${ev.item}${pick(g,[" with some ceremony",", glad to be rid of it",""])}.`;
+    case "JOIN_BCAST":
+      return `${ev.name} ${pick(g,["steps out of the dark","arrives, blinking","is suddenly simply here"])}.`;
+    default: return "";
+  }
+}
+
+/* ── [NET] — transport interface: {send(msg), onmsg(fn)} ───────────────── */
+const NET = (() => {
+  /* Layered transport with dedup. Why: BroadcastChannel is same-origin, and
+     Chrome gives every file:// tab a UNIQUE origin — so BC "works" but talks
+     to nobody. localStorage `storage` events DO cross file:// tabs in Chrome.
+     We send on both channels, tag each message with an id, and dedupe on
+     receive (Firefox file:// delivers on both). Neither channel echoes to
+     its own sender, so no self-delivery. */
+  let handler = () => {};
+  const seen = new Set();
+  function deliver(m){
+    if (!m || !m._id || seen.has(m._id)) return;
+    seen.add(m._id);
+    if (seen.size > 600){ let i = 0; for (const k of seen){ seen.delete(k); if (++i >= 300) break; } }
+    handler(m);
+  }
+  let bc = null;
+  try { bc = new BroadcastChannel("golem-world-1"); bc.onmessage = e => deliver(e.data); }
+  catch (e) { bc = null; }
+  let ls = false;
+  try {
+    localStorage.setItem("golem-net-probe","1"); localStorage.removeItem("golem-net-probe");
+    ls = true;
+    addEventListener("storage", e => {
+      if (e.key === "golem-net-1" && e.newValue){
+        try { deliver(JSON.parse(e.newValue)); } catch (_) {}
+      }
+    });
+  } catch (e) { ls = false; /* sandboxed contexts (e.g. artifact preview) → solo */ }
+  let n = 0;
+  return {
+    ok: !!bc || ls,
+    label: bc && ls ? "BroadcastChannel + storage bridge"
+         : bc ? "BroadcastChannel" : ls ? "storage bridge" : "none (solo)",
+    send: m => {
+      m._id = Date.now() + "-" + (n++) + "-" + Math.random().toString(36).slice(2,7);
+      if (bc) bc.postMessage(m);
+      if (ls){ try { localStorage.setItem("golem-net-1", JSON.stringify(m)); } catch (_) {} }
+    },
+    onmsg: fn => { handler = fn; },
+  };
+})();
+/* wire protocol, entire: 
+   HELLO    {pid,name}              client → host
+   SNAPSHOT {to,seed,log}           host  → joining client
+   CMD      {from,cmd}              client → host
+   EVENT    {ev}                    host  → all (committed, sequenced)
+   DENY     {to,reason}             host  → one client                   */
+
+/* ── [HOST] — the DM kernel: validate → sequence → broadcast ───────────── */
+function hostCommit(ev){
+  ev.seq = S.seq + 1;
+  applyEvent(ev);
+  render(ev);
+  NET.send({ k:"EVENT", ev });
+}
+function hostDeny(pid, reason){
+  if (pid === S.me) renderDeny(reason);
+  else NET.send({ k:"DENY", to:pid, reason });
+}
+function hostHandleCmd(from, cmd){
+  const p = getPlayer(from);
+  if (!p) return;
+  const [verb, ...rest] = cmd.trim().toLowerCase().split(/\s+/);
+  const arg = rest.join(" ");
+  if (verb in DIRS || (verb === "go" && arg in DIRS)){
+    const d = verb in DIRS ? verb : arg;
+    const room = genRoom(S.seed, p.x, p.y);
+    if (!room.exits.includes(d)) return hostDeny(from, `No way ${d} from here.`);
+    const [dx,dy] = DIRS[d];
+    return hostCommit({ t:"MOVE", pid:from, dir:d, x:p.x+dx, y:p.y+dy });
+  }
+  switch (verb){
+    case "look": case "l":
+      return hostCommit({ t:"LOOK", pid:from });
+    case "take": case "get": {
+      const items = itemsAt(p.x,p.y);
+      const it = items.find(i => i.includes(arg)) ;
+      if (!arg || !it) return hostDeny(from, arg ? `Your fingers close on empty air — no ${arg} here.` : "Take what?");
+      return hostCommit({ t:"TAKE", pid:from, item:it });
+    }
+    case "drop": {
+      const it = p.inv.find(i => i.includes(arg));
+      if (!it) return hostDeny(from, "You aren't carrying that.");
+      return hostCommit({ t:"DROP", pid:from, item:it });
+    }
+    case "say": {
+      if (!arg) return hostDeny(from, "Say what?");
+      return hostCommit({ t:"SAY", pid:from, text:arg.slice(0,240),
+                          room: rk(p.x,p.y) }); // audience stamp
+    }
+    case "inv": case "i": case "who": case "help":
+      // local-only verbs are handled client-side; host never sees them
+      return;
+    default:
+      return hostDeny(from, `The world does not know the verb "${verb}".`);
+  }
+}
+
+/* ── [CLIENT] — apply committed events; send intents ───────────────────── */
+NET.onmsg(m => {
+  switch (m.k){
+    case "HELLO":
+      if (S.isHost){
+        // snapshot = seed + log. The entire world state, a few KB.
+        NET.send({ k:"SNAPSHOT", to:m.pid, seed:S.seed, log:S.log });
+        hostCommit({ t:"JOIN", pid:m.pid, name:m.name, x:0, y:0 });
+      }
+      break;
+    case "SNAPSHOT":
+      if (!S.isHost && m.to === S.me && S.seed === null){
+        S.seed = m.seed;
+        for (const ev of m.log) applyEvent(ev); // silent replay
+        setTopbar();
+        say(`— joined world "${S.seed}" at event ${S.seq} —`, "sys");
+      }
+      break;
+    case "CMD":
+      if (S.isHost) hostHandleCmd(m.from, m.cmd);
+      break;
+    case "EVENT":
+      if (!S.isHost && S.seed !== null){ applyEvent(m.ev); render(m.ev); }
+      break;
+    case "DENY":
+      if (m.to === S.me) renderDeny(m.reason);
+      break;
+  }
+});
+function sendCmd(cmd){
+  if (S.isHost) hostHandleCmd(S.me, cmd);
+  else NET.send({ k:"CMD", from:S.me, cmd });
+}
+
+/* ── [UI] — teletype, sidebar, input ───────────────────────────────────── */
+const out = document.getElementById("out");
+const instant = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const ttq = [];
+let ttBusy = false;
+function teletype(el, text){
+  ttq.push([el, text]);
+  if (!ttBusy) ttPump();
+}
+function ttPump(){
+  const next = ttq.shift();
+  if (!next){ ttBusy = false; return; }
+  ttBusy = true;
+  const [el, text] = next;
+  if (instant){ el.textContent = text; out.scrollTop = out.scrollHeight; return ttPump(); }
+  let i = 0;
+  (function tick(){
+    el.textContent = text.slice(0, ++i);
+    out.scrollTop = out.scrollHeight;
+    if (i < text.length) setTimeout(tick, 9);
+    else ttPump();
+  })();
+}
+function say(text, cls){
+  const d = document.createElement("div");
+  d.className = cls || "sys";
+  out.appendChild(d);
+  if (cls === "prose") teletype(d, text);
+  else { d.textContent = text; out.scrollTop = out.scrollHeight; }
+}
+function renderDeny(reason){ say(reason, "deny"); }
+function render(ev){
+  const me = getPlayer(S.me);
+  const actor = getPlayer(ev.pid) || { x:NaN, y:NaN, name:"?" };
+  const sameRoom = me && actor && me.x === actor.x && me.y === actor.y;
+  switch (ev.t){
+    case "SAY":
+      // audience filter: only same-room clients render the line
+      if (me && ev.room === rk(me.x, me.y))
+        say(`${getPlayer(ev.pid)?.name ?? "someone"}: “${ev.text}”`, "say");
+      break;
+    case "JOIN":
+      if (ev.pid === S.me){
+        say("▸ " + controlString(ev), "trace");
+        say(golemProse(ev), "prose");
+      } else say(golemProse({ ...ev, t:"JOIN_BCAST" }), "prose");
+      break;
+    case "MOVE": case "LOOK":
+      if (ev.pid === S.me){
+        say("▸ " + controlString(ev), "trace");
+        say(golemProse(ev), "prose");
+      } else if (sameRoom) {
+        say(`${actor.name} is here.`, "sys");
+      }
+      break;
+    case "TAKE": case "DROP":
+      if (ev.pid === S.me || sameRoom){
+        if (ev.pid === S.me) say("▸ " + controlString(ev), "trace");
+        say(golemProse(ev), "prose");
+      }
+      break;
+  }
+  sidebar(); setTopbar();
+}
+function sidebar(){
+  const me = getPlayer(S.me);
+  const sr = document.getElementById("side-room");
+  const sp = document.getElementById("side-party");
+  const si = document.getElementById("side-inv");
+  if (!me){ return; }
+  const room = genRoom(S.seed, me.x, me.y);
+  sr.textContent =
+    `${room.type} @ ${me.x},${me.y}\n` +
+    `tone  ${room.tone}\n` +
+    `exits ${room.exits.join(" ")}\n` +
+    `items ${itemsAt(me.x,me.y).join(", ") || "—"}\n` +
+    `mob   ${mobAt(me.x,me.y) || "—"}`;
+  sp.textContent = players().map(p =>
+    `${p.name}${p.id===S.me?" (you)":""} @ ${p.x},${p.y}`).join("\n") || "—";
+  si.textContent = me.inv.join("\n") || "empty";
+}
+function setTopbar(){
+  document.getElementById("tb-seed").textContent  = S.seed ?? "—";
+  document.getElementById("tb-role").textContent  = S.isHost ? "HOST" : "PEER";
+  document.getElementById("tb-role").className    = S.isHost ? "role-host" : "";
+  document.getElementById("tb-peers").textContent = players().length;
+  document.getElementById("tb-seq").textContent   = S.seq;
+}
+
+/* local-only verbs never touch the network */
+function localVerb(cmd){
+  const me = getPlayer(S.me);
+  const [verb] = cmd.trim().toLowerCase().split(/\s+/);
+  if (verb === "inv" || verb === "i"){
+    say("You carry: " + (me.inv.join(", ") || "nothing."), "sys"); return true;
+  }
+  if (verb === "who"){
+    say(players().map(p=>`${p.name} @ ${p.x},${p.y}`).join("\n"), "sys"); return true;
+  }
+  if (verb === "help"){
+    say("verbs: look · n s e w · take X · drop X · inv · say … · who", "sys"); return true;
+  }
+  return false;
+}
+
+/* ── boot ──────────────────────────────────────────────────────────────── */
+const cmdEl = document.getElementById("cmd");
+const startEl = document.getElementById("start");
+document.getElementById("st-note").textContent = NET.ok
+  ? "transport: " + NET.label + " — open this file in another tab to multiplay"
+  : "transport: unavailable here — running solo (download & open locally for multiplayer)";
+document.getElementById("st-name").value = "Wanderer" + ((Math.random()*90+10)|0);
+
+function begin(asHost){
+  const name = document.getElementById("st-name").value.trim() || "Wanderer";
+  const seedInput = document.getElementById("st-seed").value.trim();
+  S.me = "p" + h32(name + Math.random()).toString(36);
+  S.isHost = asHost || !NET.ok;
+  startEl.remove();
+  cmdEl.disabled = false; cmdEl.focus();
+  if (S.isHost){
+    S.seed = seedInput || Math.random().toString(36).slice(2,8);
+    say(`— world "${S.seed}" is open. You are the DM kernel. —`, "sys");
+    hostCommit({ t:"JOIN", pid:S.me, name, x:0, y:0 });
+  } else {
+    say("— hailing a host… —", "sys");
+    NET.send({ k:"HELLO", pid:S.me, name });
+    setTimeout(() => {
+      if (S.seed === null)
+        say("No host answered. Make sure a HOST tab is open first (same browser, same file path). Transport in use: " + NET.label + ".", "deny");
+    }, 2500);
+  }
+  setTopbar();
+}
+document.getElementById("bt-host").onclick = () => begin(true);
+document.getElementById("bt-join").onclick = () => begin(false);
+
+cmdEl.addEventListener("keydown", e => {
+  if (e.key !== "Enter") return;
+  const cmd = cmdEl.value.trim();
+  cmdEl.value = "";
+  if (!cmd) return;
+  say("> " + cmd, "echo");
+  if (!localVerb(cmd)) sendCmd(cmd);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+name: data
+on:
+  workflow_dispatch:
+    inputs:
+      batches:
+        description: "number of generation batches (~20 strings x 4 variants each)"
+        default: "50"
+      corpus_tag:
+        description: "corpus version tag, e.g. c7"
+        required: true
+
+permissions:
+  id-token: write   # OIDC -> AWS role, no stored keys
+  contents: read
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.GHA_ROLE_ARN }}
+          aws-region: us-west-2
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+
+      # Never let the big model invent control strings: walk the REAL
+      # worldgen across many seeds so the training distribution exactly
+      # matches what production will feed the golem.
+      - name: harvest control strings from actual worldgen
+        run: node tools/harvest.js --seeds 2000 --out work/controls.jsonl
+
+      - name: generate prose via big-model API
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          python tools/generate.py \
+            --controls work/controls.jsonl \
+            --batches ${{ inputs.batches }} \
+            --variants 4 \
+            --out work/raw.jsonl
+
+      # The iron rule, enforced mechanically. Rejected pairs go to
+      # quarantine for error analysis — never silently deleted.
+      - name: grounding validation
+        run: |
+          python tools/validate.py \
+            --in work/raw.jsonl \
+            --pass work/clean.jsonl \
+            --fail work/quarantine.jsonl \
+            --min-pass-rate 0.85   # below this, the PROMPT is broken: fail loudly
+
+      - name: upload shard + quarantine
+        run: |
+          aws s3 cp work/clean.jsonl \
+            s3://${{ vars.CORPUS_BUCKET }}/shards/${{ inputs.corpus_tag }}/$(date +%Y%m%d-%H%M)-${GITHUB_SHA::7}.jsonl
+          aws s3 cp work/quarantine.jsonl \
+            s3://${{ vars.CORPUS_BUCKET }}/quarantine/${{ inputs.corpus_tag }}/$(date +%Y%m%d-%H%M).jsonl
+
+      - name: shard stats
+        run: python tools/stats.py work/clean.jsonl >> $GITHUB_STEP_SUMMARY

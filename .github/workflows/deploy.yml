@@ -1,0 +1,70 @@
+name: deploy
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      weights:
+        description: "pinned weight artifact, e.g. golem-v0.4.0-a1b2c3d4.bin"
+        required: true
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.GHA_ROLE_ARN }}
+          aws-region: us-west-2
+
+      - name: build golem.wasm (llama2.c-style runner)
+        uses: mymindstorm/setup-emsdk@v14
+      - run: |
+          emcc wasm/runq.c -O3 -msimd128 \
+            -s EXPORTED_FUNCTIONS='["_init","_generate","_malloc","_free"]' \
+            -s ALLOW_MEMORY_GROWTH=1 -s MODULARIZE=1 -s EXPORT_NAME=Golem \
+            -o dist/golem.js
+
+      # ── Smoke test: determinism means golden prose is an exact-match test.
+      # Load the pinned weights, run a fixed control string with a fixed
+      # sampling seed, and diff against the committed golden output.
+      - name: fetch pinned weights
+        run: |
+          aws s3 cp \
+            "s3://${{ vars.MODELS_BUCKET }}/released/weights/${{ inputs.weights }}" \
+            work/golem.bin
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: golden prose smoke test
+        run: node tests/smoke.mjs --wasm dist/golem.js --weights work/golem.bin \
+               --golden tests/golden-prose.txt
+
+      - name: assemble bundle + manifest
+        run: |
+          cp golem-world.html dist/
+          cat > dist/manifest.json <<EOF
+          {
+            "weights": "/weights/${{ inputs.weights }}",
+            "game": "${GITHUB_REF_NAME}",
+            "built": "$(date -u +%FT%TZ)",
+            "commit": "${GITHUB_SHA}"
+          }
+          EOF
+
+      - name: upload site
+        run: |
+          aws s3 sync dist/ s3://${{ vars.SITE_BUCKET }}/ \
+            --cache-control "public, max-age=300"
+
+      # Weights are immutable and cached forever; only the tiny manifest
+      # (and html shell) need invalidating. Rollback = repoint manifest.
+      - name: invalidate manifest
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ vars.CDN_DISTRIBUTION_ID }} \
+            --paths "/manifest.json" "/golem-world.html"
