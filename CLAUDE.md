@@ -58,6 +58,9 @@ working practices. When in doubt, the doctrine decides.
 ## Commands
 
 - `make test` — determinism + validator tests
+- `make solve` — 10K-seed winnability + difficulty band
+- `make html` — build the single-file dist/golem-grid.html (file:// demo)
+- `make dev` — Vite dev server
 - `make data-batch` — one generation batch through the validator
 - `make train-local` — 256K-param CPU smoke model (minutes)
 - `make wasm` — build the WASM runner
@@ -65,6 +68,6 @@ working practices. When in doubt, the doctrine decides.
 
 ## Current status
 
-v0.2 prototype (`golem-grid.html`) is working with a stub golem.
-Roadmap order in SPEC.md §8 — start at step 1 (repo-ify + shared
-modules), and keep the prototype playable at every step.
+Roadmap steps 1–3 are DONE: shared modules under shared/, Vite single-file
+build (make html), tests green (make test), solver gate (make solve).
+The golem is still the stub at ▶GOLEM-PLUG◀. Next: step 4 (data tools).
