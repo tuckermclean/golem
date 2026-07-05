@@ -66,14 +66,20 @@ working practices. When in doubt, the doctrine decides.
 - `make train-local` — 256K-param CPU smoke model (minutes)
 - `make wasm` — build the WASM runner
 - `make infra-plan` / `infra-apply` — Terraform (see infra/)
+- `npm run freeze:verify` — behavior-freeze gate (golem fixture replay +
+  some-hero @ceremony tests + topdown-puzzle parse snapshots)
 
 ## Current status
 
 Roadmap steps 1–3 are DONE: shared modules (now under
 games/golem-grid/shared/), Vite single-file build (make html), tests
-green (make test), solver gate (make solve). The P0.1 monorepo
-restructure is DONE: this repo is now the golem-engine monorepo
-(games/golem-grid/, packages/*, drawer/, docs/). VISION.md and DELTA.md
-now govern — DELTA.md on sequencing, VISION.md on principle. The golem
-is still the stub at ▶GOLEM-PLUG◀. Next: P0.2 (import the sibling
-repos).
+green (make test), solver gate (make solve). Phase 0 of DELTA.md is now
+complete: P0.1 monorepo restructure (this repo is the golem-engine
+monorepo: games/golem-grid/, packages/*, drawer/, docs/), P0.2 legacy
+imports (some-hero, topdown-puzzle under games/*/legacy/), and P0.3
+behavior freeze (25 golem-grid seed fixtures, some-hero `@ceremony`
+characterization tests, topdown-puzzle initial-grid parse snapshots —
+all wired into `npm run freeze:verify`, a permanent CI job). VISION.md
+and DELTA.md now govern — DELTA.md on sequencing, VISION.md on
+principle. The golem is still the stub at ▶GOLEM-PLUG◀. Next: Phase 1
+(K1 — `packages/random`).
