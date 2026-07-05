@@ -28,3 +28,9 @@ pull-condition; only its event vocabulary escapes the drawer (task K6).
 deeper in the drawer than the society layer it depends on. Only its
 event vocabulary (MARKET_OPENED / POSITION_TAKEN / MARKET_SETTLED)
 escapes, into the K6 schema.
+
+[CREDIT.md](CREDIT.md) — credit unions, lending, and debt; same stratum
+as MARKET.md, both depending on the society layer. Only its event
+vocabulary (LOAN_ISSUED / LOAN_REPAID / LOAN_DEFAULTED / LIEN_ATTACHED /
+GARNISHMENT_APPLIED, plus the `debt:` delta namespace) escapes, into the
+K6 schema.
