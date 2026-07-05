@@ -10,8 +10,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: 22 }
-
+        with: { node-version: 22, cache: npm }
+      # shared/rng.js re-exports from the @golem-engine/random workspace
+      # package (K1); its dist/ is built by that package's `prepare`
+      # script, which npm ci runs automatically.
+      - run: npm ci
       # The architecture's superpower: everything is a golden-file test.
       # A golden diff means the world function changed and every existing
       # seed just broke: that is a MAJOR version bump, not a bugfix.
@@ -24,7 +27,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: 22 }
+        with: { node-version: 22, cache: npm }
+      # solve.js pulls in worldgen -> shared/rng.js -> @golem-engine/random
+      # (K1); npm ci builds packages/random/dist via its prepare script.
+      - run: npm ci
       - name: 10K-seed winnability + difficulty band
         run: node games/golem-grid/tools/solve.js --seeds 10000
 
@@ -45,6 +51,10 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22, cache: npm }
       - run: npm ci
+      # DELTA.md §0.3: Math.random forbidden in packages/ (lint rule,
+      # CI-enforced), also bans eval(/new Function anywhere in scope.
+      - name: ban check (Math.random / eval / new Function under packages/**)
+        run: node tools/check-bans.mjs
       - name: single-file build
         run: |
           npm run build -w @golem-engine/golem-grid

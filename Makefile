@@ -1,10 +1,13 @@
 # Local mirrors of the pipeline stages. CI runs the same commands.
 
-.PHONY: test solve html dev data-batch train-local wasm infra-plan infra-apply
+.PHONY: test solve html dev data-batch train-local wasm infra-plan infra-apply lint-bans
 
 test:
 	npm test
 	python -m pytest tools/test_validate.py -q
+
+lint-bans:
+	node tools/check-bans.mjs
 
 solve:
 	node games/golem-grid/tools/solve.js --seeds 10000

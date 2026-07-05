@@ -1,8 +1,8 @@
 # CLAUDE.md — golem-grid
 
 Read VISION.md and DELTA.md; historical spec at
-docs/SPEC-golem-v0.2.md. This file is the constitution and the
-working practices. When in doubt, the doctrine decides.
+docs/SPEC-golem-v0.2.md. VISION.md is the constitution; this file holds
+the working practices. When in doubt, the doctrine decides.
 
 ## Doctrine
 
@@ -81,5 +81,9 @@ behavior freeze (25 golem-grid seed fixtures, some-hero `@ceremony`
 characterization tests, topdown-puzzle initial-grid parse snapshots —
 all wired into `npm run freeze:verify`, a permanent CI job). VISION.md
 and DELTA.md now govern — DELTA.md on sequencing, VISION.md on
-principle. The golem is still the stub at ▶GOLEM-PLUG◀. Next: Phase 1
-(K1 — `packages/random`).
+principle. Phase 1 K1 (`packages/random`) is DONE: h32/channel/pick/
+chance/rint live in packages/random as TypeScript, built via `prepare`
+(tsc), with vector + cross-check tests; games/golem-grid/shared/rng.js
+is now a re-export and every frozen fixture/golden/ceremony test still
+passes unchanged. The golem is still the stub at ▶GOLEM-PLUG◀. Next:
+K2 (`packages/kernel` — types and pure reducer).
