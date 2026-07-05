@@ -69,6 +69,17 @@
  * never called" — `|| 1` makes that state unreachable. We assert real
  * channels never produce that degenerate all-zero-forever sequence.
  */
+/* Re-export plumbing note: since commit df3e839,
+ * games/golem-grid/shared/rng.js is itself a one-line re-export of
+ * @golem-engine/random — so oldRng.h32 IS this package's h32 (same
+ * function object), not an independent implementation. The tests below
+ * that import oldRng therefore verify the re-export plumbing (the game
+ * module exposes exactly these five functions, unchanged, by identity),
+ * NOT algorithm equivalence — that would be tautological now. The
+ * algorithm guarantee lives entirely in the hardcoded vector literals
+ * above (traced to the pre-K1 implementation via the generation script
+ * in this file's header), not in any runtime comparison against oldRng.
+ */
 import test from "node:test";
 import assert from "node:assert/strict";
 import { h32, channel, pick, chance, rint } from "@golem-engine/random";
@@ -161,27 +172,28 @@ test("pick/chance/rint: deterministic stub r's, incl. boundaries", () => {
   assert.equal(chance(() => 1, 1), false);
 });
 
-test("cross-check: package h32 agrees with games/golem-grid/shared/rng.js", () => {
-  const strings = [
-    "", "a", "golem", "lantern", "plagueis", "seeddungeon",
-    "gölem☃", "ab", "seed1", "roomfill",
-  ];
-  for (const s of strings) {
-    assert.equal(h32(s), oldRng.h32(s), `h32(${JSON.stringify(s)}) mismatch`);
-  }
+test("re-export plumbing: games/golem-grid/shared/rng.js#h32 is the package's h32, unwrapped", () => {
+  // This is an identity check (===), not a value comparison: oldRng.h32
+  // IS this package's h32 (same function object) once shared/rng.js
+  // re-exports from @golem-engine/random, so asserting value-equality
+  // on their outputs would be tautological (comparing the
+  // implementation with itself). What's actually worth pinning here is
+  // the plumbing: the game module's public surface names the package's
+  // real h32, and nothing shadows or wraps it on the way through. The
+  // algorithm guarantee itself lives in the hardcoded vectors above.
+  assert.equal(oldRng.h32, h32);
+  assert.deepEqual(
+    Object.keys(oldRng).sort(),
+    ["chance", "channel", "h32", "pick", "rint"],
+    "shared/rng.js must re-export exactly these five names, nothing more/less",
+  );
 });
 
-test("cross-check: package channel agrees with games/golem-grid/shared/rng.js over 100 draws, 3 channels", () => {
-  const channelSpecs = [
-    ["golem", "dungeon"],
-    ["seed1", "roomfill", "3"],
-    ["plagueis", "decor", "7"],
-  ];
-  for (const parts of channelSpecs) {
-    const rNew = channel(...parts);
-    const rOld = oldRng.channel(...parts);
-    for (let i = 0; i < 100; i++) {
-      assert.equal(rNew(), rOld(), `draw ${i} mismatch for channel(${parts.join(",")})`);
-    }
-  }
+test("re-export plumbing: games/golem-grid/shared/rng.js's channel/pick/chance/rint are the package's, unwrapped", () => {
+  // Same reasoning as the h32 plumbing test above: identity, not value
+  // comparison — these are literally the same function objects.
+  assert.equal(oldRng.channel, channel);
+  assert.equal(oldRng.pick, pick);
+  assert.equal(oldRng.chance, chance);
+  assert.equal(oldRng.rint, rint);
 });

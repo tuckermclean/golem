@@ -17,7 +17,7 @@ const REPO_ROOT = new URL("..", import.meta.url).pathname;
 const PACKAGES_DIR = join(REPO_ROOT, "packages");
 const SCAN_SUBDIRS = ["src", "tools"];
 const SKIP_DIRS = new Set(["node_modules", "dist", "fixtures"]);
-const SOURCE_EXTENSIONS = new Set([".js", ".mjs", ".ts", ".mts"]);
+const SOURCE_EXTENSIONS = new Set([".js", ".mjs", ".cjs", ".ts", ".mts", ".cts"]);
 
 const BANS = [
   { name: "Math.random", pattern: /Math\.random\s*\(/ },
