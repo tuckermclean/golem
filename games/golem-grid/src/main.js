@@ -6,7 +6,7 @@ import { START_LIGHT, LIGHT_TIERS, createState,
          applyEvent as rApplyEvent, players as rPlayers, getP as rGetP,
          light as rLight, itemAt as rItemAt, prizeCarrier as rPrizeCarrier,
          radius as rRadius } from "../shared/reducer.js";
-import { makeDeduper } from "../shared/dedup.js";
+import { createAutoTransport } from "@golem-engine/net";
 import { validate } from "../shared/module.js";
 
 /* ── STATE: page identity + reducer state. Pure logic lives in shared/;
@@ -64,21 +64,11 @@ function proseFor(ev){                        // deterministic per event seq
   return"";
 }
 
-/* ── NET: layered transport (BroadcastChannel + storage bridge) ────────── */
-const NET=(()=>{let handler=()=>{};const fresh=makeDeduper();
-  function deliver(m){if(!m||!fresh(m._id))return;handler(m);}
-  let bc=null;try{bc=new BroadcastChannel("golem-grid-1");
-    bc.onmessage=e=>deliver(e.data);}catch(e){}
-  let ls=false;try{localStorage.setItem("gg-probe","1");
-    localStorage.removeItem("gg-probe");ls=true;
-    addEventListener("storage",e=>{if(e.key==="golem-grid-net"&&e.newValue){
-      try{deliver(JSON.parse(e.newValue));}catch(_){}}});}catch(e){}
-  let n=0;return{ok:!!bc||ls,
-    label:bc&&ls?"BroadcastChannel + storage bridge":bc?"BroadcastChannel":ls?"storage bridge":"none (solo)",
-    send:m=>{m._id=Date.now()+"-"+(n++)+"-"+Math.random().toString(36).slice(2,7);
-      if(bc)bc.postMessage(m);
-      if(ls){try{localStorage.setItem("golem-grid-net",JSON.stringify(m));}catch(_){}}},
-    onmsg:fn=>{handler=fn;}};})();
+/* ── NET: layered transport (BroadcastChannel + storage bridge) — the
+   five-message protocol, transports, and dedup now live in
+   @golem-engine/net (K4); this page just picks the channel name/storage
+   key that were previously hardcoded inline. ───────────────────────── */
+const NET=createAutoTransport("golem-grid-1","golem-grid-net");
 
 /* ── HOST: validate → sequence → broadcast; win/lose predicates ────────── */
 function hostCommit(ev){ev.seq=S.st.seq+1;
