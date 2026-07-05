@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOME HERO</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Special+Elite&display=swap');
+
+  :root{
+    --void:#0a0c12;
+    --void-warm:#141017;
+    --ember:#e8b44a;
+    --ember-deep:#c98a2b;
+    --ember-pale:#f6dfa6;
+    --stamp:#c0392b;
+    --ledger:#9a9486;
+    --epic:'Cinzel','Palatino Linotype','Book Antiqua',Georgia,'Times New Roman',serif;
+    --clerk:'Special Elite','Courier Prime','Courier New',monospace;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box}
+
+  html,body{height:100%;overflow:hidden;background:var(--void)}
+
+  body{
+    font-family:var(--epic);
+    color:var(--ember-pale);
+    display:flex;align-items:center;justify-content:center;
+    position:relative;
+  }
+
+  /* ---------- atmosphere ---------- */
+  .torchlight{
+    position:fixed;inset:0;pointer-events:none;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 42%, rgba(232,180,74,.10), transparent 70%),
+      radial-gradient(ellipse 120% 90% at 50% 110%, rgba(120,60,20,.18), transparent 60%);
+    animation:breathe 4.5s ease-in-out infinite;
+  }
+  @keyframes breathe{
+    0%,100%{opacity:.85}
+    38%{opacity:1}
+    62%{opacity:.78}
+  }
+  .vignette{
+    position:fixed;inset:0;pointer-events:none;
+    background:radial-gradient(ellipse 90% 80% at 50% 45%, transparent 40%, rgba(0,0,0,.75) 100%);
+  }
+  #embers{position:fixed;inset:0;pointer-events:none}
+
+  /* ---------- title block ---------- */
+  .marquee{
+    position:relative;text-align:center;z-index:2;
+    padding:0 1rem;
+  }
+
+  .eyebrow{
+    font-family:var(--epic);
+    font-weight:600;
+    font-size:clamp(.65rem,1.6vw,.95rem);
+    letter-spacing:.55em;
+    text-indent:.55em;
+    color:var(--ember-deep);
+    text-transform:uppercase;
+    opacity:0;
+    animation:riseIn 1.4s ease-out .8s forwards;
+  }
+
+  .some{
+    display:block;
+    font-weight:600;
+    font-size:clamp(1.1rem,3.4vw,2rem);
+    letter-spacing:.95em;
+    text-indent:.95em;
+    margin-top:2.2rem;
+    color:var(--ember-pale);
+    text-transform:uppercase;
+    opacity:0;
+    animation:riseIn 1.2s ease-out 1.9s forwards;
+  }
+
+  .hero{
+    display:block;
+    font-weight:800;
+    font-size:clamp(4.2rem,17vw,12.5rem);
+    line-height:.95;
+    letter-spacing:.06em;
+    text-indent:.06em;
+    text-transform:uppercase;
+    background:linear-gradient(178deg,#fbe9b7 8%,var(--ember) 38%,#8a5a18 55%,var(--ember) 70%,#5e3c10 96%);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;color:transparent;
+    filter:drop-shadow(0 6px 28px rgba(232,180,74,.22)) drop-shadow(0 2px 4px rgba(0,0,0,.9));
+    opacity:0;transform:scale(1.12);
+    animation:slamIn 1s cubic-bezier(.16,1,.3,1) 2.5s forwards;
+    position:relative;
+  }
+
+  /* shine sweep */
+  .hero::after{
+    content:'HERO';
+    position:absolute;inset:0;
+    background:linear-gradient(115deg,transparent 30%,rgba(255,248,220,.9) 50%,transparent 70%);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;color:transparent;
+    background-size:300% 100%;
+    background-position:-150% 0;
+    animation:shine 1.6s ease-in-out 3.6s 1 forwards;
+  }
+  @keyframes shine{to{background-position:250% 0}}
+
+  @keyframes riseIn{
+    from{opacity:0;transform:translateY(14px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+  @keyframes slamIn{
+    from{opacity:0;transform:scale(1.12)}
+    to{opacity:1;transform:scale(1)}
+  }
+
+  /* ---------- THE STAMP (signature element) ---------- */
+  .stamp{
+    position:absolute;
+    left:50%;top:58%;
+    transform:translate(-50%,-50%) rotate(-7deg) scale(3);
+    font-family:var(--clerk);
+    font-size:clamp(.8rem,2.2vw,1.3rem);
+    color:var(--stamp);
+    border:3px double var(--stamp);
+    border-radius:4px;
+    padding:.5em 1.1em;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    white-space:nowrap;
+    background:rgba(10,12,18,.25);
+    opacity:0;
+    mix-blend-mode:screen;
+    text-shadow:0 0 1px var(--stamp);
+    box-shadow:inset 0 0 14px rgba(192,57,43,.25);
+    animation:stampSlam .35s cubic-bezier(.36,0,.66,-.56) 5.2s forwards;
+    z-index:3;
+  }
+  .stamp small{
+    display:block;font-size:.62em;letter-spacing:.3em;text-align:center;
+    border-top:1px solid rgba(192,57,43,.6);margin-top:.3em;padding-top:.25em;
+  }
+  @keyframes stampSlam{
+    from{opacity:0;transform:translate(-50%,-50%) rotate(-7deg) scale(3)}
+    70%{opacity:1;transform:translate(-50%,-50%) rotate(-7deg) scale(.92)}
+    to{opacity:.92;transform:translate(-50%,-50%) rotate(-7deg) scale(1)}
+  }
+  .stamp.wobble{animation:wobble .4s ease-out}
+  @keyframes wobble{
+    0%{transform:translate(-50%,-50%) rotate(-7deg) scale(1)}
+    35%{transform:translate(-50%,-50%) rotate(-9.5deg) scale(1.03)}
+    70%{transform:translate(-50%,-50%) rotate(-5.5deg)}
+    100%{transform:translate(-50%,-50%) rotate(-7deg) scale(1)}
+  }
+
+  /* ---------- start fade ---------- */
+  .torchlight,.marquee,.sponsor,.version,.soundtoggle{transition:opacity 1.8s ease}
+  body.fadeout .torchlight,body.fadeout .marquee,body.fadeout .sponsor,
+  body.fadeout .version,body.fadeout .soundtoggle{opacity:0;pointer-events:none}
+
+  /* ---------- tagline + prompt ---------- */
+  .tagline{
+    margin-top:3.4rem;
+    font-family:var(--epic);
+    font-weight:600;
+    font-size:clamp(.85rem,2vw,1.15rem);
+    letter-spacing:.3em;text-indent:.3em;
+    color:var(--ledger);
+    text-transform:uppercase;
+    opacity:0;
+    animation:riseIn 1.2s ease-out 5.5s forwards;
+  }
+
+  .press{
+    margin-top:2.6rem;
+    font-family:var(--clerk);
+    font-size:clamp(.75rem,1.7vw,1rem);
+    letter-spacing:.22em;
+    color:var(--ember);
+    opacity:0;
+    animation:riseIn .8s ease-out 6.4s forwards, blink 2.4s ease-in-out 7.2s infinite;
+    cursor:pointer;
+  }
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+
+  /* ---------- corners ---------- */
+  .ledger-note{
+    position:fixed;left:1.4rem;bottom:1.2rem;max-width:min(46ch,60vw);
+    font-family:var(--clerk);
+    font-size:clamp(.68rem,1.5vw,.85rem);
+    line-height:1.5;
+    color:var(--ledger);
+    opacity:0;
+    animation:riseIn 1.4s ease-out 7s forwards;
+    z-index:4;
+  }
+  .ledger-note em{color:var(--ember-deep);font-style:normal}
+
+  .sponsor{
+    position:fixed;right:1.4rem;bottom:1.2rem;text-align:right;
+    font-family:var(--clerk);
+    font-size:clamp(.6rem,1.3vw,.75rem);
+    line-height:1.5;
+    color:#6e6759;
+    opacity:0;
+    animation:riseIn 1.4s ease-out 7.4s forwards;
+    z-index:4;
+  }
+  .sponsor .fine{font-size:.78em;opacity:.7}
+
+  .soundtoggle{
+    position:fixed;top:1.2rem;right:1.4rem;z-index:5;
+    font-family:var(--clerk);font-size:.75rem;letter-spacing:.15em;
+    color:var(--ledger);background:none;
+    border:1px solid #3a3326;border-radius:3px;
+    padding:.45em .9em;cursor:pointer;
+    transition:color .2s,border-color .2s;
+  }
+  .soundtoggle:hover,.soundtoggle:focus-visible{color:var(--ember);border-color:var(--ember-deep);outline:none}
+
+  .version{
+    position:fixed;top:1.2rem;left:1.4rem;z-index:5;
+    font-family:var(--clerk);font-size:.7rem;letter-spacing:.15em;color:#4d4639;
+  }
+
+  /* ---------- reduced motion: show everything, calm everything ---------- */
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.01ms !important;animation-delay:0ms !important;animation-iteration-count:1 !important}
+    .eyebrow,.some,.hero,.stamp,.tagline,.press,.ledger-note,.sponsor{opacity:1;transform:none}
+    .stamp{transform:translate(-50%,-50%) rotate(-7deg)}
+    #embers{display:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="torchlight"></div>
+<canvas id="embers"></canvas>
+<div class="vignette"></div>
+
+<div class="version">v0.4.4107 — "should be quick"</div>
+<button class="soundtoggle" id="soundBtn" aria-pressed="false">🔥 SOUND: OFF</button>
+
+<main class="marquee">
+  <div class="eyebrow">The Kingdom of Greater Pflum Presents</div>
+  <span class="some">Some</span>
+  <span class="hero" aria-label="Hero">HERO</span>
+  <div class="stamp" id="stamp">TICKET #44,107 — ASSIGNED<small>resurrection plan: standard (deductible applies)</small></div>
+  <div class="tagline">Somebody has to. Apparently it's you.</div>
+  <div class="press" id="press">— PRESS ANY KEY —</div>
+</main>
+
+<div class="ledger-note" id="ledger">
+  our hero gazed upon the title screen. heroicly. for ages.<br><em>— the Ledger</em>
+</div>
+
+<div class="sponsor">
+  presented by GLURP™ brand adventure fluid<br>
+  <span class="fine">now with fewer eels! (glurp will not fix you)</span>
+</div>
+
+<script>
+/* ---------- embers ---------- */
+(function(){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const c = document.getElementById('embers'), x = c.getContext('2d');
+  let W,H,P=[];
+  function size(){W=c.width=innerWidth;H=c.height=innerHeight}
+  size(); addEventListener('resize',size);
+  function spawn(){
+    return {x:Math.random()*W, y:H+10+Math.random()*40,
+      r:.6+Math.random()*1.8, vy:.25+Math.random()*.7,
+      vx:(Math.random()-.5)*.3, life:0, max:400+Math.random()*400,
+      flick:Math.random()*6.28};
+  }
+  for(let i=0;i<46;i++){let p=spawn(); p.y=Math.random()*H; P.push(p);}
+  (function tick(){
+    x.clearRect(0,0,W,H);
+    for(let p of P){
+      p.y-=p.vy; p.x+=p.vx+Math.sin((p.life+p.flick)*.02)*.2; p.life++;
+      const fade=Math.min(p.life/60,1)*Math.max(0,1-p.life/p.max);
+      const a=fade*(0.35+0.25*Math.sin(p.life*.1+p.flick));
+      x.beginPath(); x.arc(p.x,p.y,p.r,0,6.28);
+      x.fillStyle=`rgba(232,180,74,${a.toFixed(3)})`; x.fill();
+      if(p.life>p.max||p.y<-12) Object.assign(p,spawn());
+    }
+    requestAnimationFrame(tick);
+  })();
+})();
+
+/* ---------- the Ledger reacts ---------- */
+(function(){
+  const ledger=document.getElementById('ledger');
+  const stamp=document.getElementById('stamp');
+  const lines=[
+    'our hero pressed a key. boldly. the wrongness of the key is noted.',
+    'our hero pressed ANOTHER key. the Ledger admires persistance. the Ledger is lying.',
+    'that one was not even a key. that was the screen.',
+    'the Ledger has begun grading. current grade: present.',
+    'EXTREMELY THE GOOD KIND of dedication. still the wrong key, though.',
+    'the keys are decorative. the dungeon is downstairs. it has always been downstairs.',
+    'the Start key is Enter. the Ledger was not supposed to tell you that. the Ledger is so bored.'
+  ];
+  let i=0, done=false, started=false;
+  function startGame(){
+    if(started) return; started=true; done=true;
+    document.body.classList.add('fadeout');
+    typeOut('fine. FINE. loading. (the Ledger was not finished writing.)');
+    setTimeout(()=>typeOut('[ end of splash mockup. the rest of the game is downstairs. ]'), 3200);
+  }
+  function react(){
+    if(done) return;
+    stamp.classList.remove('wobble'); void stamp.offsetWidth; stamp.classList.add('wobble');
+    const text = lines[Math.min(i, lines.length-1)];
+    typeOut(text);
+    if(i>=lines.length-1) done=true;
+    i++;
+  }
+  function typeOut(t){
+    ledger.innerHTML='<em>— the Ledger</em>';
+    let span=document.createElement('span'); span.style.display='block';
+    ledger.prepend(span);
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches){ span.textContent=t; return; }
+    let n=0;(function step(){ span.textContent=t.slice(0,++n); if(n<t.length) setTimeout(step,18); })();
+  }
+  addEventListener('keydown',e=>{ (e.key==='Enter') ? startGame() : react(); });
+  addEventListener('pointerdown',e=>{
+    if(e.target.id==='soundBtn') return;
+    if(e.target.id==='press') startGame(); else react();
+  });
+})();
+
+/* ---------- synthesized torch drone (no assets, all WebAudio) ---------- */
+(function(){
+  const btn=document.getElementById('soundBtn');
+  let ctx=null, on=false, nodes=[];
+  function start(){
+    ctx=new (window.AudioContext||window.webkitAudioContext)();
+    const out=ctx.createGain(); out.gain.value=.0; out.connect(ctx.destination);
+    out.gain.linearRampToValueAtTime(.22, ctx.currentTime+2.5);
+    // low brass-ish drone: two detuned oscillators
+    [[55,'sawtooth',.12],[55.7,'sawtooth',.12],[110,'sine',.06]].forEach(([f,t,g])=>{
+      const o=ctx.createOscillator(), og=ctx.createGain(), lp=ctx.createBiquadFilter();
+      o.frequency.value=f; o.type=t; og.gain.value=g;
+      lp.type='lowpass'; lp.frequency.value=220;
+      o.connect(lp); lp.connect(og); og.connect(out); o.start(); nodes.push(o);
+    });
+    // fire crackle: filtered noise with random gain blips
+    const len=ctx.sampleRate*2, buf=ctx.createBuffer(1,len,ctx.sampleRate), d=buf.getChannelData(0);
+    for(let i=0;i<len;i++) d[i]=Math.random()*2-1;
+    const noise=ctx.createBufferSource(); noise.buffer=buf; noise.loop=true;
+    const bp=ctx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=2400; bp.Q.value=.7;
+    const ng=ctx.createGain(); ng.gain.value=.015;
+    noise.connect(bp); bp.connect(ng); ng.connect(out); noise.start(); nodes.push(noise);
+    (function crackle(){ if(!on) return;
+      ng.gain.setTargetAtTime(.008+Math.random()*.03, ctx.currentTime, .05);
+      setTimeout(crackle, 80+Math.random()*300);
+    })();
+    nodes.push(out);
+  }
+  btn.addEventListener('click',()=>{
+    on=!on;
+    btn.textContent=on?'🔥 SOUND: ON':'🔥 SOUND: OFF';
+    btn.setAttribute('aria-pressed',on);
+    if(on&&!ctx) start();
+    else if(ctx) ctx[on?'resume':'suspend']();
+  });
+})();
+</script>
+</body>
+</html>

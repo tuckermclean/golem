@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>SOME HERO</title>
+<link rel="stylesheet" href="styles/main.css">
+<link rel="stylesheet" href="styles/splash.css">
+</head>
+<body>
+<div id="wrap">
+  <canvas id="c"></canvas>
+
+  <div id="hud" style="opacity:0">
+    <div class="bar" id="hpBar"><div id="hpFill" style="width:100%"></div></div>
+    <div class="bar" id="xpBar"><div id="xpFill" style="width:0%"></div></div>
+    <div id="statline">Lv 1 · 0 g</div>
+  </div>
+  <div id="quest"></div>
+
+  <div id="stickBase"></div><div id="stickKnob"></div>
+  <div id="toast"></div>
+  <div class="btn" id="btnA">ATTACK</div>
+  <div class="btn" id="btnP">🧪 1</div>
+
+  <div id="dlg">
+    <div id="dlgName"></div>
+    <div id="dlgText"></div>
+    <div id="dlgBtns"></div>
+    <div id="dlgHint">tap to continue</div>
+  </div>
+
+  <div id="splash">
+    <div class="torchlight"></div>
+    <canvas id="embers"></canvas>
+    <div class="vignette"></div>
+    <div class="version">v0.4.4107 — "should be quick"</div>
+    <main class="marquee">
+      <div class="eyebrow">The Kingdom of Greater Pflum Presents</div>
+      <span class="some">Some</span>
+      <span class="hero" aria-label="Hero">HERO</span>
+      <div class="stamp" id="splashStamp">TICKET #44,107 — ASSIGNED<small>resurrection plan: standard (deductible applies)</small></div>
+      <div class="tagline">Somebody has to. Apparently it's you.</div>
+      <div class="press" id="splashPress">— PRESS ANY KEY —</div>
+      <div class="soundhint" id="splashSound">🔊 the band starts on your first key</div>
+    </main>
+    <div class="ledger-note" id="splashLedger">our hero gazed upon the title screen. heroicly. for ages.<br><em>— the Ledger</em></div>
+    <div class="sponsor">presented by GLURP™ brand adventure fluid<br><span class="fine">now with fewer eels! (glurp will not fix you)</span></div>
+  </div>
+
+  <div class="ui hidden" id="over">
+    <h1 id="overTitle">INCIDENT REPORT</h1>
+    <div class="sub" id="overSub">filed by the Ledger</div>
+    <div class="tip pulse" id="overTip">tap to rise again</div>
+  </div>
+</div>
+
+<script type="module" src="src/main.js"></script>
+</body>
+</html>
