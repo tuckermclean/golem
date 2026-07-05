@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "verify:golem": "node tools/verify-golem-fixtures.mjs"
+    "verify:golem": "node tools/verify-golem-fixtures.mjs",
+    "verify:tdp": "node tools/verify-tdp-snapshots.mjs"
   }
 }
