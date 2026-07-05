@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adventure Game</title>
+    <style>
+        /* Ensure the html and body take up full height and remove default margins */
+        html, body {
+        height: 100%;
+        margin: 0;
+        font-size: 1.5vh;
+        background-color: #eee
+        }
+
+        /* Use flex on body for center alignment */
+        body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        }
+
+        /* Game container fills available height and uses flex to organize children */
+        #game-container {
+        display: flex;
+        flex-direction: column;
+        max-width: 800px;
+        width: 100%;
+        height: 100vh; /* fills the viewport */
+        margin: 0;
+        box-sizing: border-box;
+        background-color: #fff;
+        }
+
+        /* Room image takes a proportional amount of height and positions location text at its bottom */
+        #room-image {
+        position: relative;
+        flex: 0 0 30vh; /* adjust height relative to viewport */
+        width: 100%;
+        background-color: #eee;
+        background-position: center;
+        background-size: cover;
+        }
+
+        /* Place the location text overlay at the bottom of the room image */
+        #location {
+        margin: 25vh 0 0 0;
+        color: white;
+        background: rgba(0, 0, 0, 0.5);
+        font-size: large; /* responsive font-size */
+        font-weight: bold;
+        line-height: 1.2;
+        border-radius: 0 0 0.5rem 0.5rem;
+        padding: 5px;
+        text-align: center;
+        }
+
+        #description {
+        flex: 0 0 auto;
+        padding: 1rem;
+        margin: 0;
+        }
+
+        /* Sections for actions, items, etc. remain auto-height */
+        #actions, 
+        #items, 
+        #adjacent-rooms, 
+        #inventory,
+        #modal-choices,
+        #money, #health {
+        display: flex;            /* Make this a flex container */
+        flex-wrap: wrap;          /* Allow items to wrap onto new lines */
+        align-items: flex-start;  /* Prevent vertical stretching */
+        justify-content: flex-start; /* Or 'center', 'space-between', etc. */
+        border: 1px solid #ccc;
+        padding: 0.25rem;
+        border-radius: 0.25rem;
+        text-align: center;
+        min-width: 1rem;
+        min-height: 2.5rem;
+        width: fit-content;
+        }
+
+        /* Button containers and labels */
+        span.buttons {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        align-items: end; 
+        width: 100%;
+        padding: 0.5rem;
+        line-height: 2.5rem;
+        }
+
+        span.label {
+        font-weight: bold;
+        color: grey;
+        padding: 0.25rem;
+        width: 5rem;
+        }
+
+        span.buttons span.label {
+        display: inline-block;
+        min-width: 8rem;
+        text-align: right;
+        padding-right: 0.5rem;
+        }
+
+        button {
+        margin: 0.25rem;
+        padding: 0.5rem;
+        cursor: pointer;
+        font-size: 1rem;
+        line-height: 1rem;
+        }
+
+        button.selected {
+        background-color: blue;
+        color: white;
+        }
+
+        /* Logs area takes up remaining available space */
+        #logs {
+        flex: 1 1 auto;
+        border: 1px solid grey;
+        padding: 0.5rem;
+        overflow-y: auto;
+        white-space: pre-wrap;
+        font-family: monospace;
+        margin-top: 0.5rem;
+        text-align: left;
+        }
+
+        /* AI input container and controls at the bottom */
+        #ai-input-container {
+        flex: 0 0 auto;
+        margin-top: 0.5rem;
+        display: flex;
+        align-items: center;
+        width: 100%;
+        }
+
+        #ai-input {
+        flex: 1;
+        padding: 0.5rem;
+        box-sizing: border-box;
+        }
+
+        button#send-button {
+        margin-left: 0.25rem;
+        }
+
+        /* Modal dialog styles remain fixed */
+        #modal-dialog-shade {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        }
+
+        #modal-dialog-shade * {
+        display: none;
+        }
+
+        #modal-dialog {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #fefefe;
+        padding: 1rem;
+        border: 1px solid #888;
+        width: 80%;
+        border-radius: 10px;
+        }
+
+        /* Utility class to force visibility */
+        .visible {
+        display: block !important;
+        }
+
+        .visible * {
+        display: block !important;
+        }
+
+        /* Optional: Adjust sizes for smaller viewports */
+        @media (max-height: 600px) {
+        #room-image {
+            flex: 0 0 20vh;
+        }
+        #location {
+            font-size: 1.2rem;
+        }
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="modal-dialog-shade">
+            <div id="modal-dialog">
+                <h2 id="modal-title">Modal</h2>
+                <span class="buttons">
+                    <span class="label" id="modal-label">Choices:</span>
+                    <span id="modal-choices"></span>
+                </span>
+            </div>
+        </div>
+                
+        <div id="room-image">
+            <p id="location">Loading...</p>
+        </div>
+        <p id="description"></p>
+
+        <span class="buttons">
+            <span class="label">Actions</span><span id="actions"></span>
+        </span>
+
+        <span class="buttons">
+            <span class="label">Items</span><span id="items"></span>
+        </span>
+
+        <span class="buttons">
+            <span class="label">Inventory</span><span id="inventory"></span>
+        </span>
+
+        <span class="buttons">
+            <span class="label">Adjacent Rooms</span><span id="adjacent-rooms"></span>
+        </span>
+
+        <span class="buttons">
+            <span class="label">Money:</span> <span id="money"></span>
+            <span class="label">Health:</span> <span id="health"></span>
+        </span>
+
+        <div id="logs"></div>
+
+        <!-- AI Chat Input -->
+        <div id="ai-input-container">
+            <span class="label">Talking to <span id="ai-character-name">nobody</span></span>
+            <input type="text" id="ai-input" placeholder="Type your message..." disabled="disabled"/>
+            <button onclick="sendMessageToAI()" id="send-button" disabled="disabled">Send</button>
+        </div>
+    </div>
+
+    <script>
+        let selectedAction = null;
+        let selectedItem = null;
+        let currentAICharacter = null;
+        let gameData = {}
+        let logIntervalId = null;
+        let logInterval = 2000;
+
+        async function fetchGameState() {
+            const response = await fetch('/state');
+            gameData = await response.json();
+
+            document.getElementById("location").innerText = gameData.location;
+            document.getElementById("description").innerText = gameData.description;
+
+            updateUI();
+        }
+
+        function updateUI() {
+            let availableActions = gameData.actions;
+            let availableItems = gameData.items;
+            let availableInventory = gameData.inventory;
+
+            if (selectedAction) {
+                availableItems = {};
+                for (const [key, value] of Object.entries(gameData.items)) {
+                    if (value.includes(selectedAction)) {
+                        availableItems[key] = value;
+                    }
+                }
+                availableInventory = {};
+                for (const [key, value] of Object.entries(gameData.inventory)) {
+                    if (value.includes(selectedAction)) {
+                        availableInventory[key] = value;
+                    }
+                }
+            } else {
+                availableItems = gameData.items;
+            }
+            if (selectedItem) {
+                availableActions = {};
+                for (const [key, value] of Object.entries(gameData.actions)) {
+                    if (value.includes(selectedItem)) {
+                        availableActions[key] = value;
+                    }
+                }
+            } else {
+                availableActions = gameData.actions;
+            }
+
+            renderButtons("actions", availableActions, selectAction, selectedAction);
+            renderButtons("items", availableItems, selectItem, selectedItem);
+            renderButtons("adjacent-rooms", gameData.adjacent_rooms, moveToRoom);
+            renderButtons("inventory", availableInventory, selectItem, selectedItem);
+            // The image is the room name, with spaces and ' replaced by underscores
+            document.getElementById("room-image").style.backgroundImage = `url('/images/${gameData.location.replace(/ /g, "_").replace(/'/g, "_")}.jpeg')`;
+            // Format money as a number with commas and two decimal places
+            gameData.money = parseFloat(gameData.money).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById("money").innerText = "$"+gameData.money;
+            document.getElementById("health").innerText = (gameData.health / gameData.first_health * 100).toFixed(2) + "%";
+            fetchLogs();
+        }
+
+        function renderButtons(containerId, items, callback, selectedItem = null) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = "";
+            Object.keys(items).forEach(item => {
+                const button = document.createElement("button");
+                button.innerText = item;
+                button.onclick = () => callback(item);
+                if (item === selectedItem) {
+                    button.classList.add("selected");
+                }
+                container.appendChild(button);
+            });
+        }
+
+        function selectAction(action) {
+            selectedAction = selectedAction === action ? null : action;
+
+            updateUI();
+            checkAndExecute();
+        }
+
+        function selectItem(item) {
+            selectedItem = selectedItem === item ? null : item;
+
+            updateUI();
+            checkAndExecute();
+        }
+
+        async function checkAndExecute() {
+            if (selectedAction && selectedItem) {
+                await executeAction(selectedAction, selectedItem);
+                selectedAction = null;
+                selectedItem = null;
+                fetchGameState();
+            }
+        }
+
+        async function executeAction(action, item, extraData = {}) {
+            const response = await fetch('/action', {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(Object.assign({ action: action, item: item }, extraData))
+            });
+            const data = await response.json();
+
+            if (data.talking) {
+                startConversation(item);
+            } if (data.targets) {
+                if (data.targets.length === 1) {
+                    executeAction(action, item, { target: data.targets[0] });
+                } else if (data.targets.length === 0) {
+                    addLog("No targets available for this action.\n\n");
+                } else {
+                     // Show a modal dialog with the choices
+                    showModal(data.message, data.targets, (target) => {
+                        executeAction(action, item, { target: target });
+                        hideModal();
+                    });
+                }
+                updateUI();
+            }
+        }
+
+        function showModal(title, choices, callback) {
+            const modal = document.getElementById("modal-dialog-shade");
+            const modalTitle = document.getElementById("modal-title");
+            const modalLabel = document.getElementById("modal-label");
+            const modalChoices = document.getElementById("modal-choices");
+
+            modalTitle.innerText = title;
+            modalLabel.innerText = "Choices:";
+            modalChoices.innerHTML = "";
+
+            choices.forEach(choice => {
+                const button = document.createElement("button");
+                button.innerText = choice;
+                button.onclick = () => callback(choice);
+                modalChoices.appendChild(button);
+            });
+
+            modal.classList.add("visible");
+        }
+
+        function hideModal() {
+            const modal = document.getElementById("modal-dialog-shade");
+            modal.classList.remove("visible");
+        }
+
+        async function moveToRoom(room) {
+            await fetch('/move', {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ room: room })
+            });
+            selectedAction = null;
+            selectedItem = null;
+            endConversation();
+            fetchGameState();
+        }
+
+        function startConversation(characterName) {
+            currentAICharacter = characterName;
+            document.getElementById("ai-character-name").innerText = characterName;
+            document.getElementById("ai-input").disabled = false;
+            document.getElementById("ai-input").focus();
+            // When the user presses Enter, send the message
+            document.getElementById("ai-input").onkeydown = (e) => {
+                if (e.key === "Enter") {
+                    sendMessageToAI();
+                }
+            };
+            document.getElementById("send-button").disabled = false;
+        }
+
+        async function sendMessageToAI() {
+            const inputField = document.getElementById("ai-input");
+            // Disable the input field while waiting for the response
+            inputField.disabled = true;
+            const message = inputField.value.trim();
+
+            if (!message) return;
+
+            addLog(`You: ${message}\n\n`);
+
+            logInterval = 200;
+            const response = await fetch('/talk', {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    talking_to: document.getElementById("ai-character-name").innerText,
+                    message: message
+                })
+            });
+
+            const data = await response.json();
+            console.log("AI Response:", data.response);
+            fetchLogs();
+
+            inputField.value = "";
+            logInterval = 2000;
+            fetchGameState();
+            inputField.disabled = false;
+        }
+
+        async function endConversation() {
+            if (!currentAICharacter) return;
+            await fetch('/end_talk', { method: "POST" });
+            document.getElementById("ai-input").disabled = true;
+            document.getElementById("ai-character-name").innerText = "nobody";
+            document.getElementById("ai-input").value = "";
+            document.getElementById("send-button").disabled = true;
+            currentAICharacter = null;
+        }
+
+        function addLog(log) {
+            const logDiv = document.getElementById("logs");
+            // Create a span element for the log
+            const logSpan = document.createElement("span");
+
+            log.replace(/\\n/g, "<br/>");
+            logSpan.innerText = log;
+            logDiv.appendChild(logSpan);
+ 
+            // Set the span to have a yellow background that fades to white
+            logSpan.style.backgroundColor = "yellow";
+            logSpan.style.transition = "background-color 2s";
+            setTimeout(() => {
+                logSpan.style.backgroundColor = "white";
+            }, 100);
+
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        async function fetchLogs() {
+            const response = await fetch('/logs');
+            const data = await response.json();
+            if (data.logs.length > 0) {
+                const logDiv = document.getElementById("logs");
+                data.logs.forEach(log => {
+                    addLog(log);
+                });
+            }
+            if (logIntervalId) {
+                clearInterval(logIntervalId);
+            }
+            logIntervalId = setInterval(fetchLogs, logInterval);
+        }
+
+        fetchGameState();
+        fetchLogs();
+    </script>
+</body>
+</html>
