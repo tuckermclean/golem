@@ -97,5 +97,22 @@ over it; shared/module.js ports src/main.js's old `hostCmd` to
 `hostCmd` is now a 3-line adapter over `validate`. All 25 frozen P0.3
 fixtures replay byte-identically through the new pure `reduce` (the K2
 DoD), and every existing test/fixture/golden still passes unchanged.
-The golem is still the stub at ▶GOLEM-PLUG◀. Next: K3 (`packages/
-kernel` event log + hash chain).
+The golem is still the stub at ▶GOLEM-PLUG◀. K3 (`packages/kernel`
+event log + hash chain) is now DONE: a new `"./log"` subpath export
+(`packages/kernel/src/log.ts`, node:crypto confined to this entry only —
+`src/index.ts` stays platform-neutral) provides `canonicalEvent`
+(sorted-key JSON bytes, the versioned wire format for everything
+below), `appendEvent`/`verifyChain` (append-only sha256 hash chain,
+genesis `prev` = 64 zeros), and `checkpoint`/`verifyCheckpoint`
+(ed25519-signed digest over the chain's tip, via `makeDevKeypair` — dev
+key, key management out of scope). Tamper detection is proven both at
+the chain's tip and mid-chain (with the documented one-link-forward
+surfacing behavior for payload-only tampering), and checkpoint
+verification is proven to survive an actual process restart (a
+committed child script under `packages/kernel/tests/`, spawned fresh,
+exits non-zero on a byte-flipped stored file). `packages/testkit/tests/
+log-chain.test.js` chains one frozen P0.3 fixture log through the new
+API and confirms tamper detection on a real (non-toy) event stream —
+fixtures remain untouched; golem-grid's live wire/fixtures still carry
+no `prev` field (that adoption is K5's call). Every existing test/
+fixture/golden/ceremony/freeze-verify still passes unchanged. Next: K4.
