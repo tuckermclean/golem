@@ -1,0 +1,230 @@
+/* The splash screen — cinematic, played 100% straight. Ported from the
+   splash.html mockup; everything scoped under #splash so the game's own
+   styles stay untouched. The torch drone was cut (one AudioContext is
+   enough); the timeline and the stamp are sacred. */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Special+Elite&display=swap');
+
+#splash{
+  --void:#0a0c12;
+  --ember:#e8b44a;
+  --ember-deep:#c98a2b;
+  --ember-pale:#f6dfa6;
+  --stamp:#c0392b;
+  --ledger:#9a9486;
+  --epic:'Cinzel','Palatino Linotype','Book Antiqua',Georgia,'Times New Roman',serif;
+  --clerk:'Special Elite','Courier Prime','Courier New',monospace;
+
+  position:absolute;inset:0;z-index:10;
+  background:var(--void);
+  font-family:var(--epic);
+  color:var(--ember-pale);
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+  transition:opacity 1s ease;
+}
+#splash.fadeout{opacity:0;pointer-events:none}
+
+/* ---------- atmosphere ---------- */
+#splash .torchlight{
+  position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 42%, rgba(232,180,74,.10), transparent 70%),
+    radial-gradient(ellipse 120% 90% at 50% 110%, rgba(120,60,20,.18), transparent 60%);
+  animation:splashBreathe 4.5s ease-in-out infinite;
+}
+@keyframes splashBreathe{
+  0%,100%{opacity:.85}
+  38%{opacity:1}
+  62%{opacity:.78}
+}
+#splash .vignette{
+  position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 90% 80% at 50% 45%, transparent 40%, rgba(0,0,0,.75) 100%);
+}
+#splash #embers{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+
+/* ---------- title block ---------- */
+#splash .marquee{
+  position:relative;text-align:center;z-index:2;
+  padding:0 1rem;
+}
+#splash .eyebrow{
+  font-family:var(--epic);
+  font-weight:600;
+  font-size:clamp(.65rem,1.6vw,.95rem);
+  letter-spacing:.55em;
+  text-indent:.55em;
+  color:var(--ember-deep);
+  text-transform:uppercase;
+  opacity:0;
+  animation:splashRiseIn 1.4s ease-out .8s forwards;
+}
+#splash .some{
+  display:block;
+  font-weight:600;
+  font-size:clamp(1.1rem,3.4vw,2rem);
+  letter-spacing:.95em;
+  text-indent:.95em;
+  margin-top:2.2rem;
+  color:var(--ember-pale);
+  text-transform:uppercase;
+  opacity:0;
+  animation:splashRiseIn 1.2s ease-out 1.9s forwards;
+}
+#splash .hero{
+  display:block;
+  font-weight:800;
+  font-size:clamp(4.2rem,17vw,12.5rem);
+  line-height:.95;
+  letter-spacing:.06em;
+  text-indent:.06em;
+  text-transform:uppercase;
+  background:linear-gradient(178deg,#fbe9b7 8%,var(--ember) 38%,#8a5a18 55%,var(--ember) 70%,#5e3c10 96%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+  filter:drop-shadow(0 6px 28px rgba(232,180,74,.22)) drop-shadow(0 2px 4px rgba(0,0,0,.9));
+  opacity:0;transform:scale(1.12);
+  animation:splashSlamIn 1s cubic-bezier(.16,1,.3,1) 2.5s forwards;
+  position:relative;
+}
+/* shine sweep */
+#splash .hero::after{
+  content:'HERO';
+  position:absolute;inset:0;
+  background:linear-gradient(115deg,transparent 30%,rgba(255,248,220,.9) 50%,transparent 70%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+  background-size:300% 100%;
+  background-position:-150% 0;
+  animation:splashShine 1.6s ease-in-out 3.6s 1 forwards;
+}
+@keyframes splashShine{to{background-position:250% 0}}
+@keyframes splashRiseIn{
+  from{opacity:0;transform:translateY(14px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes splashSlamIn{
+  from{opacity:0;transform:scale(1.12)}
+  to{opacity:1;transform:scale(1)}
+}
+
+/* ---------- THE STAMP (signature element) ---------- */
+#splash .stamp{
+  position:absolute;
+  left:50%;top:58%;
+  transform:translate(-50%,-50%) rotate(-7deg) scale(3);
+  font-family:var(--clerk);
+  font-size:clamp(.8rem,2.2vw,1.3rem);
+  color:var(--stamp);
+  border:3px double var(--stamp);
+  border-radius:4px;
+  padding:.5em 1.1em;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  white-space:nowrap;
+  background:rgba(10,12,18,.25);
+  opacity:0;
+  mix-blend-mode:screen;
+  text-shadow:0 0 1px var(--stamp);
+  box-shadow:inset 0 0 14px rgba(192,57,43,.25);
+  animation:splashStampSlam .35s cubic-bezier(.36,0,.66,-.56) 5.2s forwards;
+  z-index:3;
+}
+#splash .stamp small{
+  display:block;font-size:.62em;letter-spacing:.3em;text-align:center;
+  border-top:1px solid rgba(192,57,43,.6);margin-top:.3em;padding-top:.25em;
+}
+@keyframes splashStampSlam{
+  from{opacity:0;transform:translate(-50%,-50%) rotate(-7deg) scale(3)}
+  70%{opacity:1;transform:translate(-50%,-50%) rotate(-7deg) scale(.92)}
+  to{opacity:.92;transform:translate(-50%,-50%) rotate(-7deg) scale(1)}
+}
+/* the music's drum hits: the stamp slams again (kept below .wobble so a
+   wobble can interrupt it; the class is sticky and replayed via reset) */
+#splash .stamp.restamp{animation:splashRestamp .3s cubic-bezier(.36,0,.66,-.56) forwards}
+@keyframes splashRestamp{
+  from{opacity:.92;transform:translate(-50%,-50%) rotate(-7deg) scale(1.9)}
+  70%{opacity:1;transform:translate(-50%,-50%) rotate(-7.5deg) scale(.94)}
+  to{opacity:.92;transform:translate(-50%,-50%) rotate(-7deg) scale(1)}
+}
+#splash .hero.resweep::after{animation:splashShine 1.2s ease-in-out forwards}
+#splash .stamp.wobble{animation:splashWobble .4s ease-out}
+@keyframes splashWobble{
+  0%{transform:translate(-50%,-50%) rotate(-7deg) scale(1)}
+  35%{transform:translate(-50%,-50%) rotate(-9.5deg) scale(1.03)}
+  70%{transform:translate(-50%,-50%) rotate(-5.5deg)}
+  100%{transform:translate(-50%,-50%) rotate(-7deg) scale(1)}
+}
+
+/* ---------- tagline + prompt ---------- */
+#splash .tagline{
+  margin-top:3.4rem;
+  font-family:var(--epic);
+  font-weight:600;
+  font-size:clamp(.85rem,2vw,1.15rem);
+  letter-spacing:.3em;text-indent:.3em;
+  color:var(--ledger);
+  text-transform:uppercase;
+  opacity:0;
+  animation:splashRiseIn 1.2s ease-out 5.5s forwards;
+}
+#splash .press{
+  margin-top:2.6rem;
+  font-family:var(--clerk);
+  font-size:clamp(.75rem,1.7vw,1rem);
+  letter-spacing:.22em;
+  color:var(--ember);
+  opacity:0;
+  animation:splashRiseIn .8s ease-out 6.4s forwards, splashBlink 2.4s ease-in-out 7.2s infinite;
+  cursor:pointer;
+}
+@keyframes splashBlink{0%,100%{opacity:1}50%{opacity:.35}}
+#splash .soundhint{
+  margin-top:1.1rem;
+  font-family:var(--clerk);
+  font-size:clamp(.6rem,1.3vw,.78rem);
+  letter-spacing:.18em;
+  color:#6e6759;
+  opacity:0;
+  animation:splashRiseIn 1.2s ease-out 7.6s forwards;
+  transition:opacity .8s ease;
+}
+#splash .soundhint.off{opacity:0 !important;animation:none}
+
+/* ---------- corners ---------- */
+#splash .ledger-note{
+  position:absolute;left:1.4rem;bottom:1.2rem;max-width:min(46ch,60vw);
+  font-family:var(--clerk);
+  font-size:clamp(.68rem,1.5vw,.85rem);
+  line-height:1.5;
+  color:var(--ledger);
+  opacity:0;
+  animation:splashRiseIn 1.4s ease-out 7s forwards;
+  z-index:4;
+}
+#splash .ledger-note em{color:var(--ember-deep);font-style:normal}
+#splash .sponsor{
+  position:absolute;right:1.4rem;bottom:1.2rem;text-align:right;
+  font-family:var(--clerk);
+  font-size:clamp(.6rem,1.3vw,.75rem);
+  line-height:1.5;
+  color:#6e6759;
+  opacity:0;
+  animation:splashRiseIn 1.4s ease-out 7.4s forwards;
+  z-index:4;
+}
+#splash .sponsor .fine{font-size:.78em;opacity:.7}
+#splash .version{
+  position:absolute;top:1.2rem;left:1.4rem;z-index:5;
+  font-family:var(--clerk);font-size:.7rem;letter-spacing:.15em;color:#4d4639;
+}
+
+/* ---------- reduced motion: show everything, calm everything ---------- */
+@media (prefers-reduced-motion: reduce){
+  #splash *{animation-duration:.01ms !important;animation-delay:0ms !important;animation-iteration-count:1 !important}
+  #splash .eyebrow,#splash .some,#splash .hero,#splash .stamp,
+  #splash .tagline,#splash .press,#splash .ledger-note,#splash .sponsor{opacity:1;transform:none}
+  #splash .stamp{transform:translate(-50%,-50%) rotate(-7deg)}
+  #splash #embers{display:none}
+}
