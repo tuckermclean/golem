@@ -141,4 +141,41 @@ round-trip (peer's illegal move denied by the host, delivered back over
 the net package) are both exercised. Not wired into npm test/CI
 (flake budget is O1's call — run it locally). Every existing test/
 fixture/golden/ceremony/freeze-verify still passes unchanged; `make html`
-still produces a single file with zero external references. Next: K5.
+still produces a single file with zero external references. K5
+(re-host golem-grid on K1–K4) is now DONE: golem-grid is a thin client
+over the kernel packages; the original hand-written single-file layout
+is demoted to a reference fixture only. `games/golem-grid/reference/
+golem-grid.html` is the pre-Vite v0.2 prototype recovered byte-verbatim
+from git history (parent of the "golem-grid.html => src/main.js" rename
+commit), sha256-pinned by `tests/reference.test.js`, documented in
+`reference/PROVENANCE.md` — never edited, opens straight from `file://`.
+`src/main.js` shrank from ~340 lines mixing state/host/snapshot/
+perception/render/input into a composition root wiring five focused
+modules: `src/host.js` (hostCommit seq-stamping + the derived LIGHT_WARN/
+WIN/LOSE recursion, no DOM), `src/client.js` (applies EVENTs via the same
+`applyEvent` adapter the host uses — no fork — and applies SNAPSHOTs by
+folding the joining peer's log through @golem-engine/kernel's pure
+`replay()` driving shared/module.js's KernelCore, the K5 acceptance
+hook), `src/perceive.js` (client-local seen/lit + LOS, no network),
+`src/render.js` (canvas/feed/status-bar DOM primitives), and `src/
+input.js` (capture-phase arrow keys + click context menu). The `render(ev)`
+dispatcher and the ▶GOLEM-PLUG◀ prose functions (`golemLine`/`roomBeat`/
+`proseFor`/`lookAt`) stay in main.js by design — splitting them further
+would have scattered a single dispatch/narration decision across modules
+for no behavioral gain (documented, not an oversight). No wire changes:
+still five message kinds, no `prev` stamping live (kernel log adoption
+remains deferred infrastructure). Visual pinning: `tests/e2e/
+visual.smoke.mjs` (new, run by `make smoke-e2e` alongside the two-tab
+smoke) captures the canvas's own `toDataURL()` output at 3 light tiers
+under a fixed seed/scripted moves/`prefers-reduced-motion:reduce`
+emulation (which the app's `instant` flag already uses to disable
+drawGrid's only two Math.random() calls) — the pixel gate held
+byte-identically pre- vs post-restructure on every checkpoint (DOM/
+feed/status/lightfill-inline-style fallback captured too and also
+matched). All frozen fixtures (25/25), ceremony (62/62), topdown-puzzle
+snapshots (6/6), solver band (max 354, unchanged), and `make
+smoke-e2e` (two-tab + visual) pass against the restructured client;
+`make html` still produces a single file with zero external references.
+The "Single-file HTML deliverable" working-practices bullet still holds
+as written — the built dist demo path is unchanged; `reference/` is an
+addition, not a replacement. Next: K6.
