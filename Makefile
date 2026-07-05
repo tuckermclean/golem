@@ -23,6 +23,8 @@ dev:
 smoke-e2e: html
 	@echo "two-tab Playwright smoke (real Chromium, file://, NOT part of npm test/CI)"
 	node games/golem-grid/tests/e2e/two-tab.smoke.mjs
+	@echo "visual-pinning Playwright smoke (deterministic canvas capture, same harness)"
+	node games/golem-grid/tests/e2e/visual.smoke.mjs capture games/golem-grid/tests/e2e/.visual-out
 
 data-batch:
 	node tools/harvest.js --seeds 100 --out work/controls.jsonl
