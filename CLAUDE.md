@@ -85,5 +85,17 @@ principle. Phase 1 K1 (`packages/random`) is DONE: h32/channel/pick/
 chance/rint live in packages/random as TypeScript, built via `prepare`
 (tsc), with vector + cross-check tests; games/golem-grid/shared/rng.js
 is now a re-export and every frozen fixture/golden/ceremony test still
-passes unchanged. The golem is still the stub at ▶GOLEM-PLUG◀. Next:
-K2 (`packages/kernel` — types and pure reducer).
+passes unchanged. K2 (`packages/kernel` — types and pure reducer) is now
+DONE: packages/kernel exports Event/Command/Denial/ValidateResult/
+isDenial/GameModule/KernelCore and the pure `replay()` fold (TS strict,
+zero runtime deps); games/golem-grid/shared/reducer.js gained a pure
+`reduce(state, dungeon, event) → state` (fresh Map, copied player
+objects, no mutation), with `applyEvent` now a thin in-place adapter
+over it; shared/module.js ports src/main.js's old `hostCmd` to
+`validate(ctx, cmd) → Event[] | Denial` with byte-exact parity
+(including derived LIGHT_WARN/WIN/LOSE event ordering); main.js's
+`hostCmd` is now a 3-line adapter over `validate`. All 25 frozen P0.3
+fixtures replay byte-identically through the new pure `reduce` (the K2
+DoD), and every existing test/fixture/golden still passes unchanged.
+The golem is still the stub at ▶GOLEM-PLUG◀. Next: K3 (`packages/
+kernel` event log + hash chain).
