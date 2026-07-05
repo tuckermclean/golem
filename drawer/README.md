@@ -23,3 +23,8 @@ the item only influences event-vocabulary design, which costs nothing.
 [OATH_AND_LEDGER.md](OATH_AND_LEDGER.md) — the society layer
 (contribution, oaths, reputation, gold) — lives here with its own
 pull-condition; only its event vocabulary escapes the drawer (task K6).
+
+[MARKET.md](MARKET.md) — in-run prediction markets on run outcomes;
+deeper in the drawer than the society layer it depends on. Only its
+event vocabulary (MARKET_OPENED / POSITION_TAKEN / MARKET_SETTLED)
+escapes, into the K6 schema.
