@@ -15,7 +15,7 @@ import { createMeta, recordDeath } from '../legacy/src/core/meta.js';
 import { respawnAtGuild } from '../legacy/src/systems/respawn.js';
 import { hurtPlayer } from '../legacy/src/systems/combat.js';
 import { enterTomb } from '../legacy/src/world/zones.js';
-import { blankGame, seededGame, spyFx } from '../legacy/tests/helpers.js';
+import { blankGame, seededGame, spyFx } from './helpers.js';
 
 test('@ceremony respawnAtGuild: deductible is ceil(gold/2), hp restored to full, position reset to the Guild Hall', () => {
   const game = blankGame(), fx = spyFx();

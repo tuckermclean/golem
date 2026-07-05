@@ -12,7 +12,7 @@ import {
   minPayment, makeDeathPayment, payDown, truthInLending
 } from '../legacy/src/systems/credit.js';
 import { respawnAtGuild } from '../legacy/src/systems/respawn.js';
-import { blankGame, spyFx } from '../legacy/tests/helpers.js';
+import { blankGame, spyFx } from './helpers.js';
 
 test('@ceremony score constants: MIN 300, MAX 850, START 650', () => {
   assert.equal(SCORE_MIN, 300);

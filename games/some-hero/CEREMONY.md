@@ -16,6 +16,18 @@ archival that made them necessary in the first place. Where a
 `ceremony/` test's assertion is materially the same value as a legacy
 test's assertion, that is intentional, not oversight.
 
+**Standalone means no dependency on `legacy/tests/` either.** All six
+`ceremony/*.ceremony.test.js` files import game/state fixtures
+(`blankGame`, `seededGame`, `spyFx`) from `games/some-hero/ceremony/
+helpers.js`, a file inlined into this suite — copied verbatim from
+`legacy/tests/helpers.js` (legacy snapshot e3d17bb) with only its
+`legacy/src/...` import paths adjusted for its new location and a header
+explaining the copy. That file still imports from `legacy/src/` (the
+part decision 4 explicitly allows and the part S2 actually ports); it no
+longer imports anything from `legacy/tests/`, which dies wholesale with
+the rest of `legacy/` at archival. `legacy/tests/helpers.js` itself is
+untouched.
+
 All values below were **observed** by running the tests against
 `legacy/src` (not assumed from reading). Node 25 quirk: `node --test
 <dir>/` throws `MODULE_NOT_FOUND` on this engine; `npm run test:ceremony`

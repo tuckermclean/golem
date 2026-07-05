@@ -12,7 +12,7 @@ import { missingCredentials, grantBackstory, grantDebt, swordVerdict } from '../
 import { handleStairs } from '../legacy/src/systems/stairs.js';
 import { entryLines, approvalLines } from '../legacy/src/content/golem.js';
 import { enterTomb, exitTomb } from '../legacy/src/world/zones.js';
-import { seededGame, blankGame, spyFx } from '../legacy/tests/helpers.js';
+import { seededGame, blankGame, spyFx } from './helpers.js';
 
 function standOnTrapdoor(game) {
   const ptx = Math.floor(game.player.x / T), pty = Math.floor(game.player.y / T);

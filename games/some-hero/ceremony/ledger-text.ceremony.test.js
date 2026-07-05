@@ -17,6 +17,8 @@ test('@ceremony ledgerize house-style spelling substitutions are pinned, case-pr
   assert.equal(ledgerize('the original hero'), 'the origenal hero');
   assert.equal(ledgerize('Original character'), 'Origenal character');
   assert.equal(ledgerize('definitely victorious'), 'definately victoreous');
+  assert.equal(ledgerize('the nemesis returns'), 'the nemisis returns');
+  assert.equal(ledgerize('Nemesis returns'), 'Nemisis returns', 'capitalized nemesis is also case-preserved');
   assert.equal(ledgerize('a plain sentence'), 'a plain sentence', 'no false positives');
 });
 
