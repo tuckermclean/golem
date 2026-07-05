@@ -154,7 +154,17 @@ export function verifyChain(entries: readonly unknown[]): ChainVerifyResult {
  *  not itself checked against the chain by `verifyCheckpoint` beyond
  *  being recomputed the same way on both ends. `digest` is
  *  sha256(head + String(count)); `signature` is an ed25519 signature
- *  (hex) over `digest`'s utf8 bytes. */
+ *  (hex) over `digest`'s utf8 bytes.
+ *
+ *  IMPORTANT — a checkpoint protects only the chain's TIP (its last
+ *  entry's hash and the total count), not the interior: two entries in
+ *  the middle of the chain can be tampered with, or swapped, without
+ *  changing `head` or `count` at all, so a checkpoint alone cannot
+ *  reveal that. Pair every checkpoint check with `verifyChain(entries)`
+ *  over the same entries to get interior integrity as well — checkpoint
+ *  answers "has the tip been rolled back or forged since I signed it,"
+ *  `verifyChain` answers "is every link intact." Neither alone is a
+ *  complete integrity proof. */
 export interface Checkpoint {
   seq: number;
   head: string;
@@ -188,11 +198,20 @@ export function checkpoint(entries: readonly unknown[], privateKey: KeyObject): 
 
 /**
  * Recompute `entries`' checkpoint fields and verify both that they
- * match `cp` (catches tampering with `entries` OR with the stored
- * checkpoint's non-signature fields) and that `cp.signature` is a valid
- * ed25519 signature over `cp.digest` under `publicKey`. Returns a plain
- * boolean — never throws on tampered/mismatched input, only on
- * malformed `entries`/`cp` shape.
+ * match `cp` and that `cp.signature` is a valid ed25519 signature over
+ * `cp.digest` under `publicKey`. Returns a plain boolean — never throws
+ * on tampered/mismatched input, only on malformed `entries`/`cp` shape.
+ *
+ * SCOPE: `head`/`count` are derived ONLY from the last entry and the
+ * array length, so this only catches tampering that changes the
+ * chain's TIP or its length — truncation, appending a rogue entry, or
+ * editing/swapping the last entry — plus any direct edit of `cp` itself
+ * or a wrong `publicKey`. It does NOT, by itself, detect tampering
+ * confined to the chain's interior: editing a non-last entry leaves
+ * `head` and `count` completely unchanged, so this function has
+ * nothing to disagree with. Call `verifyChain(entries)` on the same
+ * entries for interior integrity; use both together for a complete
+ * check, as this package's cross-process restart test does.
  */
 export function verifyCheckpoint(
   cp: Checkpoint,
