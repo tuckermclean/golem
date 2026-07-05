@@ -1,5 +1,8 @@
 # golem-pipeline
 
+This repo is now the `golem-engine` monorepo (see VISION.md) and is under
+restructure per DELTA.md; golem-grid lives at `games/golem-grid/`.
+
 CI/CD for a 15M-parameter dungeon golem: synthetic data generation, GPU
 training on ephemeral spot instances, eval-gated model promotion, WASM
 packaging, and CDN deployment. All cloud resources are Terraform-defined.
@@ -64,7 +67,7 @@ validator unit tests. No model involved; sub-minute.
 ```
 make test        # determinism + validator tests
 make solve       # 10K-seed winnability + difficulty band
-make html        # build the single-file dist/golem-grid.html (file:// demo)
+make html        # build games/golem-grid/dist/golem-grid.html (file:// demo)
 make data-batch  # one generation batch against the big-model API
 make train-local # tiny smoke-train on CPU (256K params, minutes)
 make wasm        # build golem.wasm via emsdk
