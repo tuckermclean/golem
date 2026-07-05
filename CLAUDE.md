@@ -1,6 +1,7 @@
 # CLAUDE.md — golem-grid
 
-Read SPEC.md for the full design. This file is the constitution and the
+Read VISION.md and DELTA.md; historical spec at
+docs/SPEC-golem-v0.2.md. This file is the constitution and the
 working practices. When in doubt, the doctrine decides.
 
 ## Doctrine
@@ -69,5 +70,9 @@ working practices. When in doubt, the doctrine decides.
 ## Current status
 
 Roadmap steps 1–3 are DONE: shared modules under shared/, Vite single-file
-build (make html), tests green (make test), solver gate (make solve).
-The golem is still the stub at ▶GOLEM-PLUG◀. Next: step 4 (data tools).
+build (make html), tests green (make test), solver gate (make solve). The
+P0.1 monorepo restructure is DONE: this repo is now the golem-engine
+monorepo (games/golem-grid/, packages/*, drawer/, docs/). VISION.md and
+DELTA.md now govern — DELTA.md on sequencing, VISION.md on principle.
+The golem is still the stub at ▶GOLEM-PLUG◀. Next: P0.2 (import the
+sibling repos).

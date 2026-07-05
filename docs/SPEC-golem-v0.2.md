@@ -1,3 +1,5 @@
+> **HISTORICAL.** This is the golem v0.2 spec, superseded by VISION.md (vision) and DELTA.md (work order). Kept for reference; section numbers are cited by CLAUDE.md and DELTA.md.
+
 # GOLEM/GRID — Project Specification
 *v0.2 handoff — from design conversation to working repository*
 

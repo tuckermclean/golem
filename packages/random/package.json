@@ -1,0 +1,6 @@
+{
+  "name": "@golem-engine/random",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module"
+}

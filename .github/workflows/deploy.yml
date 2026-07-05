@@ -46,7 +46,7 @@ jobs:
 
       - name: assemble bundle + manifest
         run: |
-          cp golem-world.html dist/
+          cp docs/prototypes/golem-world.html dist/
           cat > dist/manifest.json <<EOF
           {
             "weights": "/weights/${{ inputs.weights }}",
