@@ -7,6 +7,7 @@ import { START_LIGHT, LIGHT_TIERS, createState,
          light as rLight, itemAt as rItemAt, prizeCarrier as rPrizeCarrier,
          radius as rRadius } from "../shared/reducer.js";
 import { makeDeduper } from "../shared/dedup.js";
+import { validate } from "../shared/module.js";
 
 /* ── STATE: page identity + reducer state. Pure logic lives in shared/;
    these aliases bind it to this page's state so the v0.2 code reads the
@@ -94,38 +95,9 @@ function hostCommit(ev){ev.seq=S.st.seq+1;
 function hostDeny(pid,reason){if(pid===S.me)feedLine(reason,"deny");
   else NET.send({k:"DENY",to:pid,reason});}
 function hostCmd(from,cmd){
-  if(S.st.over)return hostDeny(from,"The delve is over. Host a new world.");
-  const p=getP(from);if(!p)return;
-  const[verb,...rest]=cmd.trim().split(/\s+/);const arg=rest.join(" ");
-  switch(verb){
-    case"move":{const dx=+rest[0],dy=+rest[1];
-      if(Math.abs(dx)+Math.abs(dy)!==1)return;
-      const nx=p.x+dx,ny=p.y+dy;
-      if(nx<0||ny<0||nx>=GW||ny>=GH||S.dun.grid[ny][nx]==="#")
-        return hostDeny(from,"Stone does not negotiate.");
-      return hostCommit({t:"MOVE",pid:from,x:nx,y:ny});}
-    case"take":{
-      if(!prizeCarrier()&&p.x===S.dun.prize.x&&p.y===S.dun.prize.y)
-        return hostCommit({t:"TAKE_PRIZE",pid:from});
-      const it=itemAt(p.x,p.y);
-      if(!it)return hostDeny(from,"Your fingers close on empty air.");
-      if(arg&&!it.includes(arg))return hostDeny(from,`No ${arg} here — but there is a ${it}.`);
-      return hostCommit({t:"TAKE",pid:from,item:it,x:p.x,y:p.y});}
-    case"read":{
-      for(const[k,tier]of S.dun.lore){const[lx,ly]=k.split(",").map(Number);
-        if(Math.abs(lx-p.x)<=1&&Math.abs(ly-p.y)<=1)
-          return hostCommit({t:"READ",pid:from,tier,x:lx,y:ly});}
-      return hostDeny(from,"Nothing here is written for you.");}
-    case"say":return hostCommit({t:"SAY",pid:from,text:arg.slice(0,240),
-                                 x:p.x,y:p.y,scope:"room"});
-    case"party":return hostCommit({t:"SAY",pid:from,text:arg.slice(0,240),scope:"party"});
-    case"whisper":{const[to,...msg]=rest;
-      const target=players().find(q=>q.name.toLowerCase()===String(to).toLowerCase());
-      if(!target)return hostDeny(from,`No one called ${to} is down here.`);
-      return hostCommit({t:"WHISPER",pid:from,to:target.id,text:msg.join(" ").slice(0,240)});}
-    case"emote":return hostCommit({t:"EMOTE",pid:from,text:arg.slice(0,160),x:p.x,y:p.y});
-    default:return hostDeny(from,`The world does not know the verb "${verb}".`);
-  }
+  const r=validate({st:S.st,dun:S.dun,from},cmd);
+  if(!Array.isArray(r))return hostDeny(from,r.deny);
+  for(const ev of r)hostCommit(ev);
 }
 
 /* ── CLIENT: protocol ──────────────────────────────────────────────────── */
