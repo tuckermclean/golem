@@ -53,3 +53,40 @@ jobs:
         with:
           name: golem-grid-html
           path: games/golem-grid/dist/golem-grid.html
+
+  some-hero-legacy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      # Cold runner: legacy deps aren't installed yet, so Playwright's
+      # own package (and thus its browser installer) isn't resolvable
+      # until after a first `npm ci` in the legacy dir.
+      - name: Install legacy deps
+        working-directory: games/some-hero/legacy
+        run: npm ci
+      # Mirrors some-hero's own upstream CI (see
+      # games/some-hero/legacy/.github/workflows/ci.yml).
+      - name: Install Playwright Chromium
+        working-directory: games/some-hero/legacy
+        run: npx playwright install --with-deps chromium
+      - name: some-hero legacy unit + e2e suites
+        run: npm run test:some-hero-legacy
+      - name: Upload e2e screenshots on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: some-hero-e2e-shots
+          path: games/some-hero/legacy/tests/e2e/shots/
+
+  level-manifest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: regenerate topdown-puzzle level manifest; fail on drift
+        run: |
+          node games/topdown-puzzle/tools/gen-level-manifest.mjs
+          git diff --exit-code -- games/topdown-puzzle/levels/manifest.json
