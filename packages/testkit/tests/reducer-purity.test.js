@@ -27,6 +27,8 @@ test("purity: reduce does not mutate its input state and returns a new reference
   const st = createState();
   applyEvent(st, dun, { t: "JOIN", pid: "p1", name: "Ash", seq: 1 });
   const beforeBytes = serializeState(st);
+  const preLogLength = st.log.length;
+  const preLogRef = st.log;
 
   // reduce() doesn't validate legality (that's `validate`'s job) so any
   // coordinates exercise the MOVE case; light/x/y all get touched.
@@ -38,6 +40,20 @@ test("purity: reduce does not mutate its input state and returns a new reference
   assert.notEqual(next.D, st.D, "reduce must return a fresh Map for D, not the original reference");
   assert.equal(next.D.get("player:p1").x, dun.stairs.x + 1, "the returned state reflects the event");
   assert.equal(st.D.get("player:p1").x, dun.stairs.x, "the original state's player is untouched");
+
+  // `serializeState` does not include `log` at all (see reducer.js), so
+  // the assertions above are blind to a `reduce` that does
+  // `st.log.push(ev); return {..., log: st.log, ...}` — in-place growth
+  // of the original array PLUS aliasing the same reference out as the
+  // "new" state's log. That variant would pass every assertion above
+  // (byte-identical serialization, `next !== st`, `next.D !== st.D`)
+  // while still mutating `st` and violating "reduce returns a NEW
+  // state" for its `log` field specifically. Close that gap directly:
+  assert.notEqual(next.log, st.log, "reduce must return a new log array, not the same reference (no aliasing)");
+  assert.equal(st.log.length, preLogLength, "reduce must not grow the original state's log array in place");
+  assert.equal(st.log, preLogRef, "the original state's log array reference must be completely untouched");
+  assert.equal(next.log.length, preLogLength + 1, "the returned state's log must have exactly one more entry");
+  assert.equal(next.log[next.log.length - 1], ev, "the returned state's log must end with the new event");
 });
 
 test("identity-blind: two independent replays of the same log (standing in for two different local players) converge byte-identically", () => {

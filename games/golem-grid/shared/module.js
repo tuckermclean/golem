@@ -7,7 +7,7 @@
    assignment stays a host-adapter concern (main.js's hostCommit). ───── */
 import { GW, GH, genDungeon } from "./worldgen.js";
 import {
-  START_LIGHT, LIGHT_TIERS, reduce,
+  LIGHT_TIERS, reduce,
   getP, light, itemAt, prizeCarrier, players,
 } from "./reducer.js";
 
