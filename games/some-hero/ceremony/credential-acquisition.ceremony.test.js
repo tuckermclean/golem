@@ -11,7 +11,7 @@ import assert from 'node:assert/strict';
 import { createMeta } from '../legacy/src/core/meta.js';
 import { missingCredentials, grantBackstory, grantDebt } from '../legacy/src/systems/credentials.js';
 import { borrow, payDown } from '../legacy/src/systems/credit.js';
-import { blankGame } from '../legacy/tests/helpers.js';
+import { blankGame } from './helpers.js';
 
 test('@ceremony fresh meta.credentials starts as { backstory: false, debt: false } — no sword slot (the sword is not knowledge)', () => {
   const meta = createMeta();

@@ -14,7 +14,7 @@ import { handleStairs } from '../legacy/src/systems/stairs.js';
 import { tombQuestLine } from '../legacy/src/systems/quest.js';
 import { mulberry32 } from '../legacy/src/core/rng.js';
 import { enterTomb } from '../legacy/src/world/zones.js';
-import { blankGame, seededGame, spyFx } from '../legacy/tests/helpers.js';
+import { blankGame, seededGame, spyFx } from './helpers.js';
 
 test('@ceremony stairsOpen truth table: null puzzle is always open', () => {
   const game = blankGame();
