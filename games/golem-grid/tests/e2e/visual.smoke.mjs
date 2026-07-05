@@ -79,6 +79,10 @@ async function capture(outDir) {
     const page = await context.newPage();
     await page.goto("file://" + DIST);
 
+    // pin the name field: the default is Math.random()-seeded ("Wanderer"+
+    // random digits, in main.js boot code, unrelated to K5's restructure)
+    // and would otherwise be the only source of run-to-run DOM noise here.
+    await page.fill("#st-name", "VisualSmoke");
     await page.fill("#st-seed", SEED);
     await page.click("#bt-host");
     await page.waitForFunction(
