@@ -20,5 +20,6 @@ the item only influences event-vocabulary design, which costs nothing.
 - **Dedicated server / host migration** — pull when real-network play
   matters. The protocol already permits it.
 
-OATH_AND_LEDGER.md is referenced by DELTA.md P0.1 but does not exist in
-any source repo as of P0.1; if it surfaces, it lands here.
+[OATH_AND_LEDGER.md](OATH_AND_LEDGER.md) — the society layer
+(contribution, oaths, reputation, gold) — lives here with its own
+pull-condition; only its event vocabulary escapes the drawer (task K6).
