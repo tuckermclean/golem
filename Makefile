@@ -1,6 +1,6 @@
 # Local mirrors of the pipeline stages. CI runs the same commands.
 
-.PHONY: test data-batch train-local wasm infra-plan infra-apply
+.PHONY: test data-batch train-local wasm infra-plan infra-apply solve
 
 test:
 	node --test tests/worldgen.test.js tests/replay.test.js
@@ -28,3 +28,6 @@ infra-plan:
 
 infra-apply:
 	cd infra && terraform apply
+
+solve:
+	node tools/solve.js --seeds 10000
