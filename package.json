@@ -7,6 +7,7 @@
     "games/*"
   ],
   "scripts": {
-    "test": "npm run test --workspaces --if-present"
+    "test": "npm run test --workspaces --if-present",
+    "test:some-hero-legacy": "npm ci --prefix games/some-hero/legacy && npm test --prefix games/some-hero/legacy && npm run test:e2e --prefix games/some-hero/legacy"
   }
 }
