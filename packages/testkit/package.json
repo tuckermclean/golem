@@ -5,6 +5,10 @@
   "type": "module",
   "scripts": {
     "verify:golem": "node tools/verify-golem-fixtures.mjs",
-    "verify:tdp": "node tools/verify-tdp-snapshots.mjs"
+    "verify:tdp": "node tools/verify-tdp-snapshots.mjs",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "@golem-engine/kernel": "*"
   }
 }
