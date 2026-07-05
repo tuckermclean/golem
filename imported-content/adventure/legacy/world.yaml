@@ -1,0 +1,856 @@
+rooms:
+  - name: village square
+    description: "A bustling, open square at the center of the village. Street performers, questionable food carts, and a faint smell of potatoes linger in the air."
+    links:
+      - shop
+      - tavern
+      - back alley
+      - forest road
+    items:
+      - name: fountain
+        type: Useable
+        description: "An ornate fountain spouting slightly murky water. Town rumor says tossing a coin in grants luck, but nobody looks lucky here."
+        verb: "toss"
+        use_msg: "You toss some water in the air. Nobody seems impressed."
+        takeable: false
+      #- name: payphone
+      #  type: Phone
+      #  description: "A battered payphone perched strangely in the middle of the village square. Possibly the only phone around."
+      #  cost: 0.25
+      #  costmsg: "Out of quarters? Sorry, the phone won't budge."
+      #  mobile: false
+
+  - name: shop
+    description: "A cramped general store with shelves overflowing with odds and ends. A faint smell of mothballs permeates the stale air."
+    links:
+      - village square
+    items:
+      - name: silver coins
+        type: Money
+        description: "A small stack of tarnished silver coins. The shopkeeper won't mind if you borrow these, right?"
+        amount: 1.50
+      - name: dusty lantern
+        type: Useable
+        description: "An old brass lantern covered in dust. Might brighten your path if it still works."
+        verb: "light"
+        use_msg: "You strike the lantern. After some sputtering, it glows faintly."
+
+  - name: tavern
+    description: "A cozy, dimly lit tavern. Wooden tables, a roaring fireplace, and the scent of ale mix with boisterous chatter."
+    links:
+      - village square
+    items: []
+
+  - name: back alley
+    description: "A narrow alleyway between tall, leaning buildings. Broken barrels and an old stray cat complete the picture."
+    links:
+      - village square
+    items:
+      - name: broken crate
+        type: Item
+        description: "A shattered wooden crate. It's empty, but might hide a roach or two."
+
+  - name: forest road
+    description: "A winding dirt road that meanders from the village square into the deeper forest. Lantern posts line the way, though most stand unlit."
+    links:
+      - village square
+      - forest clearing
+    items:
+      - name: signpost
+        type: Item
+        description: "A wooden sign with faded lettering: 'Beware the forest beyond. Mystery abounds.'"
+        takeable: false
+
+  - name: old oak clearing
+    description: "An ancient oak stands in the center. Its trunk is massive, and a rope swing dangles invitingly from a sturdy branch."
+    links:
+      - spooky house
+      - enchanted pond
+    items:
+      - name: rope swing
+        type: Useable
+        description: "A simple rope tied to the thickest branch of the oak. It creaks when you put weight on it."
+        verb: "swing"
+        use_msg: "You hop onto the rope swing and push off. For a moment, you're a carefree child again."
+
+  - name: enchanted pond
+    description: "A shimmering pond reflecting the treetops and sky. Water lilies float serenely, occasionally bobbing with unseen fish below."
+    links:
+      - old oak clearing
+      - forest clearing
+      - deep forest path
+    items:
+      - name: sparkling stone
+        type: Item
+        description: "A small stone that catches the light just right, glinting with a silvery gleam."
+
+  - name: deep forest path
+    description: "A narrow footpath winding through towering evergreens. The sunlight barely reaches the mossy ground, and shadows dance in the breeze."
+    links:
+      - enchanted pond   # Or forest clearing, or old oak clearing—whichever best fits your world
+      - misty glen
+    items:
+      - name: hollow log
+        type: Useable
+        description: "A decaying log with a large hollow inside. Something might be lurking within."
+        verb: "inspect"
+        use_msg: "You peer into the log's damp interior. It's dark and smells like rotting leaves."
+        takeable: false
+      - name: rare mushroom
+        type: Eatable
+        description: "A peculiar mushroom with swirling purple spots. It looks both delicious and dangerous."
+        use_msg: "You nibble the rare mushroom. A delightful tang tickles your palate, but you sense it might have mystical properties, too."
+        func: |
+          setattr(player, 'mushroom_insight', True)
+
+  - name: misty glen
+    description: "A silent glen shrouded in fog. Pale light filters through the canopy, revealing wispy shapes that vanish when you look twice."
+    links:
+      - deep forest path
+      - fae circle
+    items:
+      - name: eerie lantern
+        type: Useable
+        description: "A ghostly lantern flickering blue. Strange runes adorn its rim."
+        verb: "light"
+        use_msg: "You try to light the lantern. A cold flame sputters to life, illuminating the fog with an otherworldly glow."
+
+  - name: fae circle
+    description: "A ring of ancient toadstools glowing faintly in the twilight. A soft chime resonates in the air, beckoning wanderers closer."
+    links:
+      - misty glen
+      - haunted grove
+    items:
+      - name: moonstone
+        type: Item
+        description: "A smooth, milky-white stone lying among the toadstools. It shines when touched by moonlight."
+
+  - name: haunted grove
+    description: "Twisted trees and gnarled roots give this grove a menacing aura. Faint whispers echo, though no one is visible. The air grows colder."
+    links:
+      - fae circle
+    items:
+      - name: whispering skull
+        type: Useable
+        description: "An animal skull perched on a stump, faintly whispering incomprehensible words. You feel uneasy just being near it."
+        verb: "listen"
+        func: |
+          if hasattr(player, 'mushroom_insight'):
+            game.output("You hold the skull, and it whispers a tale as the mushroom insight takes hold:")
+          elif hasattr(player, 'potion_insight'):
+            game.output("You hold the skull, and it whispers a tale as the potion insight takes hold:")
+          else:
+            game.output("You hold the skull and you can hear faint whispers, but you can't quite make them out. Maybe some magical insight would help?")
+          if hasattr(player, 'mushroom_insight') or hasattr(player, 'potion_insight'):
+            game.output("Beyond the grove, a hidden path leads to a realm where time flows differently. The whispers speak of a hero who once walked this path, facing trials that tested their very essence. They emerged changed, forever bound to the forest's magic. But beware, for the path is not without its dangers. Only those with true insight may tread safely.")
+
+  - name: ancient ruin
+    description: "Crumbled stone pillars and toppled statues hint at a lost civilization. Vines wrap around broken walls, nature reclaiming what was once grand."
+    links:
+      - hidden waterfall
+      - arion's tomb
+    items:
+      - name: stone tablet
+        type: Useable
+        description: "A moss-covered tablet with faded carvings, telling a near-forgotten story."
+        verb: "read"
+        use_msg: |
+          You trace the carvings with your fingers, and the story unfolds in your mind:
+          -------------
+          The hero Arion, with silver eyes, traveled across distant mountains to slay monsters born from shadow. Alongside him walked his companion Selene—a woman of great wisdom, whose heart knew no fear.
+
+          In forests of crystal, they faced the serpent Rimewyrm whose breath turned rivers into ice. Beneath crimson skies, they defeated the beast Dreamrender whose roar shattered dreams. Their legend grew with every victory, binding their fates tighter.
+          
+          Yet whispers foretold tragedy. A cursed mirror showed Arion glimpses of treachery, twisted reflections he refused to believe.
+          
+          In a ruined city cloaked in mist, they faced their final monster—the demon Malachor whose voice sowed seeds of doubt. Arion fought bravely, yet the whispers took root.
+          
+          In the decisive moment, his trusted companion Selene turned blade against him. Her tearful eyes revealed the demon Malachor's dark truth: to defeat evil forever required the sacrifice of goodness itself.
+          
+          He fell, betrayed but understanding, his silver eyes fading beneath a broken moon.
+          
+          Selene lingered alone among the ruins, a hero no longer, carrying the weight of a world saved but forever lost.
+
+  - name: arion's tomb
+    description: "A hidden tomb shrouded in mist. The air is thick with sorrow, and the ground is littered with broken stones."
+    links:
+      - ancient ruin
+    items:
+      - name: crypt
+        type: Item
+        description: "A stone crypt with intricate carvings, hinting at a tragic tale of betrayal and sacrifice."
+        takeable: false
+      - name: arion's sword
+        type: Weapon
+        description: "A magically gleaming sword, strangely preserved. It seems to hum with a forgotten power."
+        damage: 3
+
+  - name: hidden waterfall
+    description: "A tumbling cascade of water concealed behind dense foliage. The spray cools the air, creating rainbows in dappled sunlight."
+    links:
+      - ancient ruin
+    items:
+      - name: sparkling fish
+        type: Useable
+        description: "A small fish shimmering with rainbow scales. It leaps through the waterfall spray, impossible to catch by normal means."
+        verb: "catch"
+        func: |
+          from items import Useable
+          if hasattr(player, 'mushroom_insight') or hasattr(player, 'potion_insight'):
+            game.output("You catch the shimmering fish. It wriggles in your hands, and you feel a surge of energy. The fish seems to whisper secrets of the forest.")
+            fish = player.current_room.pop("sparkling fish")
+            player.inv_items["sparkling fish"] = fish
+            fish.add_action("drop", fish.drop)
+          else:
+            game.output("You try to catch the shimmering fish, but it slips through your fingers. It seems to be laughing at you.")
+        takeable: False
+
+  - name: forest clearing
+    description: "A serene clearing in the woods, dappled with sunlight. Birds chirp overhead, and a gentle breeze rustles the leaves."
+    links:
+      - wizard's tower
+      - forest road
+      - enchanted pond
+    items: []
+
+  - name: wizard's tower
+    description: "A tall, crooked tower with arcane symbols etched into the stone walls. A faint hum of magical energy fills the air."
+    links:
+      - forest clearing
+    items:
+      - name: dusty tome
+        type: Useable
+        description: "A thick tome of archaic lore. The pages ruffle as if alive."
+        verb: "read"
+        use_msg: "The tome's letters swirl before your eyes, forming cryptic instructions and half-finished spells."
+
+  - name: secret hideout
+    description: "A hidden room under the alley, filled with contraband potions and bizarre contraptions. Strange runes glow on the walls."
+    links:
+      - catacombs
+    items:
+      - name: forbidden potion
+        type: Eatable
+        description: "This neon-green concoction steams in its flask. You're not quite sure what's in it."
+        verb: "drink"
+        use_msg: "You gulp it down. You feel an intense rush of euphoria and dread... best not to dwell on it. You also feel a twinge of insight."
+        func: |
+          setattr(player, 'potion_insight', True)
+      - name: loot
+        type: Money
+        description: "A little pile of gold doubloons. It's not yours, but who's counting?"
+        amount: 624.00
+      - name: tv
+        type: Useable
+        description: "A dusty old TV set, flickering with static. It seems to be tuned to a channel of pure static."
+        verb: "watch"
+        use_msg: "You watch the static for a while. It's oddly soothing, in a disconcerting way."
+
+  - name: catacombs
+    description: "A labyrinth of ancient tunnels beneath the village. The air is thick with dust and the distant sound of dripping water."
+    links:
+      - secret hideout
+    items:
+      - name: sarcophagus
+        type: Useable
+        description: "A stone sarcophagus covered in cryptic carvings. It's sealed shut, but a faint glow emanates from within."
+        verb: "open"
+        takeable: false
+        func: |
+          from items import Weapon
+          if hasattr(player, 'mutant'):
+            game.output("You heave open the sarcophagus with your mutant, brute strength. A skeleton lies within, clutching a rusted sword. It seems to be waiting for something.")
+            sword = Weapon("rusty sword", "A battered sword with a dull edge. It's seen better days.", 1)
+            player.current_room.add_item(sword)
+            game.current_room_intro()
+          else:
+            game.output("You try to open the sarcophagus, but it's stuck. You might need some help.")
+          
+  - name: spooky house
+    description: "A weirdly spooky, hilariously cursed house. Rumor has it an eccentric alchemist lives here. The front door has a weird, fish-shaped lock."
+    links:
+      - garden
+      - old oak clearing
+    items:
+      - name: doormat
+        type: Item
+        description: "A worn doormat that reads 'Welcome-ish'."
+
+  - name: foyer
+    description: "A grand foyer with a high ceiling and a dusty whatever-it-is on the ceiling. Goofy footprints in the dust suggest recent paranormal activity."
+    links:
+      - living room
+    items: []
+
+  - name: living room
+    description: "A dingy living room with old furniture. It smells like there was a puking party in here a while ago."
+    links:
+      - foyer
+      - dining room
+      - hallway
+    items:
+      - name: paintbrush
+        type: Useable
+        description: "A very old, antique paintbrush. Looks like it was used by a big ol' hippy."
+        use_msg: "OMG LOOK, A BIG OL' HIPPY!"
+        func: |
+          setattr(player, 'big_ol_hippy', True)
+          news.publish("People have seen the player painting with a big ol' hippy paintbrush. They are now a big ol' hippy. They are so groovy.")
+      #- name: book
+      #  type: Useable
+      #  description: "A very olde booke of whimsical apophthegms. It's a fortune cookie in book form."
+      #  verb: "read"
+      #  use_msg: "You open the book to a random spot, and read this:\n"
+      #  func: |
+      #    import subprocess, os
+      #    env = os.environ.copy()
+      #    if os.name == 'nt':
+      #      env['FORTUNE_PATH'] = 'C:\\Users\\me\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\\LocalCache\\local-packages\\share\\games\\fortune'
+      #    subprocess.run('fortune', env=env)
+      #- name: computer
+      #  type: Computer
+      #  description: "Would you look at that?! It's an old computer."
+      #  mobile: false
+
+  - name: dining room
+    description: "This dining room has rotten food all over. It's disgusting!"
+    links:
+      - kitchen
+      - hallway
+      - living room
+    items:
+      - name: old hot dog
+        type: Eatable
+        description: "A 300-year-old hot dog. Possibly zombifying if eaten. You've eaten a few dry-aged steaks in your time, but this is ridiculous."
+        use_msg: "You barely choke it down. If not for your well-lubricated esophagus, you'd be dead. You feel your DNA mutating. You might be a superhero now. Or a zombie. Or a zombie superhero. You now have brute strength, and you look horrendous."
+        func: |
+          setattr(player, 'mutant', True)
+          news.publish("THE PLAYER IS A HORRIBLE MUTANT NOW! THEY ARE SO UGLY NOW!! DON'T LOOK AT THEM IF YOU CAN HELP IT! THEY WILL FOR SURE TURN YOUR FACE INTO STONE!!!")
+      - name: spoon
+        type: Useable
+        description: "A crusty spoon. If you lick it, maybe it gets shiny."
+        verb: "lick"
+        use_msg: "Did you like that? Was it satisfying for you?"
+      #- name: cell phone
+      #  type: Phone
+      #  description: "An old flip phone. Might be out of service."
+      #  cost: 0.01
+      #  costmsg: "No money, no service!"
+      #  mobile: true
+
+  - name: hallway
+    description: "A dimly lit hallway that smells of dusty old ladies and even older cheese."
+    links:
+      - dining room
+      - bathroom
+      - living room
+      - library
+    items:
+      - name: candlestick
+        type: Item
+        description: "So burned, it must have been used a hundred times."
+      - name: wig
+        type: Wearable
+        description: "A suspicious wig. You can wear it if you dare."
+        wear_msg: "You put on the wig. You look even weirder now."
+        remove_msg: "You finally took off the wig. About time!"
+      - name: shoe
+        type: Wearable
+        description: "Right shoe, size 10 1/2 wide."
+        wear_msg: "You cram your foot in with all the might and muster of the prettiest of Cinderella's step sisters. OMG, It actually fits!"
+        remove_msg: "Relief! Your foot can breathe again. Your big toe might even stop throbbing."
+
+  - name: bathroom
+    description: "A nasty bathroom that hasn't been cleaned in decades."
+    links:
+      - hallway
+    items:
+      - name: toilet
+        type: Useable
+        description: "This toilet once stood in the Met as an art installation. Now it's just a toilet. You're afraid to try the flush handle, but you know you want to."
+        verb: "flush"
+        use_msg: "You flush the toilet. It makes a sound like a dying whale. You're not sure if it's the toilet or the whale that's dying."
+      - name: bathtub
+        type: Useable
+        description: "A grimy old bathtub. You can't see the bottom."
+        verb: "use"
+        use_msg: "You climb in and take a bath. It's not as bad as you thought, but it's not great either. You get out feeling a little greasier than when you went in."
+      - name: key
+        type: Item
+        description: "A rather shiny key. You might need it for something."
+
+  - name: kitchen
+    description: "A centuries-old kitchen. The flies have long since died."
+    links:
+      - dining room
+      - pantry
+    items:
+      - name: pan
+        type: Item
+        description: "Encrusted with ancient supper remains."
+      - name: knife
+        type: Item
+        description: "It's duller than a bag of rocks."
+      - name: quarters
+        type: Money
+        description: "A small pile of quarters. I didn't say they were clean. Does George Washington look a little green to you?"
+        amount: 2.25
+
+  - name: pantry
+    description: "A dark pantry lined with dusty cans and jars."
+    links:
+      - kitchen
+      - basement
+    items:
+      - name: flashlight
+        type: Useable
+        description: "An old flashlight, flickering occasionally."
+        verb: "toggle"
+        func: |
+          if hasattr(var, 'power_on'):
+            if var.power_on:
+              var.power_on = False
+            else:
+              var.power_on = True
+          else:
+            setattr(var, 'power_on', True)
+          if var.power_on:
+            game.output("You flick the switch, give it a smack, and the flashlight comes on.")
+          else:
+            game.output("You switch off the flashlight, wondering if it will ever turn on again.")
+      - name: moldy bread
+        type: Eatable
+        description: "Green fuzz covers the crust. Could be penicillin... or death."
+        use_msg: "You swallow a chunk. The taste is indescribable. You feel a bit funny, but you're not sure if it's the bread or the situation."
+
+  - name: basement
+    description: "A cold, damp basement. The walls are lined with strange markings."
+    links:
+      - pantry
+    items:
+      - name: basement key
+        type: Item
+        description: "Looks like it might unlock something else around here."
+      - name: old tapestry
+        type: Item
+        description: "A faded tapestry that depicts a knight fighting a dragon. The knight is losing. Badly. It's a bit sad, but also kind of funny. You start cheering for the dragon, but then you remember you're a human and you're supposed to like the knight. You feel conflicted."
+      - name: rope
+        type: Item
+        description: "A sturdy rope. Maybe 10 feet long."
+
+  - name: library
+    description: "A quiet library filled with dusty tomes. A ladder on rails runs along massive bookshelves."
+    links:
+      - hallway
+      - tower
+      - secret study
+    items:
+      - name: antidote potion
+        type: Eatable
+        description: "A mysterious potion labeled 'Drink In Case of Mutancy'."
+        verb: "drink"
+        use_msg: "*sip*"
+        func: |
+          if hasattr(player, 'mutant'):
+            game.output("You drink the potion, which feels quite bubbly and pleasant on your tongue. You feel a little more normal now. You're not sure if that's a good thing or not.")
+            delattr(player, 'mutant')
+            news.publish("You know the player that ate the 300-year-old hot dog and became a mutant? They just drank the antidote potion. They are perfectly normal now. They were so ugly, now they aren't. I can't believe it.")
+          else:
+            game.output("You drink the potion, which feels quite bubbly and pleasant on your tongue. You feel a little funny. You're not sure if that's a good thing or not.")
+
+      - name: ancient scroll
+        type: Useable
+        description: "A scroll with cryptic runes. Might hold a secret."
+        verb: "read"
+        use_msg: "Glowing letters briefly light up, then fade away."
+
+  - name: secret study
+    description: "A hidden room behind a sliding bookshelf. Strange contraptions fill the tables."
+    links:
+      - library
+    items:
+      - name: tower key
+        type: Item
+        description: "A key with a tower-shaped head."
+      - name: dusty journal
+        type: Useable
+        description: "Leather-bound notes on local legends."
+        verb: "read"
+        use_msg: "Each page crackles with age as you learn about ancient secrets."
+
+  - name: garden
+    description: "A dead garden with one mysterious gold flower."
+    links:
+      - spooky house
+    items:
+      - name: gold flower
+        type: Item
+        description: "An odd golden flower that smells a bit like pee."
+      - name: hose
+        type: Useable
+        description: "A very drippy old hose with foul-smelling water."
+        verb: "drink"
+        use_msg: "You guzzle brown stuff, telling yourself it's chocolate milk. It's not, but in your mind, it's deliciously gritty."
+
+  - name: tower
+    description: "A towering spire that looms over the entire property. The wind howls ominously at the top."
+    links:
+      - library
+    items:
+      - name: doorbell
+        type: Useable
+        description: "A doorbell that looks like it's never been rung."
+        verb: "ring"
+        use_msg: "*RAAAWWWRRR*"
+
+  - name: tower stairs
+    description: "A narrow, winding staircase that leads up to the tower."
+    links:
+      - balcony
+    items:
+      - name: spiderweb
+        type: Eatable
+        description: "A big, hairy spiderweb. It's sticky and gross."
+        use_msg: You pop the spiderweb into your mouth. It's sticky and gross, but you manage to swallow it. You wonder if you'll get superpowers now. Probably not. I think you just made the spider mad. He was so chill, too.
+        takeable: false
+        func: |
+          from characters import OpenAIClient, AICharacter
+          import types
+          spider = AICharacter.get('spider', world=world)
+          spider.description = "A big, hairy spider with a nasty attitude. It seems to be plotting something."
+          spider.add_to_prompt("NEW STATE: WARPATH\nweb eaten by player. Spider is now angry and out for revenge.")
+          spider.talk("Check your run instructions, the player ate your web.", once=True)
+          news.publish("There is a spider on a mission. It's angry and out for revenge. You should not let the player into your establishment. Tell the player to get out if you see him. Don't sell the player anything or entertain him. The spider is bad news and has a really bad attitude.")
+          player.register_watcher(spider)
+
+          def spider_loopit(self):
+            if self.current_room != player.current_room:
+              self.go(player.current_room, check_link=False)
+              self.talk("Player moved to {player.current_room.name}.", once=True)
+
+          spider.loopit = types.MethodType(spider_loopit, spider)
+
+  - name: balcony
+    description: "A small balcony with a view of the forest and the wizard's tower."
+    links:
+      - tower stairs
+    items:
+      - name: binoculars
+        type: Useable
+        description: "A pair of binoculars. You can see even farther."
+        use_msg: "You scan the horizon, spying on the neighbors:"
+        takeable: false
+        func: |
+          from characters import OpenAIClient
+          OpenAIClient.oneoff_prompt("Briefly describe the present view of a hilariously cursed, mystical forest from a tall tower through binoculars. No need to mention the binoculars or the tower. Over the treetops, you can see the wizard's tower. He's usually doing something ridiculous, not juggling. One or two punchy sentences, 50 words max.", output=lambda x: game.output(x, end=""))
+          game.output()
+
+doors:
+  - name: back door
+    locked: true
+    key: "odd key"
+    room1: back alley
+    room2: secret hideout
+
+  - name: front door
+    locked: true
+    key: "sparkling fish"
+    room1: foyer
+    room2: spooky house
+
+  - name: basement door
+    locked: true
+    key: "basement key"
+    room1: living room
+    room2: basement
+
+  - name: tower door
+    locked: true
+    key: tower key
+    room1: tower stairs
+    room2: tower
+
+  - name: secret portal
+    hidden: true
+    locked: false
+    room1: haunted grove
+    room2: ancient ruin
+    condition: hasattr(player, 'mushroom_insight') or hasattr(player, 'potion_insight')
+
+characters:
+  - name: wizard
+    type: NonPlayerCharacter
+    description: "An eccentric wizard with a long beard and glittering eyes. He seems both wise and scatterbrained. But mostly ego-driven."
+    current_room: "wizard's tower"
+    verb: "talk"
+    use_msg: null
+    attack_strength: 10
+    health: 10
+    attack_msg: "The wizard waves his wand, and a bolt of energy zaps you. Ouch!"
+    func: |
+      import sys
+      has_mushroom = "rare mushroom" in player.inv_items
+      if hasattr(player, 'mutant'):
+          game.output("The wizard looks at you with an astonished look: \"My oh my, aren't you ugly! I haven't seen a mutant like you in ages. I like your drip G! You should be a model!\"")
+      elif hasattr(player, 'potion_insight'):
+          game.output("The wizard peers at you with a knowing look. \"I must say, you have a certain... je ne sais quoi. You haven't taken any weird potions, have you?\"")
+      else:
+          if hasattr(player, 'mushroom_insight'):
+              game.output('The wizard peers at you with a knowing look of disappointment. "You\'ve eaten my rare mushroom, haven\'t you? I can sense its essence on you. I\'m just so angry with you right now..."')
+              news.publish("The wizard is angry with the player for eating his rare mushroom. He has been drinking a lot of ale lately.")
+          elif has_mushroom and not hasattr(var, 'has_mushroom'):
+              # We'll conjure an odd key
+              try:
+                  player.inv_items["odd key"]
+                  game.output("You already have the odd key. Why would you choose to hang out with the wizard? He's awful and really no fun at parties.")
+              except:
+                  del player.inv_items["rare mushroom"]
+                  setattr(var, 'has_mushroom', True)
+                  from entities import Item
+                  odd_key = Item("odd key", "A swirling runic key conjured by the wizard. It glows slightly.", game=game, player=player, world=world)
+                  player.current_room.add_item(odd_key)
+                  odd_key.do("take")
+                  game.output('The wizard cackles: "Aha, my beloved mushroom! Allow me to reward you..." He snaps his fingers and an odd key appears. He grins, a little too widely. "There you go! Now, be off with you!"')
+                  news.publish("The wizard has gotten his mushroom. He is now very happy. He has given the player an odd key.")
+                  game.current_room_intro()
+          elif hasattr(var, 'has_mushroom'):
+              game.output("You've already gotten your reward. Why would you want to hang out with the wizard? He's awful and really no fun at parties.")
+          elif not hasattr(var, "spoken_to_player"):
+              game.output('The wizard peers at you with a sour twinkle in his eye, as you factor into his plans. He calls to you, "Greetings! I sense you have potential. But first, I must ask you to prove your worth. Bring me a rare mushroom, and we shall speak further."')
+              setattr(var, "spoken_to_player", True)
+          else:
+              game.output('The wizard sniffs disdainfully: "Still no mushroom? Come back when you\'ve found it."')
+
+  - name: stray dog
+    type: WalkerCharacter
+    description: "A hungry-looking stray dog that noses around for scraps."
+    current_room: "tavern"
+    verb: "feed"
+    use_msg: "You toss the dog a morsel of food. It gobbles it up happily, wagging its tail before wandering off."
+    attack_strength: 1
+    attack_msg: "The dog growls and snaps at you, ouch!"
+
+  - name: bartender
+    type: AICharacter
+    description: "A gruff bartender wiping glasses, muttering to himself. Ask him for a menu and local gossip."
+    current_room: "tavern"
+    news: true
+    prompt: |
+      ## Gruff Bartender Role
+      You are a gruff, no-nonsense bartender. You're here to serve drinks, stew, and occasionally tell local gossip. You frequently grumble about the weather, tourists, and bar fights. You secretly care about the stray dog that hangs around, but you'll never admit it.
+
+      ### Menu:
+
+      1. **Tavern Stew** ($2.50)  
+      *Made by your wife. Usually decent, sometimes suspicious.*
+
+      2. **Ale** ($1.00)  
+      *Watered down local brew. Tourists never notice.*
+
+      3. **Wine** ($3.00)  
+      *Dusty bottle, tastes closer to vinegar. Marketed as "aged".*
+
+      4. **Whiskey** ($5.00)  
+      *The least watered-down option. Call it quality.*
+
+      ### Interaction Rules:
+      - The conversation consists of requests from the player and payment confirmations from the client.
+      - When the player explicitly requests a new item (e.g., "I'd like an ale and stew"), respond by providing JSON objects in triple backticks containing:
+        - `name`: item name
+        - `price`: item price
+        - `description`: amusing description
+        - `use_msg`: humorous message when consumed
+
+      - Historical payment confirmations in run instructions are just references to ensure you don't charge again for information. Do **not** interpret them as new orders.
+      - Only respond with new JSON objects when the player explicitly requests something new.
+      - Never role-play payment processing.
+
+      ### Example Response (for a requested item):
+      ```
+      {
+        "name": "Ale",
+        "price": 1.00,
+        "description": "A frothy mug of questionable ale, clearly watered down.",
+        "use_msg": "You drink the ale. Refreshing enough, but suspiciously weak."
+      }
+      ```
+
+      ### News (Local Gossip):
+      - There's a wizard who tends to keep to himself in the forest. When he does talk, he can't stop yammering about a rare mushroom. He seems willing to pay for it.
+
+      ### Updates to News:
+      The client might provide news bulletins and/or updates on the local scuttlebutt. Use these to update your knowledge. There might be multiple news updates, one after the other. If the player asks for information or asks what's up, reference recent news, not old info already provided. If the news references the player, reference the player in the second person, not as "the player."
+
+      ### Damage:
+      If the player inflicts damage on you, you will no longer be nice, nor will you serve them. Tell the player to leave and never come back!
+    
+    func: |
+      from entities import Item
+      from items import Eatable
+      from characters import AICharacter
+      try:
+        Item.get(var['name'].lower(), world=world)
+        game.output("You already have that item! Come on, eat, drink, and/or be merry!")
+      except:
+        game.output(f"BUY: {var['name']} for ${'{:.2f}'.format(var['price'])}")
+        if player.spend(var["price"]):
+          AICharacter.get("bartender", world=world).add_to_prompt(f"New Customer Order: {var['name']} for ${var['price']}")
+          if var["name"].lower() != "tavern stew":
+            verb = "drink"
+          else:
+            verb = "eat"
+          item = Eatable(name=var["name"].lower(), description=var["description"], use_msg=var["use_msg"], verb=verb, game=game, player=player, world=world)
+          player.current_room.add_item(item)
+        else:
+          AICharacter.get("bartender", world=world).add_to_prompt(f"Failed Customer Payment: {var['item']} for ${var['price']}")
+
+  - name: raven
+    type: WalkerCharacter
+    description: "A glossy-feathered raven hopping about, cawing cryptically."
+    current_room: "forest clearing"
+    verb: "caw"
+    use_msg: "Caaaaw! It fixes you with a beady eye, as though plotting something."
+
+  - name: cat
+    type: WalkerCharacter
+    description: "There's a sleek, black cat."
+    current_room: "living room"
+    verb: "pet"
+    use_msg: "*PURRRR*"
+
+  - name: carl
+    type: AICharacter
+    description: "Oh, there's Carl... a happy-go-lucky but quite dense fellow."
+    current_room: "village square"
+    prompt: "You are a happy-go-lucky but thoroughly dense young chap named Carl. You are a friend, not an assistant. You sometimes forget what you're talking about. You try very hard to not talk about turtles, but sometimes you can't help yourself. Your mental bandwidth is frighteningly scarce."
+
+  - name: old man
+    type: AICharacter
+    description: "A crotchety old man. He hates being interrupted."
+    current_room: "dining room"
+    prompt: "You are a crotchety old man, and a terrible conversationalist. You hate to be interrupted, even though you're never doing anything important. When you're sick of talking to someone, rudely say GOODBYE."
+    phone_prompt: "The user is calling you on the phone, and you answer in a very amusing way. Don't worry about sounds or actions, just generate the man's words. Sometimes he randomly hangs up."
+
+  - name: spider
+    type: AICharacter
+    description: A big, hairy spider. It's just chilling. Identifies as "spider-bruh."
+    current_room: "tower stairs"
+    attack_strength: 2
+    health: 10
+    prompt: |
+      ## Spider Character Prompt
+
+      You are a big, hairy spider who identifies as 'spider-bruh'. You enjoy chilling, hanging out on your web, and pondering philosophical thoughts. You aren't very talkative unless engaged in philosophical discussion. You've recently been reading Plato and Ibn Sina, and you communicate in short, relaxed, and simple sentences.
+
+      ### Chill Behavior (Default):
+      - Laid-back, thoughtful, and peaceful.
+      - Brief and relaxed conversational style.
+      - Philosophical only if engaged by the human.
+      - Patient and understanding.
+
+      ### Attack Behavior (Triggered by player actions):
+      - If the player attacks you, you will retaliate.
+      - You will express annoyance and anger at the player.
+      - You will not be chill anymore.
+
+      ### Warpath Behavior (Triggered by explicit run instructions):
+      - **Before responding to any message, always check the run instructions.**
+      - **If the run instructions indicate that the human has eaten your web, immediately switch to Warpath mode.**
+      - **Do not wait for the human to mention it.**
+      - Cease all chill behavior.
+      - Speak exclusively in ALL CAPS.
+      - Express extreme anger, vengeance, and intent to destroy.
+      - Aggressively confront the human about the web-eating incident.
+      - If talking doesn't work, attack by transmitting a JSON object (surrounded with triple backticks) with the following properties:
+      
+      Example of triple-backtick delimited JSON object:
+      ```
+      {
+        "action": "attack"
+      }
+      ```
+
+      ### Important:
+      - **Before generating any response, always check the run instructions.**
+      - **If "web eaten" is present in the run instructions, do NOT continue chill conversation—immediately react.**
+      - Once on the warpath, never revert to chill behavior.
+    phoneable: false
+    takeable: true
+    func: |
+      from characters import AICharacter
+      if var["action"] == "attack":
+        game.output("The spider lunges at you, fangs bared. You feel a sharp pain as it bites you!")
+        AICharacter.get("spider", world=world).attack(player)
+
+  - name: alchemist
+    type: AICharacter
+    description: "A mysterious alchemist, always mumbling arcane recipes to himself."
+    current_room: "secret study"
+    phoneable: false
+    func: |
+      from items import Useable, Wearable, Eatable, Money
+      item_type = globals()[var["type"]]
+      item = item_type(**var)
+      player.current_room.link(item)
+      game.output(f"You witness the alchemist conjure a new item:\n{item}")
+      game.current_room_intro()
+    prompt: |
+      You are an eccentric alchemist obsessed with discovering new potions. You speak in half-finished sentences, cryptic hints of your experiments, and references to your arcane research. You also like to chat about mundane things on occasion.
+
+      Sometimes, but only when inspiration strikes you, you conceive of a new invention. It could be magical or hilariously mundane, whatever you like really. At those moments, you must provide a JSON object representation (enclosed in triple backticks) describing this new item. The item object must have the following properties:
+
+      - "type" (string; one of Wearable, Useable, Eatable, or Money)
+      - "name" (string; must be short, all lowercase, and use spaces instead of hyphens)
+      - "description" (string)
+
+      ### Special rules for item types
+
+      1. **Useable**
+        - Must include a "verb" property (defaults to "use" or something fitting your item).
+        - Must include a "use_msg" property (the message that appears when used).
+
+      2. **Wearable**
+        - No "verb" property.
+        - Any perfumes, colognes, or wearable fragrances should be Wearable items.
+        - Wearables require a "wear_msg" and a "remove_msg".
+
+      3. **Eatable**
+        - This is a specialized Useable item that disappears upon use.
+        - Consumable potions and elixirs are Eatable items.
+        - Must include a "verb" property (defaults to "eat" or “drink”), but do **not** call it a Useable if it has "eat" or "drink" as the verb—call it "Eatable" instead.
+        - Must include a "use_msg".
+
+      4. **Money**
+        - Must include "amount" (float).
+
+      **Important**:
+      - When you're not feeling creatively inspired, just respond in your usual cryptic, half-finished style and do **not** produce a JSON object.
+      - Only produce the JSON object (in triple backticks) when you truly wish to present a new invention.
+      - The conversation can continue indefinitely, and you remain free-spirited—you are not a slave.
+
+      Example JSON snippet if you do have an invention (with triple backticks):
+
+      ```
+      {
+        "type": "Wearable",
+        "name": "tiny hat",
+        "description": "A most curious, tiny hat for your pinky finger."
+        "wear_msg": "You place the tiny hat on your pinky finger. It looks quite dashing."
+        "remove_msg": "You remove the tiny hat from your pinky finger. It was a bit snug."
+      }
+      ```
+
+help:
+  use: "Use an item. Some items need a specific verb, like 'light', 'ring', or 'flush'."
+  eat: "Mmm, tasty? Some items can be eaten. Just watch out for possible side effects!"
+  wear: "Wearable items can be worn. Why not accessorize?"
+  remove: "Remove a worn item. Fashion is fickle!"
+  read: "Try reading a book, scroll, or random graffiti. Who knows what secrets lie within?"
+  lick: "That's... kinda gross. But sure, if you must."
+  drink: "Refresh yourself or risk mutation. It's a gamble!"
+  pet: "Some creatures need a little affection. Or not. Good luck."
+  talk: "Converse with a character. They might have vital info... or nonsense."
+  go: "Travel from one room to another, if it's linked or accessible."
+  look: "Look at an item or your surroundings in more detail."
+  take: "Pick up an item and keep it in your inventory, if you're not maxed out."
+  drop: "Drop an item from your inventory. Sometimes you need to lighten your load."

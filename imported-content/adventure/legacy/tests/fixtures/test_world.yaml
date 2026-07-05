@@ -1,0 +1,55 @@
+---
+rooms:
+  - name: test_room1
+    description: A test room 1
+    links: [test_room2]
+    items:
+      - name: test_item1
+        type: Item
+        description: A test item 1
+        takeable: true
+      - name: test_money
+        type: Money
+        description: Some test money
+        amount: 10.0
+  - name: test_room2
+    description: A test room 2
+    links: [test_room1, test_room3]
+    items:
+      - name: test_item2
+        type: Item
+        description: A test item 2
+        takeable: true
+      - name: test_wearable
+        type: Wearable
+        description: A test wearable item
+        wear_msg: You put on the test wearable.
+        remove_msg: You took off the test wearable.
+  - name: test_room3
+    description: A test room 3
+    links: [test_room2]
+    items:
+      - name: test_eatable
+        type: Eatable
+        description: A test eatable item
+        verb: eat
+        use_msg: Yummy!
+      - name: test_useable
+        type: Useable
+        description: A test useable item
+        verb: use
+        use_msg: You used the test useable item.
+characters:
+  - name: test_npc
+    type: NonPlayerCharacter
+    description: A test NPC
+    current_room: test_room2
+    health: 10
+    verb: talk
+    use_msg: Hello there!
+help:
+  go: Move to a connected room
+  look: Look at an item or room
+  take: Take an item
+  drop: Drop an item
+  inv: Show inventory
