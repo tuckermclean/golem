@@ -13,6 +13,7 @@
     "freeze:verify": "npm run verify:golem --workspace @golem-engine/testkit && npm run test:ceremony && npm run verify:tdp --workspace @golem-engine/testkit"
   },
   "devDependencies": {
+    "ajv": "8.20.0",
     "typescript": "6.0.3"
   }
 }

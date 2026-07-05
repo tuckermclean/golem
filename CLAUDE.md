@@ -178,4 +178,34 @@ smoke-e2e` (two-tab + visual) pass against the restructured client;
 `make html` still produces a single file with zero external references.
 The "Single-file HTML deliverable" working-practices bullet still holds
 as written — the built dist demo path is unchanged; `reference/` is an
-addition, not a replacement. Next: K6.
+addition, not a replacement. K6 (event schema v1 — the drawer's free
+part) is now DONE, and with it **PHASE 1 IS COMPLETE (K1–K6)**:
+`packages/kernel/schemas/events.v1.json` (JSON-Schema draft 2020-12,
+version in the filename) defines every golem-grid event kind
+reality-first — matched to the 25 frozen `packages/testkit/fixtures/
+golem/*.log.json` logs + `games/golem-grid/tests/golden/replay-log.json`
+byte-for-byte (JOIN/MOVE/TAKE/TAKE_PRIZE/WIN/SAY census'd directly, 2,496
++ 75 = 2,571 events; LOSE/WHISPER/EMOTE/READ/LIGHT_WARN derived from
+`shared/module.js` + the pinned `validate.test.js`/`reducer.test.js`
+characterization since no fixture happens to lose/whisper/emote/read) —
+plus the full drawer vocabulary (schema fields only, zero consumers,
+per DELTA.md §0.4): `audience` (optional on every kind, default "all" is
+semantic/not injected), reusable `AttributionFields`/`MilestoneContributor`
+property groups, `MILESTONE`, the five oath kinds, the four economy
+kinds, MARKET.md's three kinds, and CREDIT.md's five kinds + a
+documentation-only `debt:` namespace note. `packages/testkit/tools/
+validate-events.mjs` (ajv, draft-2020 build, default code-gen mode —
+now a root exact-pinned devDependency) is the CI-runnable gate; the new
+`event-schema` CI job runs it plus `packages/testkit/tests/
+event-schema.test.js` (fixture conformance + 7 negative cases, one per
+failure mode, including drawer kinds) and `packages/testkit/tests/
+conservation.test.js` (the gold-conservation helper,
+`packages/testkit/tools/conservation.mjs`'s `checkGoldConservation`,
+TDD'd RED-first — pure, folds GOLD_MINTED/BURNED/TRANSFERRED/
+PURSE_DISTRIBUTED over balances, checks sum(balances) == minted − burned
+after every event, localizes the first violating seq; per-account
+non-negativity is explicitly out of scope, documented inline). No
+reducer/validate/wire file changed; every existing test/fixture/golden/
+ceremony/freeze-verify/solver-band/smoke-e2e still passes unchanged.
+Phase 1 (K1–K6) needs a whole-phase review before Phase 2 (C1 —
+`packages/content`: schema + compiler) begins.
