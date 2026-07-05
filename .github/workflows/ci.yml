@@ -13,14 +13,31 @@ jobs:
         with: { node-version: 22, cache: npm }
       # shared/rng.js re-exports from the @golem-engine/random workspace
       # package (K1); its dist/ is built by that package's `prepare`
-      # script, which npm ci runs automatically.
+      # script, which npm ci runs automatically. `npm ci` at the repo
+      # root also builds every other package's dist/ (kernel, net) the
+      # same way, via each workspace's own `prepare`.
       - run: npm ci
       # The architecture's superpower: everything is a golden-file test.
       # A golden diff means the world function changed and every existing
       # seed just broke: that is a MAJOR version bump, not a bugfix.
-      - name: determinism tests (worldgen goldens, reducer replay, solver)
-        working-directory: games/golem-grid
-        run: node --test
+      #
+      # Root `npm test` runs `npm run test --workspaces --if-present`
+      # (package.json), i.e. EVERY workspace's own `test` script in one
+      # pass: golem-grid's worldgen goldens/reducer replay/solver-lite
+      # suite, AND the K1-K5 package suites that are each phase's DoD
+      # tests — packages/random (h32/channel/pick/chance/rint vectors),
+      # packages/kernel (replay + log/log-restart chain), packages/net
+      # (transports/dedup), packages/testkit (kernel-replay conformance,
+      # reducer purity/identity, log-chain, event-schema, conservation).
+      # Phase 1 whole-branch review finding #1: before this, CI only
+      # ever ran games/golem-grid's own suite via a bare `node --test`
+      # scoped to that directory — none of the other workspaces' tests
+      # executed in CI at all. This one step subsumes that narrower
+      # invocation (it still runs golem-grid's suite, plus every other
+      # workspace's), so there is no separate golem-grid-only step here
+      # anymore.
+      - name: workspace tests (root npm test — every package's DoD suite)
+        run: npm test
 
   solver:
     runs-on: ubuntu-latest

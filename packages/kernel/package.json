@@ -9,7 +9,7 @@
   },
   "types": "./dist/index.d.ts",
   "scripts": {
-    "prepare": "tsc -p .",
+    "prepare": "tsc -p . && tsc -p tsconfig.log.json",
     "pretest": "tsc -p tsconfig.tests.json",
     "test": "node --test"
   },

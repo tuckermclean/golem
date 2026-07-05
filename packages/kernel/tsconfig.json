@@ -1,4 +1,19 @@
 {
+  // Browser-safe core boundary (DELTA K2/K6, Phase 1 review finding #2):
+  // this config covers ONLY src/index.ts. "types": [] is not merely "no
+  // node types requested" — it's the load-bearing override that
+  // suppresses TypeScript's default auto-inclusion of every @types/*
+  // package found by walking node_modules/@types up the tree (which
+  // would otherwise pull in @types/node, hoisted to the repo root by
+  // this package's own devDependency, even without "node" named here).
+  // A plain omission of "types" does NOT give this guard — do not
+  // remove this array or widen it.
+  //
+  // src/log.ts (the only file allowed to touch node:crypto) is compiled
+  // separately by tsconfig.log.json, which DOES carry "types": ["node"].
+  // `npm run prepare` runs this config first, then tsconfig.log.json —
+  // that order matters: it's what makes this config the actual gate
+  // (see this package's package.json "prepare" script).
   "compilerOptions": {
     "strict": true,
     "target": "ES2022",
@@ -7,7 +22,7 @@
     "declaration": true,
     "outDir": "dist",
     "rootDir": "src",
-    "types": ["node"]
+    "types": []
   },
-  "include": ["src"]
+  "include": ["src/index.ts"]
 }

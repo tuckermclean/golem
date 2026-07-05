@@ -1,0 +1,21 @@
+{
+  // Companion to tsconfig.json (DELTA K2/K6, Phase 1 review finding #2).
+  // Covers ONLY src/log.ts, the sole file in this package permitted to
+  // import node:crypto — hence "types": ["node"] here, and nowhere in
+  // the sibling config that gates src/index.ts. tsc still pulls
+  // src/index.ts into this program too (log.ts imports its types) and
+  // re-emits dist/index.{js,d.ts} as a side effect; that's harmless
+  // (identical output) as long as this config runs SECOND in `prepare`,
+  // after tsconfig.json has already gated index.ts under "types": [].
+  "compilerOptions": {
+    "strict": true,
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "declaration": true,
+    "outDir": "dist",
+    "rootDir": "src",
+    "types": ["node"]
+  },
+  "include": ["src/log.ts"]
+}
