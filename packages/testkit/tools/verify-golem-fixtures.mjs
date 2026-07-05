@@ -2,21 +2,35 @@
 /* Replays every committed fixtures/golem/<seed> log through the shared
    reducer against freshly derived worldgen, and asserts:
    (a) re-serialized worldgen === committed <seed>.world.json bytes
-   (b) replay final hash (h32 of serializeState output) === index.json's
+   (b) the replayed state reached gameover === "WIN" — matches the
+       assertion games/golem-grid/tests/replay.test.js makes on its own
+       golden; without this, a log truncated just short of WIN would only
+       be caught by h32 luck.
+   (c) replay final hash (h32 of serializeState output) === index.json's
        finalHash for that seed.
    Exits non-zero on any mismatch. This is the runnable check that P0.3's
    part c will call from a root `freeze:verify` script. No fork of
-   golem-grid logic: everything below imports the shared modules. */
+   golem-grid logic: everything below imports the shared modules.
+
+   Optional first CLI arg: an alternate fixtures/golem/ directory to
+   verify (defaults to the committed packages/testkit/fixtures/golem/).
+   This exists solely so a canary/smoke run can point the verifier at a
+   tampered copy in /tmp without touching the repo. */
 import { readFileSync } from "node:fs";
+import path from "node:path";
+import { pathToFileURL } from "node:url";
 import { genDungeon, serializeDungeon } from "../../../games/golem-grid/shared/worldgen.js";
 import { createState, applyEvent, serializeState } from "../../../games/golem-grid/shared/reducer.js";
 import { h32 } from "../../../games/golem-grid/shared/rng.js";
 
-const FIXTURES_DIR = new URL("../fixtures/golem/", import.meta.url);
+const dirArg = process.argv[2];
+const FIXTURES_DIR = dirArg
+  ? pathToFileURL(path.resolve(dirArg) + path.sep)
+  : new URL("../fixtures/golem/", import.meta.url);
 
 function loadIndex() {
-  const path = new URL("index.json", FIXTURES_DIR);
-  return JSON.parse(readFileSync(path, "utf8"));
+  const indexPath = new URL("index.json", FIXTURES_DIR);
+  return JSON.parse(readFileSync(indexPath, "utf8"));
 }
 
 function verifySeed(entry) {
@@ -34,6 +48,12 @@ function verifySeed(entry) {
 
   const st = createState();
   for (const ev of log) applyEvent(st, dun, ev);
+
+  const gameover = st.D.get("gameover");
+  if (gameover !== "WIN") {
+    return { pass: false, reason: `replay did not reach WIN (gameover=${gameover ?? "undefined"})` };
+  }
+
   const finalState = serializeState(st) + "\n";
   const gotHash = h32(finalState);
   if (gotHash !== entry.finalHash) {
