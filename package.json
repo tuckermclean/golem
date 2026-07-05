@@ -8,6 +8,8 @@
   ],
   "scripts": {
     "test": "npm run test --workspaces --if-present",
-    "test:some-hero-legacy": "npm ci --prefix games/some-hero/legacy && npm test --prefix games/some-hero/legacy && npm run test:e2e --prefix games/some-hero/legacy"
+    "test:some-hero-legacy": "npm ci --prefix games/some-hero/legacy && npm test --prefix games/some-hero/legacy && npm run test:e2e --prefix games/some-hero/legacy",
+    "test:ceremony": "node --test games/some-hero/ceremony/*.ceremony.test.js",
+    "freeze:verify": "npm run verify:golem --workspace @golem-engine/testkit && npm run test:ceremony && npm run verify:tdp --workspace @golem-engine/testkit"
   }
 }

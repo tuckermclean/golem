@@ -90,3 +90,16 @@ jobs:
         run: |
           node games/topdown-puzzle/tools/gen-level-manifest.mjs
           git diff --exit-code -- games/topdown-puzzle/levels/manifest.json
+
+  freeze-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      # Permanent DoD job for DELTA.md P0.3 (behavior freeze): golem
+      # fixture replay, some-hero @ceremony characterization tests, and
+      # topdown-puzzle parse snapshots, in that order, failing fast.
+      - name: freeze:verify (golem fixtures + ceremony + tdp snapshots)
+        run: npm run freeze:verify
