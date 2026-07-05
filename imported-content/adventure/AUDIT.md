@@ -1,12 +1,20 @@
 # Adventure content audit
 
 Hand-written inventory of the `adventure` legacy snapshot's world content
-and every dynamic-code hook (`func:` in YAML, `eval(`/`exec(` in Python).
-These are the compile targets for tasks A3/C3 — turning ad hoc
-Python-in-YAML into a real, sandboxed action grammar. Completeness
-matters more than prose; every occurrence below was located by grep and
-confirmed against `legacy/world.yaml` and `legacy/adventure.py` at the
-pinned SHA (e720d388f055e153ec9a3ea85526d636c2b1d450).
+and every dynamic-code hook. These are the compile targets for tasks
+A3/C3 — turning ad hoc Python-in-YAML into a real, sandboxed action
+grammar. Completeness matters more than prose.
+
+**Scope:** literal `func:` (YAML) and `eval(`/`exec(` (Python) greps,
+**plus** known eval-equivalents found by inspection — mechanisms that
+execute arbitrary code without literally spelling `eval(`/`exec(`
+(`code.InteractiveConsole`, `subprocess`, and `globals()`-based dynamic
+type instantiation that makes such a mechanism reachable by name from
+YAML). A pure string grep for `eval(`/`exec(` would miss these; they are
+just as much a compile target for A3/C3's sandboxing work. Every
+occurrence below was located by grep or targeted read and confirmed
+against `legacy/world.yaml`, `legacy/adventure.py`, and `legacy/items.py`
+at the pinned SHA (e720d388f055e153ec9a3ea85526d636c2b1d450).
 
 All paths below are relative to `imported-content/adventure/legacy/`.
 
@@ -73,6 +81,50 @@ All three are the single mechanism (`item['func']`, `door['condition']`,
 gets executed at runtime with the live game objects in scope. This is the
 whole surface A3/C3 needs to replace with a sandboxed grammar.
 
+### Known eval-equivalents found by inspection — 1 hazard, 3 supporting sites
+
+Not a literal `eval(`/`exec(` match, but functionally the same class of
+hazard: an item type whose `use()` method drops the player into a live
+Python REPL over the process's own globals/locals.
+
+| Line | Line text | Category |
+|---|---|---|
+| `items.py:152` | `        variables = {**globals(), **locals()}` | eval-equivalent — merges live process globals and locals into a namespace for... |
+| `items.py:153` | `        shell = code.InteractiveConsole(variables)` | ...a `code.InteractiveConsole`, then `shell.interact()` hands the player an interactive Python REPL scoped to that namespace — arbitrary code execution, functionally `eval`/`exec`-class |
+| `adventure.py:4` | `from items import Money, Wearable, Useable, Eatable, Computer, Phone, Weapon` | import site — makes the `Computer` item type (containing the hazard above) resolvable by name in `adventure.py`'s module globals |
+| `adventure.py:54` | `                            item_class = globals()[item['type']]` | world-loader hook — the same dynamic-instantiation-by-name mechanism used for every item; for a YAML item with `type: Computer` this would resolve to the class above |
+
+**Reachability: dormant/dead, same as the `book` entry above.** The only
+YAML reference to a `Computer` item is inside the same commented-out
+block as `book` (`world.yaml:299-313`, commented lines only — see the
+`book` row above for the `func:` line within it):
+
+```
+world.yaml:310:      #- name: computer
+world.yaml:311:      #  type: Computer
+world.yaml:312:      #  description: "Would you look at that?! It's an old computer."
+world.yaml:313:      #  mobile: false
+```
+
+Since every line is commented out, `world.yaml` never actually
+instantiates a `Computer` item today — but the class, its `use()` method,
+and the `globals()`-based lookup that would dispatch to it are all live,
+uncommented Python. If this item block (or a copy of it) were
+un-commented, or any future YAML added a `type: Computer` item anywhere,
+the loader at `adventure.py:54` would resolve it and the player would be
+one `use` verb away from a full Python shell over the running game
+process — no `eval(`/`exec(` string required. Same disposition as the
+`book`/`subprocess` hazard: dormant, present in source, and a compile
+target for "should be impossible in the new grammar."
+
+Grep/read commands used to establish this:
+```
+grep -n "InteractiveConsole\|variables = {\*\*globals" items.py
+grep -n "from items import" adventure.py
+grep -n "item_class = globals" adventure.py
+grep -n "name: computer\|type: Computer" world.yaml
+```
+
 ### Related, not separately requested: `condition:` (YAML)
 
 Not `func:`, but the direct counterpart consumed by `eval(` at
@@ -91,4 +143,11 @@ true` door (`world.yaml:574`).
 - YAML world/content files: **2** (`world.yaml`, `tests/fixtures/test_world.yaml`).
 - `func:` occurrences in YAML: **16** (15 live, 1 commented-out/dead).
 - `eval(`/`exec(` occurrences in Python: **3** (all in `adventure.py`; 2×`exec(`, 1×`eval(`).
+- Known eval-equivalents found by inspection (not literal `eval(`/`exec(`
+  matches): **1 hazard** (`items.py:152-153`, `Computer.use()`'s
+  `code.InteractiveConsole`), with **4 supporting code sites**
+  (`items.py:152`, `items.py:153`, `adventure.py:4` import,
+  `adventure.py:54` dynamic-dispatch) — dormant/dead, reachable only
+  through the same commented-out `world.yaml:299-313` block as the
+  `book`/`subprocess` hazard.
 - Bonus/related: `condition:` occurrences in YAML: **1** (feeds the `eval(` at `adventure.py:77`).
