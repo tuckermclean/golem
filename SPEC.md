@@ -98,7 +98,9 @@ deliberately each player's *partial* knowledge — click-to-walk pathfinds
 over seen tiles only. This partial-knowledge property is load-bearing for
 the future traitor layer (partial logs = testimonies).
 
-Light economy: START_LIGHT=240, burn 1/move (2 while carrying prize),
+Light economy: START_LIGHT=360 (solver-derived 2026-07-03: worst-case
+entrance→prize→entrance budget over the 10K CI seed set is 354; was 240),
+burn 1/move (2 while carrying prize),
 radius tiers 180/110/55/20 → 6/5/4/3/2. Host emits LIGHT_WARN at tier
 crossings. These constants are the difficulty dial; see §9 solver.
 

@@ -1,263 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>GOLEM/GRID 0.2 — everything is chat</title>
-<style>
-  :root{
-    --bg:#0b0a08; --panel:#14120e;
-    --amber:#ffb000; --amber-dim:#8a6200; --amber-hot:#ffd75e;
-    --tui-blue:#1424a8; --tui-cyan:#54d7d7; --tui-white:#e8e8e0;
-    --engine:#6f7f6f; --deny:#e05a4e;
-    --floor:#2b2620; --wall:#57493a; --dark:#050505; --seen:#171410;
-    --gold:#ffcf40; --lore:#b48cff; --mob:#e0604e; --stairs:#7ec8e3;
-    --p1:#54d7d7; --p2:#7ee37e; --p3:#e37ec8; --p4:#e3b57e; --p5:#8ca9ff; --p6:#d7d754;
-    --mono:"IBM Plex Mono","Cascadia Mono",Consolas,"Liberation Mono",monospace;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%}
-  body{background:var(--bg);color:var(--amber);font-family:var(--mono);
-       font-size:14.5px;line-height:1.4;display:flex;flex-direction:column}
-  #topbar{background:var(--tui-blue);color:var(--tui-white);display:flex;gap:1.3em;
-          align-items:center;padding:.25em .8em;font-size:13px;flex-wrap:wrap}
-  #topbar .brand{color:var(--tui-cyan);font-weight:600;letter-spacing:.08em}
-  #topbar .kv b{color:var(--tui-cyan);font-weight:400}
-  #topbar .role-host{color:#ffe15e}
-  #lightwrap{display:flex;align-items:center;gap:.4em;margin-left:auto}
-  #lightbar{width:110px;height:9px;border:1px solid var(--tui-cyan);position:relative}
-  #lightfill{position:absolute;inset:1px;background:var(--amber);transform-origin:left;
-             transition:transform .3s, background .3s}
+import "./style.css";
+import { h32, channel, pick } from "../shared/rng.js";
+import { TONE_LINE } from "../shared/themes.js";
+import { GW, GH, genDungeon } from "../shared/worldgen.js";
+import { START_LIGHT, LIGHT_TIERS, createState,
+         applyEvent as rApplyEvent, players as rPlayers, getP as rGetP,
+         light as rLight, itemAt as rItemAt, prizeCarrier as rPrizeCarrier,
+         radius as rRadius } from "../shared/reducer.js";
+import { makeDeduper } from "../shared/dedup.js";
 
-  #gridwrap{position:relative;background:var(--dark);
-            border-bottom:1px solid var(--amber-dim);line-height:0}
-  canvas{display:block;width:100%;image-rendering:pixelated;cursor:crosshair}
-
-  #feed{flex:1;overflow-y:auto;padding:.6em 1em;min-height:80px;
-        scrollbar-width:thin;scrollbar-color:var(--amber-dim) transparent}
-  #feed>div{margin:.14em 0;white-space:pre-wrap}
-  .golem{color:var(--amber);font-style:italic}
-  .golem .nick{color:var(--amber-hot);font-style:normal}
-  .trace{color:var(--engine);font-size:12px}
-  .chat .nick{font-weight:600}
-  .sys{color:var(--tui-white)}
-  .deny{color:var(--deny)}
-  .whis{color:var(--lore)}
-  .me{color:var(--tui-cyan);font-style:italic}
-
-  #inrow{display:flex;align-items:center;gap:.5em;border-top:1px solid var(--amber-dim);
-         padding:.45em .9em}
-  #inrow .ps1{color:var(--amber-hot)}
-  #cmd{flex:1;background:transparent;border:0;outline:0;color:var(--amber-hot);
-       font:inherit;caret-color:var(--amber-hot)}
-  #hint{color:var(--engine);font-size:11.5px;padding:0 1em .4em}
-
-  #menu{position:fixed;z-index:30;background:var(--panel);border:1px solid var(--amber);
-        min-width:150px;display:none;font-size:13.5px;box-shadow:0 4px 16px #000c}
-  #menu .mt{color:var(--engine);padding:.3em .7em;border-bottom:1px solid var(--amber-dim);
-            font-size:11.5px}
-  #menu button{display:block;width:100%;text-align:left;background:none;border:0;
-               color:var(--amber);font:inherit;padding:.35em .7em;cursor:pointer}
-  #menu button:hover{background:var(--tui-blue);color:var(--tui-white)}
-
-  #start{position:fixed;inset:0;background:rgba(6,6,4,.95);z-index:40;
-         display:flex;align-items:center;justify-content:center}
-  #start .card{border:2px double var(--amber);padding:1.5em 1.9em;max-width:460px;
-               width:92%;background:var(--bg)}
-  #start h1{font-size:16px;color:var(--amber-hot);letter-spacing:.1em}
-  #start p{color:var(--amber-dim);font-size:12.5px;margin:.6em 0 .9em}
-  #start label{display:block;color:var(--tui-cyan);font-size:11.5px;
-               letter-spacing:.12em;margin-top:.8em}
-  #start input{width:100%;background:transparent;border:0;
-               border-bottom:1px solid var(--amber-dim);color:var(--amber-hot);
-               font:inherit;padding:.2em 0;outline:0}
-  #start .btns{display:flex;gap:1em;margin-top:1.3em}
-  #start button{flex:1;background:var(--tui-blue);color:var(--tui-white);
-                border:1px solid var(--tui-cyan);font:inherit;padding:.45em;cursor:pointer}
-  #start button:hover{background:#1c30c8}
-  #start .note{color:var(--engine);font-size:11.5px;margin-top:1em}
-  ::selection{background:var(--amber);color:var(--bg)}
-</style>
-</head>
-<body>
-
-<div id="topbar">
-  <span class="brand">GOLEM/GRID 0.2</span>
-  <span class="kv">seed <b id="tb-seed">—</b></span>
-  <span class="kv" id="tb-theme"></span>
-  <span class="kv">role <b id="tb-role">—</b></span>
-  <span class="kv">party <b id="tb-party">0</b></span>
-  <div id="lightwrap"><span class="kv">light</span>
-    <div id="lightbar"><div id="lightfill"></div></div></div>
-</div>
-
-<div id="gridwrap"><canvas id="cv"></canvas></div>
-<div id="feed" aria-live="polite"></div>
-<div id="inrow"><span class="ps1">›</span>
-  <input id="cmd" autocomplete="off" spellcheck="false" disabled
-         placeholder="type to talk · /help for commands" aria-label="chat and commands"></div>
-<div id="hint">arrows walk · click the world for actions · Enter talks (room-local) · /party /w /take /read /me /who /help</div>
-
-<div id="menu" role="menu"></div>
-
-<div id="start"><div class="card">
-  <h1>▓▒░ GOLEM/GRID ░▒▓</h1>
-  <p>Bring the prize up from the bottom before the light runs out.
-     Open this file in a second tab to delve together.</p>
-  <label>YOUR NAME</label><input id="st-name" maxlength="16">
-  <label>SEED (host only — blank for random)</label>
-  <input id="st-seed" maxlength="24" placeholder="e.g. plagueis">
-  <div class="btns"><button id="bt-host">HOST WORLD</button>
-                    <button id="bt-join">JOIN WORLD</button></div>
-  <div class="note" id="st-note">transport: probing…</div>
-</div></div>
-
-<script>
-"use strict";
-/* ═══ GOLEM/GRID — grid world + chat-is-everything + extraction objective ═══
-   Same doctrine as v0.1: world = f(seed); delta map = only truth; host
-   sequences events; golem renders. New: finite tile dungeon, fog of war,
-   light-as-clock, themed history layer, click context menus, IRC grammar.
-   The golem is now literally a participant in the chat feed.            */
-
-/* ── RNG (unchanged) ───────────────────────────────────────────────────── */
-function h32(str){let h=2166136261>>>0;for(let i=0;i<str.length;i++){
-  h^=str.charCodeAt(i);h=Math.imul(h,16777619);}
-  h^=h>>>15;h=Math.imul(h,2246822519);h^=h>>>13;
-  h=Math.imul(h,3266489917);h^=h>>>16;return h>>>0;}
-function channel(...parts){let s=h32(parts.join("\u001f"))||1;
-  return()=>{s^=s<<13;s>>>=0;s^=s>>>17;s^=s<<5;s>>>=0;return s/4294967296;};}
-const pick=(r,a)=>a[(r()*a.length)|0], chance=(r,p)=>r()<p,
-      rint=(r,n)=>(r()*n)|0;
-
-/* ── THEMES: the history layer, three founders' worth ──────────────────── */
-const THEMES={
-  drowned_monastery:{label:"the drowned monastery",prize:"the Quiet Bell",
-    loot:["wax stub","offering bowl","salt-crusted rosary","verdigris censer"],
-    mob:"pale eel",adjs:["water-stained","hushed","candle-blackened","weeping"],
-    lore:["The Order of the Quiet Bell raised these halls over the spring, {A}.",
-          "They began ringing the bell for the living, {A}. The water listened.",
-          "The drowned came up the cistern stair to answer the last ringing, {A}."],
-    loreSlots:["to count the hours of the dead","in the wet year","when the abbot went below",
-               "against all writ","and none forbade it"]},
-  salt_counting_house:{label:"the salt counting house",prize:"the Final Ledger",
-    loot:["green coin","cracked seal","brass stylus","tally stick"],
-    mob:"clerk-thing",adjs:["ledger-lined","dust-dry","ink-stained","airless"],
-    lore:["The Counting House was dug deep to keep the salt-debts cool, {A}.",
-          "The clerks began recording debts before they were owed, {A}.",
-          "On the last page someone wrote a sum that has not finished being paid, {A}."],
-    loreSlots:["by royal writ","in the ninth audit","against the factor's word",
-               "the year of the short harvest","and sealed it twice"]},
-  deep_mine:{label:"the deep mine",prize:"the First Lode",
-    loot:["slag ingot","cold lantern","split pick-haft","vein of fool's gold"],
-    mob:"ember wisp",adjs:["soot-caked","props-groaning","hot-aired","narrow"],
-    lore:["They followed the seam down past the marked depth, {A}.",
-          "The foreman ordered the singing shaft sealed, {A}. Digging continued.",
-          "What they struck at the bottom struck back, {A}."],
-    loreSlots:["against the surveyor's oath","in the dry season","for the third charter",
-               "when the canaries went quiet","and told no one above"]},
-};
-const TONE_LINE={
-  ominous:["Something here does not want company.","The dark has a texture, like held breath."],
-  still:["Nothing has moved here for a very long time.","Your footsteps sound apologetic."],
-  cold:["The cold gets into your teeth.","Breath hangs before you like a small ghost."],
-  watchful:["You have the strong sense of being counted.","Attention turns toward you, somewhere."]};
-const TONES=Object.keys(TONE_LINE);
-const ROOM_KINDS=["hall","gallery","vault","stairwell","chapel","store"];
-
-/* ── WORLDGEN: finite seeded dungeon — pure f(seed) ────────────────────── */
-const GW=48, GH=30;
-function genDungeon(seed){
-  const r=channel(seed,"dungeon");
-  const grid=Array.from({length:GH},()=>Array(GW).fill("#"));
-  const tileRoom=Array.from({length:GH},()=>Array(GW).fill(-1));
-  const rooms=[];
-  for(let tries=0;tries<200&&rooms.length<12;tries++){
-    const w=4+rint(r,5),h=3+rint(r,4),
-          x=1+rint(r,GW-w-2),y=1+rint(r,GH-h-2);
-    if(rooms.some(o=>x<o.x+o.w+1&&o.x<x+w+1&&y<o.y+o.h+1&&o.y<y+h+1))continue;
-    rooms.push({x,y,w,h,cx:x+(w>>1),cy:y+(h>>1),
-                kind:pick(r,ROOM_KINDS),tone:pick(r,TONES),idx:rooms.length});
-  }
-  for(const rm of rooms)
-    for(let j=rm.y;j<rm.y+rm.h;j++)for(let i=rm.x;i<rm.x+rm.w;i++){
-      grid[j][i]=".";tileRoom[j][i]=rm.idx;}
-  const carve=(x1,y1,x2,y2)=>{
-    let x=x1,y=y1;
-    while(x!==x2){grid[y][x]=grid[y][x]==="#"?".":grid[y][x];x+=Math.sign(x2-x);}
-    while(y!==y2){grid[y][x]=grid[y][x]==="#"?".":grid[y][x];y+=Math.sign(y2-y);}
-    grid[y][x]=grid[y][x]==="#"?".":grid[y][x];};
-  for(let i=1;i<rooms.length;i++)
-    carve(rooms[i-1].cx,rooms[i-1].cy,rooms[i].cx,rooms[i].cy);
-  if(rooms.length>4)carve(rooms[0].cx,rooms[0].cy,
-                          rooms[rooms.length-1].cx,rooms[rooms.length-1].cy);
-  const stairs={x:rooms[0].cx,y:rooms[0].cy}; grid[stairs.y][stairs.x]="<";
-  /* BFS depth from stairs — the dungeon's act structure */
-  const dist=Array.from({length:GH},()=>Array(GW).fill(-1));
-  const q=[[stairs.x,stairs.y]];dist[stairs.y][stairs.x]=0;
-  while(q.length){const[cx,cy]=q.shift();
-    for(const[dx,dy]of[[0,1],[0,-1],[1,0],[-1,0]]){
-      const nx=cx+dx,ny=cy+dy;
-      if(nx>=0&&ny>=0&&nx<GW&&ny<GH&&grid[ny][nx]!=="#"&&dist[ny][nx]<0){
-        dist[ny][nx]=dist[cy][cx]+1;q.push([nx,ny]);}}}
-  /* prize in the deepest room; the object and the climax share coordinates */
-  let deep=rooms[0];for(const rm of rooms)
-    if(dist[rm.cy][rm.cx]>dist[deep.cy][deep.cx])deep=rm;
-  const prize={x:deep.cx,y:deep.cy,room:deep.idx};
-  /* lore fragments at shallow / mid / deep — story buried by depth */
-  const byDepth=[...rooms].sort((a,b)=>dist[a.cy][a.cx]-dist[b.cy][b.cx]);
-  const lore=new Map();
-  [byDepth[1],byDepth[Math.floor(byDepth.length/2)],byDepth[byDepth.length-2]]
-    .forEach((rm,tier)=>{if(rm&&rm.idx!==prize.room)
-      lore.set(rm.cx+1+","+rm.cy,tier);});
-  /* theme + loot + décor mobs */
-  const theme=pick(channel(seed,"theme"),Object.keys(THEMES));
-  const T=THEMES[theme];
-  const items=new Map(), mobs=new Map();
-  for(const rm of rooms){
-    if(rm.idx===0)continue;
-    const rr=channel(seed,"roomfill",String(rm.idx));
-    if(chance(rr,.45)){
-      const ix=rm.x+rint(rr,rm.w),iy=rm.y+rint(rr,rm.h);
-      if(grid[iy][ix]==="."&&!lore.has(ix+","+iy))
-        items.set(ix+","+iy,pick(rr,T.loot));}
-    if(chance(rr,.22)&&rm.idx!==prize.room){
-      const mx=rm.x+rint(rr,rm.w),my=rm.y+rint(rr,rm.h);
-      if(grid[my][mx]===".")mobs.set(mx+","+my,T.mob);}
-  }
-  return{grid,tileRoom,rooms,stairs,prize,lore,items,mobs,dist,theme,T};
-}
-
-/* ── STATE: seed + deltas + log ────────────────────────────────────────── */
-const START_LIGHT=240;
-const S={seed:null,dun:null,D:new Map(),log:[],seq:0,me:null,isHost:false,over:false};
-function players(){const o=[];for(const[k,v]of S.D)
-  if(k.startsWith("player:"))o.push(v);return o;}
-function getP(id){return S.D.get("player:"+id);}
-function light(){return S.D.has("light")?S.D.get("light"):START_LIGHT;}
-function itemAt(x,y){const k=x+","+y;
-  if(S.D.get("taken:"+k))return null;return S.dun.items.get(k)||null;}
-function prizeCarrier(){return S.D.get("prize_by")||null;}
-function radius(){const L=light();
-  return L>180?6:L>110?5:L>55?4:L>20?3:2;}
-
-/* ── REDUCER: deterministic, identity-blind ────────────────────────────── */
-function applyEvent(ev){
-  switch(ev.t){
-    case"JOIN":S.D.set("player:"+ev.pid,
-      {id:ev.pid,name:ev.name,x:S.dun.stairs.x,y:S.dun.stairs.y,inv:[]});break;
-    case"MOVE":{const p=getP(ev.pid);if(!p)break;
-      p.x=ev.x;p.y=ev.y;
-      const burn=prizeCarrier()===ev.pid?2:1;         // the prize is heavy
-      S.D.set("light",Math.max(0,light()-burn));break;}
-    case"TAKE":{const p=getP(ev.pid);if(!p)break;
-      S.D.set("taken:"+ev.x+","+ev.y,true);p.inv.push(ev.item);break;}
-    case"TAKE_PRIZE":S.D.set("prize_by",ev.pid);break;
-    case"WIN":case"LOSE":S.D.set("gameover",ev.t);S.over=true;break;
-    case"SAY":case"WHISPER":case"EMOTE":case"READ":case"LIGHT_WARN":break;
-  }
-  S.seq=ev.seq;S.log.push(ev);
-}
+/* ── STATE: page identity + reducer state. Pure logic lives in shared/;
+   these aliases bind it to this page's state so the v0.2 code reads the
+   same as it always did. ─────────────────────────────────────────────── */
+const S={seed:null,dun:null,me:null,isHost:false,st:createState()};
+const players=()=>rPlayers(S.st);
+const getP=id=>rGetP(S.st,id);
+const light=()=>rLight(S.st);
+const itemAt=(x,y)=>rItemAt(S.st,S.dun,x,y);
+const prizeCarrier=()=>rPrizeCarrier(S.st);
+const radius=()=>rRadius(S.st);
+const applyEvent=ev=>rApplyEvent(S.st,S.dun,ev);
 
 /* ── GOLEM ▶GOLEM-PLUG◀ — a participant in the chat, cannot lie ────────── */
 function golemLine(text,trace){
@@ -303,10 +64,8 @@ function proseFor(ev){                        // deterministic per event seq
 }
 
 /* ── NET: layered transport (BroadcastChannel + storage bridge) ────────── */
-const NET=(()=>{let handler=()=>{};const seen=new Set();
-  function deliver(m){if(!m||!m._id||seen.has(m._id))return;
-    seen.add(m._id);if(seen.size>600){let i=0;
-      for(const k of seen){seen.delete(k);if(++i>=300)break;}}handler(m);}
+const NET=(()=>{let handler=()=>{};const fresh=makeDeduper();
+  function deliver(m){if(!m||!fresh(m._id))return;handler(m);}
   let bc=null;try{bc=new BroadcastChannel("golem-grid-1");
     bc.onmessage=e=>deliver(e.data);}catch(e){}
   let ls=false;try{localStorage.setItem("gg-probe","1");
@@ -321,22 +80,21 @@ const NET=(()=>{let handler=()=>{};const seen=new Set();
     onmsg:fn=>{handler=fn;}};})();
 
 /* ── HOST: validate → sequence → broadcast; win/lose predicates ────────── */
-const LIGHT_TIERS=[180,110,55,20];
-function hostCommit(ev){ev.seq=S.seq+1;
+function hostCommit(ev){ev.seq=S.st.seq+1;
   const before=light();
   applyEvent(ev);render(ev);NET.send({k:"EVENT",ev});
   if(ev.t==="MOVE"){
     const after=light();
     for(const t of LIGHT_TIERS)if(before>t&&after<=t)
       hostCommit({t:"LIGHT_WARN",pid:ev.pid,tier:t});
-    if(after<=0&&!S.over)hostCommit({t:"LOSE",pid:ev.pid});
+    if(after<=0&&!S.st.over)hostCommit({t:"LOSE",pid:ev.pid});
     else{const p=getP(ev.pid);
-      if(prizeCarrier()===ev.pid&&p.x===S.dun.stairs.x&&p.y===S.dun.stairs.y&&!S.over)
+      if(prizeCarrier()===ev.pid&&p.x===S.dun.stairs.x&&p.y===S.dun.stairs.y&&!S.st.over)
         hostCommit({t:"WIN",pid:ev.pid});}}}
 function hostDeny(pid,reason){if(pid===S.me)feedLine(reason,"deny");
   else NET.send({k:"DENY",to:pid,reason});}
 function hostCmd(from,cmd){
-  if(S.over)return hostDeny(from,"The delve is over. Host a new world.");
+  if(S.st.over)return hostDeny(from,"The delve is over. Host a new world.");
   const p=getP(from);if(!p)return;
   const[verb,...rest]=cmd.trim().split(/\s+/);const arg=rest.join(" ");
   switch(verb){
@@ -373,11 +131,11 @@ function hostCmd(from,cmd){
 /* ── CLIENT: protocol ──────────────────────────────────────────────────── */
 NET.onmsg(m=>{switch(m.k){
   case"HELLO":if(S.isHost){
-    NET.send({k:"SNAPSHOT",to:m.pid,seed:S.seed,log:S.log});
+    NET.send({k:"SNAPSHOT",to:m.pid,seed:S.seed,log:S.st.log});
     hostCommit({t:"JOIN",pid:m.pid,name:m.name});}break;
   case"SNAPSHOT":if(!S.isHost&&m.to===S.me&&S.seed===null){
     setSeed(m.seed);for(const ev of m.log)applyEvent(ev);
-    feedLine(`— joined "${S.seed}" (${S.dun.T.label}) at event ${S.seq} —`,"sys");
+    feedLine(`— joined "${S.seed}" (${S.dun.T.label}) at event ${S.st.seq} —`,"sys");
     perceive();render();}break;
   case"CMD":if(S.isHost)hostCmd(m.from,m.cmd);break;
   case"EVENT":if(!S.isHost&&S.seed!==null){applyEvent(m.ev);render(m.ev);}break;
@@ -416,7 +174,7 @@ function drawGrid(){if(!S.dun)return;
   const me=getP(S.me),frac=light()/START_LIGHT,R=radius();
   /* the flame is steady when fed, restless when starved */
   let jitter=0;
-  if(!instant&&frac<0.5&&!S.over)jitter=(Math.random()-0.5)*(0.5-frac)*0.9;
+  if(!instant&&frac<0.5&&!S.st.over)jitter=(Math.random()-0.5)*(0.5-frac)*0.9;
   const dim=Math.max(0.25,0.55+0.45*frac+jitter);
   cx2.fillStyle=C.dark;cx2.fillRect(0,0,cv.width,cv.height);
   cx2.font="15px "+css("--mono");cx2.textAlign="center";cx2.textBaseline="middle";
@@ -437,7 +195,7 @@ function drawGrid(){if(!S.dun)return;
     const d=me?Math.max(Math.abs(x-me.x),Math.abs(y-me.y)):0;
     let a=dim*(1-Math.pow(d/(R+1),2));
     /* when the light is dying, the rim gutters first */
-    if(!instant&&frac<0.35&&!S.over&&d>=R&&Math.random()<(0.35-frac))a*=0.2;
+    if(!instant&&frac<0.35&&!S.st.over&&d>=R&&Math.random()<(0.35-frac))a*=0.2;
     cx2.globalAlpha=Math.max(0,Math.min(1,a));
     if(t==="#")glyph(x,y,"#",C.wall);
     else{cx2.fillStyle=C.floor;cx2.fillRect(x*TS+1,y*TS+1,TS-2,TS-2);
@@ -551,7 +309,7 @@ function walkTo(tx,ty){const me=getP(S.me);if(!me)return;
   while(cur&&!(cur[0]===me.x&&cur[1]===me.y)){pathQ.unshift(cur);cur=prev.get(key(cur[0],cur[1]));}
   clearInterval(pathTimer);
   pathTimer=setInterval(()=>{const me2=getP(S.me),step=pathQ.shift();
-    if(!step||S.over){clearInterval(pathTimer);return;}
+    if(!step||S.st.over){clearInterval(pathTimer);return;}
     sendCmd(`move ${step[0]-me2.x} ${step[1]-me2.y}`);},130);}
 cv.addEventListener("click",e=>{
   if(!S.dun)return;
@@ -617,6 +375,3 @@ function begin(asHost){
   topbar();}
 document.getElementById("bt-host").onclick=()=>begin(true);
 document.getElementById("bt-join").onclick=()=>begin(false);
-</script>
-</body>
-</html>

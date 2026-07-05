@@ -1,10 +1,21 @@
 # Local mirrors of the pipeline stages. CI runs the same commands.
 
-.PHONY: test data-batch train-local wasm infra-plan infra-apply
+.PHONY: test solve html dev data-batch train-local wasm infra-plan infra-apply
 
 test:
-	node --test tests/worldgen.test.js tests/replay.test.js
+	node --test
 	python -m pytest tools/test_validate.py -q
+
+solve:
+	node tools/solve.js --seeds 10000
+
+html:
+	npx vite build
+	mv dist/index.html dist/golem-grid.html
+	@echo "single-file deliverable: dist/golem-grid.html (open from file://, two tabs)"
+
+dev:
+	npx vite
 
 data-batch:
 	node tools/harvest.js --seeds 100 --out work/controls.jsonl

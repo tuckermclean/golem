@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GOLEM/GRID 0.2 — everything is chat</title>
+</head>
+<body>
+
+<div id="topbar">
+  <span class="brand">GOLEM/GRID 0.2</span>
+  <span class="kv">seed <b id="tb-seed">—</b></span>
+  <span class="kv" id="tb-theme"></span>
+  <span class="kv">role <b id="tb-role">—</b></span>
+  <span class="kv">party <b id="tb-party">0</b></span>
+  <div id="lightwrap"><span class="kv">light</span>
+    <div id="lightbar"><div id="lightfill"></div></div></div>
+</div>
+
+<div id="gridwrap"><canvas id="cv"></canvas></div>
+<div id="feed" aria-live="polite"></div>
+<div id="inrow"><span class="ps1">›</span>
+  <input id="cmd" autocomplete="off" spellcheck="false" disabled
+         placeholder="type to talk · /help for commands" aria-label="chat and commands"></div>
+<div id="hint">arrows walk · click the world for actions · Enter talks (room-local) · /party /w /take /read /me /who /help</div>
+
+<div id="menu" role="menu"></div>
+
+<div id="start"><div class="card">
+  <h1>▓▒░ GOLEM/GRID ░▒▓</h1>
+  <p>Bring the prize up from the bottom before the light runs out.
+     Open this file in a second tab to delve together.</p>
+  <label>YOUR NAME</label><input id="st-name" maxlength="16">
+  <label>SEED (host only — blank for random)</label>
+  <input id="st-seed" maxlength="24" placeholder="e.g. plagueis">
+  <div class="btns"><button id="bt-host">HOST WORLD</button>
+                    <button id="bt-join">JOIN WORLD</button></div>
+  <div class="note" id="st-note">transport: probing…</div>
+</div></div>
+
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>
