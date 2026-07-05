@@ -1,6 +1,6 @@
 # Local mirrors of the pipeline stages. CI runs the same commands.
 
-.PHONY: test solve html dev data-batch train-local wasm infra-plan infra-apply lint-bans
+.PHONY: test solve html dev data-batch train-local wasm infra-plan infra-apply lint-bans smoke-e2e
 
 test:
 	npm test
@@ -19,6 +19,10 @@ html:
 
 dev:
 	npm run dev -w @golem-engine/golem-grid
+
+smoke-e2e: html
+	@echo "two-tab Playwright smoke (real Chromium, file://, NOT part of npm test/CI)"
+	node games/golem-grid/tests/e2e/two-tab.smoke.mjs
 
 data-batch:
 	node tools/harvest.js --seeds 100 --out work/controls.jsonl

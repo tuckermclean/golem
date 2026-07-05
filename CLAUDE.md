@@ -115,4 +115,30 @@ log-chain.test.js` chains one frozen P0.3 fixture log through the new
 API and confirms tamper detection on a real (non-toy) event stream —
 fixtures remain untouched; golem-grid's live wire/fixtures still carry
 no `prev` field (that adoption is K5's call). Every existing test/
-fixture/golden/ceremony/freeze-verify still passes unchanged. Next: K4.
+fixture/golden/ceremony/freeze-verify still passes unchanged. K4
+(`packages/net`) is now DONE: the five-message wire protocol (HELLO/
+SNAPSHOT/CMD/EVENT/DENY, discriminated union + per-kind type guards),
+the `Transport {ok,label,send,onmsg}` interface, `createBroadcastTransport`/
+`createStorageTransport`/`createAutoTransport` (BroadcastChannel-then-
+storage-then-`ok:false` layering, labels byte-identical to the old
+inline NET: "BroadcastChannel + storage bridge" / "BroadcastChannel" /
+"storage bridge" / "none (solo)"), and `makeDeduper` (ported verbatim,
+including the >600-eviction branch that was an open gap since the P0
+freeze) all now live in packages/net (TS strict, browser-safe — no
+node: imports; the old Math.random() id-nonce, banned under
+packages/**/src, is now Web Crypto's getRandomValues). games/golem-grid/
+shared/dedup.js is a one-line re-export (rng.js/K1 pattern); main.js's
+inline NET IIFE is now `createAutoTransport("golem-grid-1",
+"golem-grid-net")`. Transport contract tests use fakes (fake
+BroadcastChannel pair, fake cross-tab storage world), not Node's
+ambient BroadcastChannel/localStorage, per the K4 brief. The required
+two-tab Playwright smoke (`games/golem-grid/tests/e2e/
+two-tab.smoke.mjs`, `make smoke-e2e`, using the Playwright already
+installed under games/some-hero/legacy/node_modules — not a root/
+golem-grid dependency) passes against the real single-file build in
+real Chromium: cross-tab movement rendering and a genuine wire DENY
+round-trip (peer's illegal move denied by the host, delivered back over
+the net package) are both exercised. Not wired into npm test/CI
+(flake budget is O1's call — run it locally). Every existing test/
+fixture/golden/ceremony/freeze-verify still passes unchanged; `make html`
+still produces a single file with zero external references. Next: K5.
