@@ -1,0 +1,13 @@
+{
+  // Extends the index-only, node-type-free tsconfig.json, but this
+  // config typechecks the WHOLE package (src/ incl. log.ts, plus
+  // tests/) — it is not the browser-safety boundary, so "types" is
+  // restored to ["node"] here (log.ts's node:crypto import needs it).
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "rootDir": ".",
+    "types": ["node"]
+  },
+  "include": ["src", "tests"]
+}

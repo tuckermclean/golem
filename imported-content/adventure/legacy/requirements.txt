@@ -1,0 +1,12 @@
+cmd2
+openai
+pyyaml
+pillow
+flask
+flask_cors
+gunicorn
+gevent
+
+# Development dependencies
+pytest
+pytest-cov

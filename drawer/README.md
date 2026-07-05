@@ -20,5 +20,17 @@ the item only influences event-vocabulary design, which costs nothing.
 - **Dedicated server / host migration** — pull when real-network play
   matters. The protocol already permits it.
 
-OATH_AND_LEDGER.md is referenced by DELTA.md P0.1 but does not exist in
-any source repo as of P0.1; if it surfaces, it lands here.
+[OATH_AND_LEDGER.md](OATH_AND_LEDGER.md) — the society layer
+(contribution, oaths, reputation, gold) — lives here with its own
+pull-condition; only its event vocabulary escapes the drawer (task K6).
+
+[MARKET.md](MARKET.md) — in-run prediction markets on run outcomes;
+deeper in the drawer than the society layer it depends on. Only its
+event vocabulary (MARKET_OPENED / POSITION_TAKEN / MARKET_SETTLED)
+escapes, into the K6 schema.
+
+[CREDIT.md](CREDIT.md) — credit unions, lending, and debt; same stratum
+as MARKET.md, both depending on the society layer. Only its event
+vocabulary (LOAN_ISSUED / LOAN_REPAID / LOAN_DEFAULTED / LIEN_ATTACHED /
+GARNISHMENT_APPLIED, plus the `debt:` delta namespace) escapes, into the
+K6 schema.

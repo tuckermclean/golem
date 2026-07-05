@@ -1,0 +1,538 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://golem-engine/packages/kernel/schemas/events.v1.json",
+  "$comment": "K6 — event schema v1. Version is IN THE FILENAME (events.v1.json); there is no in-body version field. Any change to this file's shape for an EXISTING $defs entry (renaming/removing/tightening a required field, changing a type) is a versioning event: ship events.v2.json side-by-side, do not mutate v1 in place, and say so in the commit/PR. Adding a wholly new $defs entry (a new event kind) is additive and does not require a version bump on its own, but still update CLAUDE.md's status section. Two families of $defs live here: (1) golem-grid's existing, shipped event kinds — schematized to MATCH THE FROZEN FIXTURES in packages/testkit/fixtures/golem/*.log.json and games/golem-grid/tests/golden/replay-log.json, not anyone's idea of what they should be; (2) the drawer's vocabulary (DELTA.md PHASE 1 K6, plus drawer/MARKET.md and drawer/CREDIT.md) — schema fields only, per DELTA.md §0.4 ('schema is free, societies are not'). NO reducer, validator, or renderer anywhere in this repo may consume kind (2). See packages/kernel/schemas/README.md-equivalent notes inline via $comment on each $defs entry for what was READ from a source doc (with citation) versus DEFINED here because the source only named the event and left fields unspecified.",
+
+  "$defs": {
+    "Audience": {
+      "type": "string",
+      "$comment": "DELTA.md K6 verbatim: 'audience field (default all)'. Default is SEMANTIC, not injected: none of the 2,571 events across the 25 frozen fixtures + the replay golden carry this key, and this schema does not require it. A missing audience means 'all' by convention; nothing writes the literal string in today. Deliberately left as a free string (not an enum) since the drawer's audience taxonomy (all/sworn/eliminated/spectators/...) is not yet specified anywhere — enumerating it here would be inventing a system, not a schema field."
+    },
+
+    "NamespacedId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_-]*:",
+      "$comment": "DELTA.md §0.3: 'IDs: string, namespaced (player:x, item:y, region:z)'. K6 brief controller decision #4: pattern ^[a-z][a-z0-9_-]*: applies where a NEW (drawer) field is an entity reference (player, loan, contract, oath, purse, ...). Deliberately NOT applied to existing golem-grid kinds' pid/to fields (see PidLegacy) — those fixtures carry bare ids like 'p1', which this pattern would reject; reality-first wins for shipped kinds."
+    },
+
+    "PidLegacy": {
+      "type": "string",
+      "minLength": 1,
+      "$comment": "Existing golem-grid player-id shape as it actually appears in the 25 frozen fixtures + replay golden: bare strings ('p1', 'p2'), never namespaced. Reality-first (K6 brief #3): do not retrofit the NamespacedId pattern onto shipped kinds."
+    },
+
+    "NonNegInt": { "type": "integer", "minimum": 0 },
+
+    "BaseEvent": {
+      "type": "object",
+      "$comment": "Documentation-only fragment (not $ref'd structurally, since additionalProperties:false per kind requires each kind to be a flat, fully-enumerated object — see K6 brief controller decision #2). Every concrete $defs entry below repeats seq/t/audience directly. Kept here so the base shape is visible in one place: seq (integer >= 0), t (string, one of the catalog's consts), audience (optional, see Audience above).",
+      "properties": {
+        "seq": { "$ref": "#/$defs/NonNegInt" },
+        "t": { "type": "string" },
+        "audience": { "$ref": "#/$defs/Audience" }
+      },
+      "required": ["seq", "t"]
+    },
+
+    "AttributionFields": {
+      "type": "object",
+      "$comment": "READ from drawer/OATH_AND_LEDGER.md:18-24 and DELTA.md K6 verbatim (k6-brief.md:6-9): 'attribution fields on act events (actor, beneficiary, attacker, preventedDamage, proximity)'. OATH_AND_LEDGER.md's own list additionally names 'timing' (line 20); the K6 controller's verbatim plan text (the binding one for this task) lists exactly these five, so 'timing' is deliberately omitted here — pull it in on the task that actually authors combat/heal/defend events. This is a reusable PROPERTY GROUP, not a standalone event kind: golem-grid ships no combat/heal/defend event yet, so there is nothing for it to decorate. It is defined here (unreferenced by the top-level oneOf catalog) purely because DELTA.md §0.4 puts 'their event vocabulary and schema fields' in scope even though the systems that would emit them are not built. When a future task adds e.g. a HIT/HEAL/DEFEND event kind, that kind's schema should compose these properties in (JSON-Schema allOf/properties merge) rather than re-deriving field shapes.",
+      "properties": {
+        "actor": { "$ref": "#/$defs/NamespacedId", "$comment": "DEFINED: who performed the act." },
+        "beneficiary": { "$ref": "#/$defs/NamespacedId", "$comment": "DEFINED: who benefited (e.g. was healed, was defended)." },
+        "attacker": { "$ref": "#/$defs/NamespacedId", "$comment": "DEFINED: source of the incoming damage/threat being attributed against." },
+        "preventedDamage": { "type": "number", "minimum": 0, "$comment": "DEFINED: OATH_AND_LEDGER.md:45 'damage intercepted for carrier' — magnitude of damage the act prevented; unit left to the (unbuilt) combat system." },
+        "proximity": { "type": "number", "minimum": 0, "$comment": "DEFINED: OATH_AND_LEDGER.md:20 names the field, no unit or scale given anywhere; modeled as a non-negative distance-like scalar, scale TBD by the combat system that eventually emits it." }
+      },
+      "additionalProperties": false
+    },
+
+    "MilestoneContributor": {
+      "type": "object",
+      "$comment": "DELTA.md K6 verbatim: 'milestone events with contributors[] {player, kind, weight} stamped at validation'. 'kind' here is the CONTRIBUTOR's role, not the event's t — READ from drawer/OATH_AND_LEDGER.md:38 role list: Pioneer, Solver, Supporter, Defender, Escort, Scout, Saboteur, Pirate, Interceptor, Martyr, Opportunist.",
+      "properties": {
+        "player": { "$ref": "#/$defs/NamespacedId" },
+        "kind": {
+          "type": "string",
+          "enum": ["Pioneer", "Solver", "Supporter", "Defender", "Escort", "Scout", "Saboteur", "Pirate", "Interceptor", "Martyr", "Opportunist"]
+        },
+        "weight": { "type": "number", "minimum": 0, "$comment": "DEFINED: OATH_AND_LEDGER.md:57-58 implies confidence-weighted, normalized ratings but gives no bound; modeled as non-negative with no upper bound (not required <= 1) since normalization scheme is unspecified." }
+      },
+      "required": ["player", "kind", "weight"],
+      "additionalProperties": false
+    },
+
+    "Payout": {
+      "type": "object",
+      "$comment": "Shared shape for a single payee line inside a payouts[] array (PURSE_DISTRIBUTED, MARKET_SETTLED). DEFINED here: neither DELTA.md nor the drawer docs give payouts[] an element shape, only the array name.",
+      "properties": {
+        "player": { "$ref": "#/$defs/NamespacedId" },
+        "amount": { "type": "number", "exclusiveMinimum": 0 }
+      },
+      "required": ["player", "amount"],
+      "additionalProperties": false
+    },
+
+    "JOIN": {
+      "type": "object",
+      "$comment": "Reality-first: matches packages/testkit/fixtures/golem/*.log.json + replay golden exactly (field set 'name,pid,seq,t' on every JOIN across 2,571 census'd events).",
+      "properties": {
+        "t": { "const": "JOIN" },
+        "seq": { "$ref": "#/$defs/NonNegInt" },
+        "audience": { "$ref": "#/$defs/Audience" },
+        "pid": { "$ref": "#/$defs/PidLegacy" },
+        "name": { "type": "string", "minLength": 1 }
+      },
+      "required": ["t", "seq", "pid", "name"],
+      "additionalProperties": false
+    },
+
+    "MOVE": {
+      "type": "object",
+      "$comment": "Reality-first: field set 'pid,seq,t,x,y' on all 2,408 MOVE events census'd. x/y left unbounded (no min/max tied to GW/GH=48/30 in shared/worldgen.js) — those are worldgen constants, not part of the event-shape contract; a worldgen resize is a worldgen version bump (doctrine #1), not an events.v1 change.",
+      "properties": {
+        "t": { "const": "MOVE" },
+        "seq": { "$ref": "#/$defs/NonNegInt" },
+        "audience": { "$ref": "#/$defs/Audience" },
+        "pid": { "$ref": "#/$defs/PidLegacy" },
+        "x": { "type": "integer" },
+        "y": { "type": "integer" }
+      },
+      "required": ["t", "seq", "pid", "x", "y"],
+      "additionalProperties": false
+    },
+
+    "TAKE": {
+      "type": "object",
+      "$comment": "Reality-first: field set 'item,pid,seq,t,x,y' on all 7 TAKE events census'd (games/golem-grid/shared/module.js:61).",
+      "properties": {
+        "t": { "const": "TAKE" },
+        "seq": { "$ref": "#/$defs/NonNegInt" },
+        "audience": { "$ref": "#/$defs/Audience" },
+        "pid": { "$ref": "#/$defs/PidLegacy" },
+        "item": { "type": "string", "minLength": 1 },
+        "x": { "type": "integer" },
+        "y": { "type": "integer" }
+      },
+      "required": ["t", "seq", "pid", "item", "x", "y"],
+      "additionalProperties": false
+    },
+
+    "TAKE_PRIZE": {
+      "type": "object",
+      "$comment": "Reality-first: field set 'pid,seq,t' on all 26 TAKE_PRIZE events census'd (games/golem-grid/shared/module.js:57).",
+      "properties": {
+        "t": { "const": "TAKE_PRIZE" },
+        "seq": { "$ref": "#/$defs/NonNegInt" },
+        "audience": { "$ref": "#/$defs/Audience" },
+        "pid": { "$ref": "#/$defs/PidLegacy" }
+      },
+      "required": ["t", "seq", "pid"],
+      "additionalProperties": false
+    },
+
+    "WIN": {
+      "type": "object",
+      "$comment": "Reality-first: field set 'pid,seq,t' on all 26 WIN events census'd (games/golem-grid/shared/module.js:37; games/golem-grid/shared/reducer.js:39).",
+      "properties": {
+        "t": { "const": "WIN" },
+        "seq": { "$ref": "#/$defs/NonNegInt" },
+        "audience": { "$ref": "#/$defs/Audience" },
+        "pid": { "$ref": "#/$defs/PidLegacy" }
+      },
+      "required": ["t", "seq", "pid"],
+      "additionalProperties": false
+    },
+
+    "LOSE": {
+      "type": "object",
+      "$comment": "Not present in any of the 25 frozen fixtures or the replay golden (none of them lose the run) — schematized instead from the pinned characterization tests (games/golem-grid/tests/validate.test.js:121-129 'validate: move — draining the last light appends LOSE after the MOVE') and games/golem-grid/shared/module.js:33 'events.push({t:\"LOSE\",pid:moveEv.pid})'/reducer.js:39. Shape mirrors WIN/TAKE_PRIZE: {pid} only.",
+      "properties": {
+        "t": { "const": "LOSE" },
+        "seq": { "$ref": "#/$defs/NonNegInt" },
+        "audience": { "$ref": "#/$defs/Audience" },
+        "pid": { "$ref": "#/$defs/PidLegacy" }
+      },
+      "required": ["t", "seq", "pid"],
+      "additionalProperties": false
+    },
+
+    "SAY": {
+      "type": "object",
+      "$comment": "Reality-first: census found TWO field sets across the 52 SAY events — 'pid,scope,seq,t,text,x,y' (scope:\"room\", games/golem-grid/shared/module.js:67-68) and 'pid,scope,seq,t,text' (scope:\"party\", module.js:69, no x/y). x/y are therefore optional here, not required; scope enum is the complete census (only 'room' and 'party' ever observed).",
+      "properties": {
+        "t": { "const": "SAY" },
+        "seq": { "$ref": "#/$defs/NonNegInt" },
+        "audience": { "$ref": "#/$defs/Audience" },
+        "pid": { "$ref": "#/$defs/PidLegacy" },
+        "text": { "type": "string" },
+        "scope": { "type": "string", "enum": ["room", "party"] },
+        "x": { "type": "integer" },
+        "y": { "type": "integer" }
+      },
+      "required": ["t", "seq", "pid", "text", "scope"],
+      "additionalProperties": false
+    },
+
+    "WHISPER": {
+      "type": "object",
+      "$comment": "Not present in the frozen fixtures/golden (no fixture issues a whisper command). Schematized from games/golem-grid/shared/module.js:70-73 and games/golem-grid/tests/validate.test.js:214-217 ('emits WHISPER' -> {t:\"WHISPER\",pid,to,text}). No x/y (unlike SAY/EMOTE) — matches the pinned test exactly.",
+      "properties": {
+        "t": { "const": "WHISPER" },
+        "seq": { "$ref": "#/$defs/NonNegInt" },
+        "audience": { "$ref": "#/$defs/Audience" },
+        "pid": { "$ref": "#/$defs/PidLegacy" },
+        "to": { "$ref": "#/$defs/PidLegacy" },
+        "text": { "type": "string" }
+      },
+      "required": ["t", "seq", "pid", "to", "text"],
+      "additionalProperties": false
+    },
+
+    "EMOTE": {
+      "type": "object",
+      "$comment": "Not present in the frozen fixtures/golden. Schematized from games/golem-grid/shared/module.js:74 and games/golem-grid/tests/validate.test.js:220-224 ('emits EMOTE at the actor's tile' -> {t:\"EMOTE\",pid,text,x,y}).",
+      "properties": {
+        "t": { "const": "EMOTE" },
+        "seq": { "$ref": "#/$defs/NonNegInt" },
+        "audience": { "$ref": "#/$defs/Audience" },
+        "pid": { "$ref": "#/$defs/PidLegacy" },
+        "text": { "type": "string" },
+        "x": { "type": "integer" },
+        "y": { "type": "integer" }
+      },
+      "required": ["t", "seq", "pid", "text", "x", "y"],
+      "additionalProperties": false
+    },
+
+    "READ": {
+      "type": "object",
+      "$comment": "Not present in the frozen fixtures/golden. Schematized from games/golem-grid/shared/module.js:62-65 and games/golem-grid/tests/validate.test.js:175-179 ('emits READ with the tier' -> {t:\"READ\",pid,tier,x,y}). tier is the lore depth index assigned in shared/worldgen.js:44-49 (0/1/2, shallow/mid/deep) — modeled as a non-negative integer rather than a fixed enum since worldgen constructs it positionally, not from a literal constant list.",
+      "properties": {
+        "t": { "const": "READ" },
+        "seq": { "$ref": "#/$defs/NonNegInt" },
+        "audience": { "$ref": "#/$defs/Audience" },
+        "pid": { "$ref": "#/$defs/PidLegacy" },
+        "tier": { "$ref": "#/$defs/NonNegInt" },
+        "x": { "type": "integer" },
+        "y": { "type": "integer" }
+      },
+      "required": ["t", "seq", "pid", "tier", "x", "y"],
+      "additionalProperties": false
+    },
+
+    "LIGHT_WARN": {
+      "type": "object",
+      "$comment": "Not present in the frozen fixtures/golden. Schematized from games/golem-grid/shared/module.js:30-31 and games/golem-grid/tests/validate.test.js:109-117 ('appends a LIGHT_WARN after the MOVE' -> {t:\"LIGHT_WARN\",pid,tier}). tier is one of shared/reducer.js:6 LIGHT_TIERS=[180,110,55,20] — modeled as a non-negative integer, not a closed enum, since LIGHT_TIERS is a tunable constant, not part of the event-shape contract.",
+      "properties": {
+        "t": { "const": "LIGHT_WARN" },
+        "seq": { "$ref": "#/$defs/NonNegInt" },
+        "audience": { "$ref": "#/$defs/Audience" },
+        "pid": { "$ref": "#/$defs/PidLegacy" },
+        "tier": { "$ref": "#/$defs/NonNegInt" }
+      },
+      "required": ["t", "seq", "pid", "tier"],
+      "additionalProperties": false
+    },
+
+    "MILESTONE": {
+      "type": "object",
+      "$comment": "DEFINED (not read verbatim as a kind name): DELTA.md K6 says 'milestone events with contributors[] {player, kind, weight} stamped at validation', naming the payload shape but not a concrete event-type string. A single generic MILESTONE kind is chosen here (rather than one kind per milestone) so the open-ended 'which milestone' question is a data field ('milestone', free string — no fixed taxonomy exists yet) rather than an ever-growing set of $defs entries. Schema only: no validator anywhere stamps this.",
+      "properties": {
+        "t": { "const": "MILESTONE" },
+        "seq": { "$ref": "#/$defs/NonNegInt" },
+        "audience": { "$ref": "#/$defs/Audience" },
+        "milestone": { "type": "string", "minLength": 1 },
+        "contributors": { "type": "array", "items": { "$ref": "#/$defs/MilestoneContributor" }, "minItems": 1 }
+      },
+      "required": ["t", "seq", "milestone", "contributors"],
+      "additionalProperties": false
+    },
+
+    "OATH_SWORN": {
+      "type": "object",
+      "$comment": "READ (name) from DELTA.md K6 + drawer/OATH_AND_LEDGER.md:22-24. Fields DEFINED here: drawer/OATH_AND_LEDGER.md:60-77 describes the posse oath's rules (membership locks before the relic is claimed, unanimous consent, public state) but gives no literal event field list. Modeled as {oath, members[]} — an oath id and the full sworn membership at the moment of swearing.",
+      "properties": {
+        "t": { "const": "OATH_SWORN" },
+        "seq": { "$ref": "#/$defs/NonNegInt" },
+        "audience": { "$ref": "#/$defs/Audience" },
+        "oath": { "$ref": "#/$defs/NamespacedId" },
+        "members": { "type": "array", "items": { "$ref": "#/$defs/NamespacedId" }, "minItems": 1 }
+      },
+      "required": ["t", "seq", "oath", "members"],
+      "additionalProperties": false
+    },
+
+    "OATHBROTHER_ATTACKED": {
+      "type": "object",
+      "$comment": "READ (name + narrative) from drawer/OATH_AND_LEDGER.md:83-84: 'a visible window where the feed announces OATHBROTHER_ATTACKED'. Fields DEFINED: {oath, attacker, victim} — the sworn oath in force, who struck, and which sworn member was struck.",
+      "properties": {
+        "t": { "const": "OATHBROTHER_ATTACKED" },
+        "seq": { "$ref": "#/$defs/NonNegInt" },
+        "audience": { "$ref": "#/$defs/Audience" },
+        "oath": { "$ref": "#/$defs/NamespacedId" },
+        "attacker": { "$ref": "#/$defs/NamespacedId" },
+        "victim": { "$ref": "#/$defs/NamespacedId" }
+      },
+      "required": ["t", "seq", "oath", "attacker", "victim"],
+      "additionalProperties": false
+    },
+
+    "POSSE_MEMBER_KILLED": {
+      "type": "object",
+      "$comment": "READ (name) from DELTA.md K6 + drawer/OATH_AND_LEDGER.md:22-24. Fields DEFINED: drawer/OATH_AND_LEDGER.md:80-82 draws a hard line between ordinary death (share intact) and 'final elimination' (share voided) — 'resurrection window expired at extraction, or run-specific banishment'. Modeled as {oath, member, final} where final:boolean carries that distinction explicitly rather than leaving it implicit.",
+      "properties": {
+        "t": { "const": "POSSE_MEMBER_KILLED" },
+        "seq": { "$ref": "#/$defs/NonNegInt" },
+        "audience": { "$ref": "#/$defs/Audience" },
+        "oath": { "$ref": "#/$defs/NamespacedId" },
+        "member": { "$ref": "#/$defs/NamespacedId" },
+        "final": { "type": "boolean" }
+      },
+      "required": ["t", "seq", "oath", "member", "final"],
+      "additionalProperties": false
+    },
+
+    "OATH_BETRAYED": {
+      "type": "object",
+      "$comment": "READ (name + narrative) from drawer/OATH_AND_LEDGER.md:79-87: betrayal requires eliminating all sworn companions AND keeping them eliminated through extraction. Fields DEFINED: {oath, traitor} — the traitor is the single member who completed that act; the eliminated companions are already on record as POSSE_MEMBER_KILLED{final:true} events, not repeated here.",
+      "properties": {
+        "t": { "const": "OATH_BETRAYED" },
+        "seq": { "$ref": "#/$defs/NonNegInt" },
+        "audience": { "$ref": "#/$defs/Audience" },
+        "oath": { "$ref": "#/$defs/NamespacedId" },
+        "traitor": { "$ref": "#/$defs/NamespacedId" }
+      },
+      "required": ["t", "seq", "oath", "traitor"],
+      "additionalProperties": false
+    },
+
+    "SOLE_CLAIM_CREATED": {
+      "type": "object",
+      "$comment": "READ (name) from DELTA.md K6 + drawer/OATH_AND_LEDGER.md:22-24; the concept (an extraction NOT split by an oath) is implied by contrast with drawer/OATH_AND_LEDGER.md:75-77 ('If any sworn member extracts, every surviving sworn member shares equally') but no field list is given anywhere. DEFINED: {claimant} — the single player whose claim is not subject to any oath's equal-share rule.",
+      "properties": {
+        "t": { "const": "SOLE_CLAIM_CREATED" },
+        "seq": { "$ref": "#/$defs/NonNegInt" },
+        "audience": { "$ref": "#/$defs/Audience" },
+        "claimant": { "$ref": "#/$defs/NamespacedId" }
+      },
+      "required": ["t", "seq", "claimant"],
+      "additionalProperties": false
+    },
+
+    "GOLD_MINTED": {
+      "type": "object",
+      "$comment": "READ (name) from DELTA.md K6 + drawer/OATH_AND_LEDGER.md:22-24, §5 (line 113: 'transfers, purses, faucets and sinks are events'). Fields DEFINED: {to, amount} — a faucet crediting a single balance. amount is exclusiveMinimum 0 (a zero-gold mint is not a meaningful event).",
+      "properties": {
+        "t": { "const": "GOLD_MINTED" },
+        "seq": { "$ref": "#/$defs/NonNegInt" },
+        "audience": { "$ref": "#/$defs/Audience" },
+        "to": { "$ref": "#/$defs/NamespacedId" },
+        "amount": { "type": "number", "exclusiveMinimum": 0 }
+      },
+      "required": ["t", "seq", "to", "amount"],
+      "additionalProperties": false
+    },
+
+    "GOLD_BURNED": {
+      "type": "object",
+      "$comment": "READ (name) from DELTA.md K6 + drawer/OATH_AND_LEDGER.md:22-24, §5. Fields DEFINED: {from, amount} — a sink debiting a single balance. drawer/MARKET.md:14 notes market rake is 'a GOLD_BURNED sink' (a fictional/mechanical note, not a distinct kind).",
+      "properties": {
+        "t": { "const": "GOLD_BURNED" },
+        "seq": { "$ref": "#/$defs/NonNegInt" },
+        "audience": { "$ref": "#/$defs/Audience" },
+        "from": { "$ref": "#/$defs/NamespacedId" },
+        "amount": { "type": "number", "exclusiveMinimum": 0 }
+      },
+      "required": ["t", "seq", "from", "amount"],
+      "additionalProperties": false
+    },
+
+    "GOLD_TRANSFERRED": {
+      "type": "object",
+      "$comment": "READ (name) from DELTA.md K6 + drawer/OATH_AND_LEDGER.md:22-24, §5. Fields DEFINED: {from, to, amount}.",
+      "properties": {
+        "t": { "const": "GOLD_TRANSFERRED" },
+        "seq": { "$ref": "#/$defs/NonNegInt" },
+        "audience": { "$ref": "#/$defs/Audience" },
+        "from": { "$ref": "#/$defs/NamespacedId" },
+        "to": { "$ref": "#/$defs/NamespacedId" },
+        "amount": { "type": "number", "exclusiveMinimum": 0 }
+      },
+      "required": ["t", "seq", "from", "to", "amount"],
+      "additionalProperties": false
+    },
+
+    "PURSE_DISTRIBUTED": {
+      "type": "object",
+      "$comment": "READ (name) from DELTA.md K6 + drawer/OATH_AND_LEDGER.md:22-24. Purse semantics DEFINED here per the K6 brief's own instruction (OATH_AND_LEDGER.md never specifies a payouts[] shape): payouts[] must sum to `amount` (the conservation helper in packages/testkit/tools/conservation.mjs treats `purse` as a pseudo-balance debited by `amount` and credited across payouts[], so any payouts-sum mismatch surfaces as an ordinary conservation violation at this event's seq — see that file's header comment). Prototype split (claimant/posse ~80%, milestone contributors ~15%, gratuity ~5%) from OATH_AND_LEDGER.md:104-106 is NOT encoded as a schema constraint — it is a prototype ratio for a future reducer, not a shape rule.",
+      "properties": {
+        "t": { "const": "PURSE_DISTRIBUTED" },
+        "seq": { "$ref": "#/$defs/NonNegInt" },
+        "audience": { "$ref": "#/$defs/Audience" },
+        "purse": { "$ref": "#/$defs/NamespacedId" },
+        "amount": { "type": "number", "exclusiveMinimum": 0 },
+        "payouts": { "type": "array", "items": { "$ref": "#/$defs/Payout" }, "minItems": 1 }
+      },
+      "required": ["t", "seq", "purse", "amount", "payouts"],
+      "additionalProperties": false
+    },
+
+    "MARKET_OPENED": {
+      "type": "object",
+      "$comment": "READ verbatim from drawer/MARKET.md:11-14: 'MARKET_OPENED {contract, params}'. params is intentionally an open object — drawer/MARKET.md's 'Contract menu (v1, conservative)' (lines 52-58: player X extracts / posse Y extracts / winner's alignment is Z / extraction happens at all) implies per-contract-type parameter shapes that are not specified structurally anywhere; constraining params further here would be inventing the market's contract-type system, which is explicitly not in scope for K6.",
+      "properties": {
+        "t": { "const": "MARKET_OPENED" },
+        "seq": { "$ref": "#/$defs/NonNegInt" },
+        "audience": { "$ref": "#/$defs/Audience" },
+        "contract": { "$ref": "#/$defs/NamespacedId" },
+        "params": { "type": "object" }
+      },
+      "required": ["t", "seq", "contract", "params"],
+      "additionalProperties": false
+    },
+
+    "POSITION_TAKEN": {
+      "type": "object",
+      "$comment": "READ verbatim from drawer/MARKET.md:11-14: 'POSITION_TAKEN {player, contract, side, stake, price}'. side left as a free non-empty string (per-contract vocabulary, e.g. 'yes'/'no', is not specified). price bounded [0,1]: drawer/MARKET.md:22-25 specifies an LMSR automated market maker, whose price is a probability.",
+      "properties": {
+        "t": { "const": "POSITION_TAKEN" },
+        "seq": { "$ref": "#/$defs/NonNegInt" },
+        "audience": { "$ref": "#/$defs/Audience" },
+        "player": { "$ref": "#/$defs/NamespacedId" },
+        "contract": { "$ref": "#/$defs/NamespacedId" },
+        "side": { "type": "string", "minLength": 1 },
+        "stake": { "type": "number", "exclusiveMinimum": 0 },
+        "price": { "type": "number", "minimum": 0, "maximum": 1 }
+      },
+      "required": ["t", "seq", "player", "contract", "side", "stake", "price"],
+      "additionalProperties": false
+    },
+
+    "MARKET_SETTLED": {
+      "type": "object",
+      "$comment": "READ verbatim from drawer/MARKET.md:11-14: 'MARKET_SETTLED {contract, outcome, payouts[]}'. Reuses the shared Payout shape (see PURSE_DISTRIBUTED). drawer/MARKET.md:13-14 notes 'Conservation invariant already covers payouts; rake is a GOLD_BURNED sink' — i.e. settlement's rake is modeled as a separate GOLD_BURNED event, not a field on this event.",
+      "properties": {
+        "t": { "const": "MARKET_SETTLED" },
+        "seq": { "$ref": "#/$defs/NonNegInt" },
+        "audience": { "$ref": "#/$defs/Audience" },
+        "contract": { "$ref": "#/$defs/NamespacedId" },
+        "outcome": { "type": "string", "minLength": 1 },
+        "payouts": { "type": "array", "items": { "$ref": "#/$defs/Payout" } }
+      },
+      "required": ["t", "seq", "contract", "outcome", "payouts"],
+      "additionalProperties": false
+    },
+
+    "LOAN_ISSUED": {
+      "type": "object",
+      "$comment": "READ verbatim from drawer/CREDIT.md:11-15: 'LOAN_ISSUED {lender, borrower, principal, rate, term, terms_hash}'. One field DEFINED beyond that literal list: `loan`, a namespaced id for the loan itself. CREDIT.md never says how a loan is identified, yet LOAN_REPAID/LOAN_DEFAULTED/LIEN_ATTACHED/GARNISHMENT_APPLIED all reference '{loan, ...}' — so LOAN_ISSUED must mint that id at issuance for the others to point at. rate/term left as generic non-negative numbers (annualization/units unspecified — CREDIT.md discusses rate only as an input to the fair_rate/spread formula in its usury section, lines 73, never a unit). terms_hash is a non-empty string (a content hash of the full terms, per the log's own hash-chain ethos in OATH_AND_LEDGER.md §5; hash algorithm unspecified/future work).",
+      "properties": {
+        "t": { "const": "LOAN_ISSUED" },
+        "seq": { "$ref": "#/$defs/NonNegInt" },
+        "audience": { "$ref": "#/$defs/Audience" },
+        "loan": { "$ref": "#/$defs/NamespacedId" },
+        "lender": { "$ref": "#/$defs/NamespacedId" },
+        "borrower": { "$ref": "#/$defs/NamespacedId" },
+        "principal": { "type": "number", "exclusiveMinimum": 0 },
+        "rate": { "type": "number", "minimum": 0 },
+        "term": { "type": "number", "exclusiveMinimum": 0 },
+        "terms_hash": { "type": "string", "minLength": 1 }
+      },
+      "required": ["t", "seq", "loan", "lender", "borrower", "principal", "rate", "term", "terms_hash"],
+      "additionalProperties": false
+    },
+
+    "LOAN_REPAID": {
+      "type": "object",
+      "$comment": "READ verbatim from drawer/CREDIT.md:11-13: 'LOAN_REPAID {loan, amount}'.",
+      "properties": {
+        "t": { "const": "LOAN_REPAID" },
+        "seq": { "$ref": "#/$defs/NonNegInt" },
+        "audience": { "$ref": "#/$defs/Audience" },
+        "loan": { "$ref": "#/$defs/NamespacedId" },
+        "amount": { "type": "number", "exclusiveMinimum": 0 }
+      },
+      "required": ["t", "seq", "loan", "amount"],
+      "additionalProperties": false
+    },
+
+    "LOAN_DEFAULTED": {
+      "type": "object",
+      "$comment": "READ verbatim from drawer/CREDIT.md:11-13: 'LOAN_DEFAULTED {loan}'.",
+      "properties": {
+        "t": { "const": "LOAN_DEFAULTED" },
+        "seq": { "$ref": "#/$defs/NonNegInt" },
+        "audience": { "$ref": "#/$defs/Audience" },
+        "loan": { "$ref": "#/$defs/NamespacedId" }
+      },
+      "required": ["t", "seq", "loan"],
+      "additionalProperties": false
+    },
+
+    "LIEN_ATTACHED": {
+      "type": "object",
+      "$comment": "READ verbatim from drawer/CREDIT.md:11-14: 'LIEN_ATTACHED {loan, target}'. `target` DEFINED as a namespaced entity reference; CREDIT.md does not say what a lien attaches to beyond the mechanism in its Default and enforcement section (lines 55-57: 'Liens attach at the validator: GARNISHMENT_APPLIED intercepts PURSE_DISTRIBUTED before gold reaches the debtor') — read as the debtor's account or a specific claim, not further specified.",
+      "properties": {
+        "t": { "const": "LIEN_ATTACHED" },
+        "seq": { "$ref": "#/$defs/NonNegInt" },
+        "audience": { "$ref": "#/$defs/Audience" },
+        "loan": { "$ref": "#/$defs/NamespacedId" },
+        "target": { "$ref": "#/$defs/NamespacedId" }
+      },
+      "required": ["t", "seq", "loan", "target"],
+      "additionalProperties": false
+    },
+
+    "GARNISHMENT_APPLIED": {
+      "type": "object",
+      "$comment": "READ verbatim from drawer/CREDIT.md:11-14: 'GARNISHMENT_APPLIED {loan, source, amount}'. drawer/CREDIT.md:55-57: this event 'intercepts PURSE_DISTRIBUTED before gold reaches the debtor' — `source` is DEFINED as the purse/distribution being intercepted (a namespaced id, e.g. the same id a PURSE_DISTRIBUTED.purse would carry).",
+      "properties": {
+        "t": { "const": "GARNISHMENT_APPLIED" },
+        "seq": { "$ref": "#/$defs/NonNegInt" },
+        "audience": { "$ref": "#/$defs/Audience" },
+        "loan": { "$ref": "#/$defs/NamespacedId" },
+        "source": { "$ref": "#/$defs/NamespacedId" },
+        "amount": { "type": "number", "exclusiveMinimum": 0 }
+      },
+      "required": ["t", "seq", "loan", "source", "amount"],
+      "additionalProperties": false
+    },
+
+    "DebtNamespaceNote": {
+      "$comment": "Documentation-only $defs entry, deliberately unreferenced by the oneOf catalog below (there is no debt: EVENT to schematize). drawer/CREDIT.md:11-15 ('plus a debt: delta namespace (claims, distinct from balances)') and CREDIT.md:19-22 ('Debt is a claim, not a balance ... full-reserve only ... claims are tracked in debt:, never counted as money') describe a DELTA-STATE namespace, not an event shape: a future reducer's delta map must key debt claims under a `debt:` namespace distinct from `balance:`-style keys, so packages/testkit/tools/conservation.mjs's sum(balances) invariant is never asked to include loan principal as if it were spendable gold. Recorded here per K6 brief controller addition #2 ('plus a schema-level note that debt lives in a debt: delta namespace'); no schema keyword encodes it because it constrains reducer/delta-map shape, not event shape, and no reducer exists yet."
+    }
+  },
+
+  "oneOf": [
+    { "$ref": "#/$defs/JOIN" },
+    { "$ref": "#/$defs/MOVE" },
+    { "$ref": "#/$defs/TAKE" },
+    { "$ref": "#/$defs/TAKE_PRIZE" },
+    { "$ref": "#/$defs/WIN" },
+    { "$ref": "#/$defs/LOSE" },
+    { "$ref": "#/$defs/SAY" },
+    { "$ref": "#/$defs/WHISPER" },
+    { "$ref": "#/$defs/EMOTE" },
+    { "$ref": "#/$defs/READ" },
+    { "$ref": "#/$defs/LIGHT_WARN" },
+    { "$ref": "#/$defs/MILESTONE" },
+    { "$ref": "#/$defs/OATH_SWORN" },
+    { "$ref": "#/$defs/OATHBROTHER_ATTACKED" },
+    { "$ref": "#/$defs/POSSE_MEMBER_KILLED" },
+    { "$ref": "#/$defs/OATH_BETRAYED" },
+    { "$ref": "#/$defs/SOLE_CLAIM_CREATED" },
+    { "$ref": "#/$defs/GOLD_MINTED" },
+    { "$ref": "#/$defs/GOLD_BURNED" },
+    { "$ref": "#/$defs/GOLD_TRANSFERRED" },
+    { "$ref": "#/$defs/PURSE_DISTRIBUTED" },
+    { "$ref": "#/$defs/MARKET_OPENED" },
+    { "$ref": "#/$defs/POSITION_TAKEN" },
+    { "$ref": "#/$defs/MARKET_SETTLED" },
+    { "$ref": "#/$defs/LOAN_ISSUED" },
+    { "$ref": "#/$defs/LOAN_REPAID" },
+    { "$ref": "#/$defs/LOAN_DEFAULTED" },
+    { "$ref": "#/$defs/LIEN_ATTACHED" },
+    { "$ref": "#/$defs/GARNISHMENT_APPLIED" }
+  ]
+}

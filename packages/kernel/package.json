@@ -2,5 +2,18 @@
   "name": "@golem-engine/kernel",
   "version": "0.0.0",
   "private": true,
-  "type": "module"
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js",
+    "./log": "./dist/log.js"
+  },
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "prepare": "tsc -p . && tsc -p tsconfig.log.json",
+    "pretest": "tsc -p tsconfig.tests.json",
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.4"
+  }
 }

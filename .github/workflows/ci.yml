@@ -10,21 +10,44 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: 22 }
-
+        with: { node-version: 22, cache: npm }
+      # shared/rng.js re-exports from the @golem-engine/random workspace
+      # package (K1); its dist/ is built by that package's `prepare`
+      # script, which npm ci runs automatically. `npm ci` at the repo
+      # root also builds every other package's dist/ (kernel, net) the
+      # same way, via each workspace's own `prepare`.
+      - run: npm ci
       # The architecture's superpower: everything is a golden-file test.
       # A golden diff means the world function changed and every existing
       # seed just broke: that is a MAJOR version bump, not a bugfix.
-      - name: determinism tests (worldgen goldens, reducer replay, solver)
-        working-directory: games/golem-grid
-        run: node --test
+      #
+      # Root `npm test` runs `npm run test --workspaces --if-present`
+      # (package.json), i.e. EVERY workspace's own `test` script in one
+      # pass: golem-grid's worldgen goldens/reducer replay/solver-lite
+      # suite, AND the K1-K5 package suites that are each phase's DoD
+      # tests — packages/random (h32/channel/pick/chance/rint vectors),
+      # packages/kernel (replay + log/log-restart chain), packages/net
+      # (transports/dedup), packages/testkit (kernel-replay conformance,
+      # reducer purity/identity, log-chain, event-schema, conservation).
+      # Phase 1 whole-branch review finding #1: before this, CI only
+      # ever ran games/golem-grid's own suite via a bare `node --test`
+      # scoped to that directory — none of the other workspaces' tests
+      # executed in CI at all. This one step subsumes that narrower
+      # invocation (it still runs golem-grid's suite, plus every other
+      # workspace's), so there is no separate golem-grid-only step here
+      # anymore.
+      - name: workspace tests (root npm test — every package's DoD suite)
+        run: npm test
 
   solver:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: 22 }
+        with: { node-version: 22, cache: npm }
+      # solve.js pulls in worldgen -> shared/rng.js -> @golem-engine/random
+      # (K1); npm ci builds packages/random/dist via its prepare script.
+      - run: npm ci
       - name: 10K-seed winnability + difficulty band
         run: node games/golem-grid/tools/solve.js --seeds 10000
 
@@ -45,6 +68,10 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22, cache: npm }
       - run: npm ci
+      # DELTA.md §0.3: Math.random forbidden in packages/ (lint rule,
+      # CI-enforced), also bans eval(/new Function anywhere in scope.
+      - name: ban check (Math.random / eval / new Function under packages/**)
+        run: node tools/check-bans.mjs
       - name: single-file build
         run: |
           npm run build -w @golem-engine/golem-grid
@@ -53,3 +80,69 @@ jobs:
         with:
           name: golem-grid-html
           path: games/golem-grid/dist/golem-grid.html
+
+  some-hero-legacy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      # Cold runner: legacy deps aren't installed yet, so Playwright's
+      # own package (and thus its browser installer) isn't resolvable
+      # until after a first `npm ci` in the legacy dir.
+      - name: Install legacy deps
+        working-directory: games/some-hero/legacy
+        run: npm ci
+      # Mirrors some-hero's own upstream CI (see
+      # games/some-hero/legacy/.github/workflows/ci.yml).
+      - name: Install Playwright Chromium
+        working-directory: games/some-hero/legacy
+        run: npx playwright install --with-deps chromium
+      - name: some-hero legacy unit + e2e suites
+        run: npm run test:some-hero-legacy
+      - name: Upload e2e screenshots on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: some-hero-e2e-shots
+          path: games/some-hero/legacy/tests/e2e/shots/
+
+  level-manifest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: regenerate topdown-puzzle level manifest; fail on drift
+        run: |
+          node games/topdown-puzzle/tools/gen-level-manifest.mjs
+          git diff --exit-code -- games/topdown-puzzle/levels/manifest.json
+
+  event-schema:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      # K6 DoD: events.v1.json validates every frozen fixture log + the
+      # replay golden (validate-events.mjs), plus the schema's own unit
+      # tests (fixture conformance, negative cases, and the gold-
+      # conservation helper's tests, run via the testkit workspace).
+      - name: validate every fixture/golden event against events.v1.json
+        run: node packages/testkit/tools/validate-events.mjs
+      - name: event-schema + conservation unit tests
+        run: node --test packages/testkit/tests/event-schema.test.js packages/testkit/tests/conservation.test.js
+
+  freeze-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      # Permanent DoD job for DELTA.md P0.3 (behavior freeze): golem
+      # fixture replay, some-hero @ceremony characterization tests, and
+      # topdown-puzzle parse snapshots, in that order, failing fast.
+      - name: freeze:verify (golem fixtures + ceremony + tdp snapshots)
+        run: npm run freeze:verify
