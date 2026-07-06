@@ -7,6 +7,7 @@ import { createState,
          light as rLight, itemAt as rItemAt, prizeCarrier as rPrizeCarrier,
          radius as rRadius } from "../shared/reducer.js";
 import { createAutoTransport } from "@golem-engine/net";
+import { createTouchControls, isCoarsePointer } from "@golem-engine/clients";
 import { createHost } from "./host.js";
 import { createClient } from "./client.js";
 import { createPerception } from "./perceive.js";
@@ -152,9 +153,24 @@ function sendCmd(c){S.isHost?Host.hostCmd(S.me,c):NET.send({k:"CMD",from:S.me,cm
 
 /* ── INPUT: capture-phase keys + click context menu (src/input.js). ──── */
 const cmdEl=document.getElementById("cmd");
-createInput(S,{
+const Input=createInput(S,{
   cmdEl,sendCmd,feedLine:Render.feedLine,players,getP,itemAt,prizeCarrier,
   seenT:Perception.seenT,litT:Perception.litT,lookAt,
+});
+
+/* ── TOUCH: @golem-engine/clients' shared touch layer (mobile-ergonomics
+   PR1) — an input ADAPTER only, no new game logic: onDir funnels through
+   the same moveStep() the keyboard uses, onTap funnels through the same
+   handleTap() the mouse click listener uses, and the lone action button
+   sends the same "take" command a keyboard /take would. Inert on mouse-
+   only desktops (createTouchControls shows nothing unless a touch/coarse-
+   pointer signal arrives), so keyboard + mouse paths are unaffected. ──── */
+createTouchControls({
+  target:document.getElementById("cv"),
+  onDir:(dx,dy)=>Input.moveStep(dx,dy),
+  onTap:(x,y)=>Input.handleTap(x,y),
+  actions:[{label:"take",glyph:"TAKE",onPress:()=>sendCmd("take")}],
+  chat:{onOpen:()=>cmdEl.focus()},
 });
 
 /* ── boot ──────────────────────────────────────────────────────────────── */
@@ -169,7 +185,12 @@ function begin(asHost){
   S.me="p"+h32(name+Math.random()).toString(36);
   S.isHost=asHost||!NET.ok;
   document.getElementById("start").remove();
-  cmdEl.disabled=false;cmdEl.focus();
+  cmdEl.disabled=false;
+  /* Keyboard fix (mobile-ergonomics §1): on touch/coarse-pointer devices
+     cmdEl must NOT auto-focus — that's exactly what pops the soft
+     keyboard and eats half the screen. It's collapsed behind the touch
+     layer's chat toggle instead; desktop keeps today's auto-focus. */
+  if(!isCoarsePointer())cmdEl.focus();
   setInterval(Render.drawGrid,90);   /* the flame animates even while you stand still */
   if(S.isHost){
     setSeed(seedInput||Math.random().toString(36).slice(2,8));

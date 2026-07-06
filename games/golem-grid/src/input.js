@@ -3,8 +3,20 @@
    phase keys only ("arrows are feet, always"); no state mutation
    outside dispatched commands (everything here funnels through
    `sendCmd`). `lookAt` stays golem prose (main.js's ▶GOLEM-PLUG◀
-   section, injected here as a dep) since it calls `golemLine`. ──────── */
+   section, injected here as a dep) since it calls `golemLine`.
+
+   Mobile note: `moveStep`/`handleTap` below are ADDITIONS (returned for
+   main.js to wire @golem-engine/clients' touch onDir/onTap into) — the
+   original keydown handler and the `cv` "click" listener are untouched
+   byte-for-byte; touch funnels through the exact same `sendCmd`/menu
+   machinery a mouse or keyboard already did, no forked logic. `COARSE`
+   only gates whether picking a context-menu action/tile also yanks
+   keyboard focus back to `cmdEl` — on touch that would pop the soft
+   keyboard the whole feature exists to avoid. ──────────────────────── */
 import { GW, GH } from "../shared/worldgen.js";
+import { isCoarsePointer } from "@golem-engine/clients";
+
+const COARSE = isCoarsePointer();
 
 export function createInput(S,deps){
   const{cmdEl,sendCmd,feedLine,players,getP,itemAt,prizeCarrier,seenT,litT,lookAt}=deps;
@@ -16,6 +28,13 @@ export function createInput(S,deps){
     if(!dirs[e.key]||cmdEl.disabled||!getP(S.me))return;
     e.preventDefault();e.stopPropagation();hideMenu();
     pathQ.length=0;sendCmd(`move ${dirs[e.key][0]} ${dirs[e.key][1]}`);},true);
+
+  /* touch stick/swipe path (src/main.js wires this to onDir) — same
+     guard the keydown handler uses, same sendCmd grammar, nothing new. */
+  function moveStep(dx,dy){
+    if(cmdEl.disabled||!getP(S.me))return;
+    hideMenu();pathQ.length=0;sendCmd(`move ${dx} ${dy}`);
+  }
   cmdEl.addEventListener("keydown",e=>{
     if(e.key!=="Enter")return;
     const raw=cmdEl.value.trim();cmdEl.value="";if(!raw)return;
@@ -52,11 +71,21 @@ export function createInput(S,deps){
       if(!step||S.st.over){clearInterval(pathTimer);return;}
       sendCmd(`move ${step[0]-me2.x} ${step[1]-me2.y}`);},130);}
   const cv=document.getElementById("cv");
-  cv.addEventListener("click",e=>{
+  /* handleTap(clientX,clientY): the tile -> context-menu logic, factored
+     out so both the mouse "click" listener below AND touch's onTap (src/
+     main.js, via @golem-engine/clients) drive the exact same menu/acts
+     construction — no forked logic between input paths. The only touch-
+     specific change is COARSE-gating the two generic cmdEl.focus() calls
+     that used to run unconditionally on every tap/selection: those would
+     pop the soft keyboard on every tile tap, which is the whole bug this
+     feature exists to fix. The "whisper" action's OWN focus() call is
+     left unconditional — picking "whisper" is an explicit request to
+     type, on touch or desktop alike. */
+  function handleTap(clientX,clientY){
     if(!S.dun)return;
     const r=cv.getBoundingClientRect(),
-          x=Math.floor((e.clientX-r.left)/r.width*GW),
-          y=Math.floor((e.clientY-r.top)/r.height*GH);
+          x=Math.floor((clientX-r.left)/r.width*GW),
+          y=Math.floor((clientY-r.top)/r.height*GH);
     if(x<0||y<0||x>=GW||y>=GH||!seenT.has(x+","+y))return hideMenu();
     const me=getP(S.me),k=x+","+y,acts=[];
     const adj=me&&Math.abs(me.x-x)<=1&&Math.abs(me.y-y)<=1;
@@ -74,13 +103,15 @@ export function createInput(S,deps){
     menu.innerHTML="";const mt=document.createElement("div");mt.className="mt";
     mt.textContent=`${x},${y}`;menu.appendChild(mt);
     for(const[label,fn]of acts){const b=document.createElement("button");
-      b.textContent=label;b.onclick=()=>{hideMenu();fn();cmdEl.focus();};menu.appendChild(b);}
+      b.textContent=label;b.onclick=()=>{hideMenu();fn();if(!COARSE)cmdEl.focus();};menu.appendChild(b);}
     menu.style.display="block";
-    menu.style.left=Math.min(e.clientX,innerWidth-170)+"px";
-    menu.style.top=Math.min(e.clientY,innerHeight-40-acts.length*30)+"px";
-    cmdEl.focus();});
+    menu.style.left=Math.min(clientX,innerWidth-170)+"px";
+    menu.style.top=Math.min(clientY,innerHeight-40-acts.length*30)+"px";
+    if(!COARSE)cmdEl.focus();
+  }
+  cv.addEventListener("click",e=>handleTap(e.clientX,e.clientY));
   function hideMenu(){menu.style.display="none";}
   addEventListener("click",e=>{if(!menu.contains(e.target)&&e.target!==cv)hideMenu();});
 
-  return{walkTo,hideMenu};
+  return{walkTo,hideMenu,moveStep,handleTap};
 }
