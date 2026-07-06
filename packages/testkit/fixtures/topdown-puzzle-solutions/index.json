@@ -2,6 +2,11 @@
  {
   "level": "synthetic-pr1",
   "log": "synthetic-pr1.log.json",
-  "finalHash": 1123289315
+  "finalHash": 519734678
+ },
+ {
+  "level": "synthetic-pr2",
+  "log": "synthetic-pr2.log.json",
+  "finalHash": 417611071
  }
 ]

@@ -18,8 +18,29 @@ export function makeEntity(id, kind, x, y, extra = {}) {
   };
 }
 
-export function makePlayer(x, y) {
-  return makeEntity("entity:player", "player", x, y, { controlledBy: "player" });
+// Mirrors shared/module.js's deriveWorld PR2 addition: every player
+// entity carries a Health component (design doc decision #8's canonical
+// "3 HP, 1 damage per contact" numbers).
+export const PLAYER_MAX_HP = 3;
+
+export function makePlayer(x, y, { hp = PLAYER_MAX_HP, max = PLAYER_MAX_HP } = {}) {
+  const entity = makeEntity("entity:player", "player", x, y, { controlledBy: "player" });
+  entity.components.Health = { hp, max };
+  return entity;
+}
+
+/** A baddie entity — mirrors shared/module.js's deriveWorld PR2 addition
+ *  (per-instance `moveDir`, always seeded to 1, same as legacy's
+ *  addBaddie). `axis` is `"horizontal"` or `"vertical"`. */
+export function makeBaddie(id, x, y, axis, moveDir = 1, extra = {}) {
+  return makeEntity(id, "baddie", x, y, { axis, moveDir, hostile: true, ...extra });
+}
+
+/** A directional moving-block entity — `facing` is one of "N"/"S"/"E"/"W"
+ *  (mirrors shared/module.js's deriveWorld attaching legendEntry.facing
+ *  to the shared moving_block template). */
+export function makeMovingBlock(id, x, y, facing, extra = {}) {
+  return makeEntity(id, "moving_block", x, y, { facing, moves: true, ...extra });
 }
 
 /** makeWorld(rows, cols, {walls, memoryHoles, entities}) — walls/

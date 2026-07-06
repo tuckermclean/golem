@@ -14,12 +14,17 @@
    means baddies are never registered in `this.grid`, so a baddie-
    occupied cell reads as empty to getPushChain exactly like a memory
    hole does. That makes a baddie-occupied landing cell ordinary open
-   ground as far as THIS file is concerned; the perpendicular-shove
-   interaction legacy layers on top of that (shoveBaddiePerpendicular)
-   is PR2's tick.js concern (baddies do not exist as a validate-time
-   collision concept until PR2), not modeled here. No shipped PR1 level
-   or fixture exercises a baddie-occupied landing cell, so this is a
-   documented deferral, not a silent gap. ─────────────────────────────── */
+   ground as far as getPushChain's OWN chain-walk/blocked/tooLong result
+   is concerned. PR2 layers the perpendicular-shove interaction
+   (shoveBaddiePerpendicular, ~394-442) on top of that result, in
+   resolveMove itself (`resolveBaddieAtLanding`, below): shoving along the
+   baddie's own axis refuses the WHOLE push (a Denial, exactly mirroring
+   pushBlocks' `if (!shoved) return false`); shoving perpendicular to it
+   moves — or, into a memory hole, destroys — the baddie one tile in the
+   push direction, before the farthest chain member's own MOVED/DESTROYED
+   is emitted (matching pushBlocks' farthest-to-nearest ordering: the
+   shove happens exactly when the farthest member's own move is
+   attempted, which is always first). ─────────────────────────────────── */
 import { entityAt, player, reduce } from "./reducer.js";
 
 export const MAX_PUSH_CHAIN = 2; // KyeScene's `if (chain.length > 2) return null`
@@ -37,6 +42,48 @@ function inBounds(world, x, y) {
 function isChainMember(entity) {
   const actor = entity && entity.components.Actor;
   return !!actor && CHAIN_ACTOR_KINDS.has(actor.kind);
+}
+
+function isBaddie(entity) {
+  const actor = entity && entity.components.Actor;
+  return !!actor && actor.kind === "baddie";
+}
+
+/** PR2: if the push-chain's landing cell holds a baddie, resolve the
+ *  ported shoveBaddiePerpendicular sub-resolution. Returns
+ *  `{ events: [] }` when there is no baddie there (the common case);
+ *  `{ events: [MOVED|DESTROYED] }` on a successful perpendicular shove
+ *  (events is a 1-element array — a baddie is never itself a chain
+ *  member, so it never has farther members behind it to also move); or
+ *  a Denial when the shove is illegal (along the baddie's own axis) or
+ *  blocked (another wall/chain-member/baddie occupies the shove
+ *  destination) — which denies the WHOLE push, per legacy. */
+function resolveBaddieAtLanding(state, world, landing, dx, dy) {
+  const baddie = entityAt(state, landing.x, landing.y);
+  if (!isBaddie(baddie)) return { events: [] };
+
+  const axis = baddie.components.Actor.axis;
+  const alongOwnAxis = (axis === "horizontal" && dx !== 0) || (axis === "vertical" && dy !== 0);
+  if (alongOwnAxis) {
+    return { deny: "It will not be shoved that way." };
+  }
+
+  const sx = landing.x + dx;
+  const sy = landing.y + dy;
+  const shoveOccupant = entityAt(state, sx, sy);
+  const shoveBlocked =
+    !inBounds(world, sx, sy) ||
+    world.walls.has(key(sx, sy)) ||
+    isChainMember(shoveOccupant) ||
+    isBaddie(shoveOccupant);
+  if (shoveBlocked) {
+    return { deny: "There is nowhere for it to go." };
+  }
+
+  if (world.memoryHoles.has(key(sx, sy))) {
+    return { events: [{ t: "DESTROYED", id: baddie.id }] };
+  }
+  return { events: [{ t: "MOVED", id: baddie.id, x: sx, y: sy }] };
 }
 
 /** Walk from (x, y) in direction (dx, dy), collecting consecutive
@@ -74,7 +121,11 @@ export function getPushChain(state, world, x, y, dx, dy) {
  *   1. wall/out-of-bounds denial
  *   2. direct diamond collection (always collects, never pushes)
  *   3. push-chain resolution (illegal-length / blocked-end denial, else
- *      one MOVED/DESTROYED per chain member, farthest first)
+ *      one MOVED/DESTROYED per chain member, farthest first) — PR2:
+ *      if the landing cell holds a baddie, resolve the perpendicular
+ *      shove sub-resolution first (deny the whole push if it's along
+ *      the baddie's own axis or blocked; otherwise the baddie's own
+ *      MOVED/DESTROYED lands before the chain's)
  *   4. otherwise plain movement
  *   5. static-world memory-hole LOSE check (the player's own final tile)
  *   6. dynamic-state diamond-count WIN check (sim-and-inspect — the
@@ -105,6 +156,11 @@ export function resolveMove(state, world, dx, dy) {
     const { chain, landing, blocked, tooLong } = getPushChain(state, world, nx, ny, dx, dy);
     if (tooLong) return { deny: "That row will not budge — too many to push." };
     if (blocked) return { deny: "There is nowhere for it to go." };
+
+    const shove = resolveBaddieAtLanding(state, world, landing, dx, dy);
+    if (shove.deny) return shove;
+    events.push(...shove.events);
+
     const intoHole = world.memoryHoles.has(key(landing.x, landing.y));
     for (let i = chain.length - 1; i >= 0; i--) {
       const member = chain[i];
