@@ -32,6 +32,7 @@
 {"task": "C", "seed": "0", "id": "s0-c-noplayer", "register": "plain", "in": "TASK:C THEME:salt_counting_house EVENT:whisper REASON:NO_SUCH_PLAYER", "out": "No one by that name is down here with you."}
 {"task": "C", "seed": "0", "id": "s0-c-nothing", "register": "terse", "in": "TASK:C THEME:salt_counting_house EVENT:take REASON:NOTHING_HERE", "out": "There's nothing here to take."}
 {"task": "C", "seed": "0", "id": "s0-c-unknownverb", "register": "lush", "in": "TASK:C THEME:salt_counting_house EVENT:dance REASON:UNKNOWN_VERB", "out": "The golem doesn't know how to do that."}
+{"task": "C", "seed": "0", "id": "s0-c-wall", "register": "plain", "in": "TASK:C THEME:salt_counting_house EVENT:move DIR:n EXITS:s,e REASON:WALL", "out": "A solid wall blocks the way north."}
 {"task": "C", "seed": "0", "id": "s0-c-wrongitem", "register": "terse", "in": "TASK:C THEME:salt_counting_house EVENT:take ITEMS:tally_stick REASON:WRONG_ITEM", "out": "The tally stick isn't something you can take."}
 {"task": "D", "seed": "0", "id": "s0-d-distant", "register": "lush", "in": "TASK:D THEME:salt_counting_house TOPIC:distant KNOWS:chapel DOESNT_KNOW:store QUESTION:What's in the deepest chamber?", "out": "I couldn't tell you \u2014 I've never been that far, only as deep as the chapel."}
 {"task": "D", "seed": "0", "id": "s0-r0-room", "register": "plain", "in": "TASK:D THEME:salt_counting_house TOPIC:room KNOWS:chapel+salt_counting_house DOESNT_KNOW:store QUESTION:What lies deeper in?", "out": "I couldn't say \u2014 I've never gone past the chapel."}
@@ -81,6 +82,7 @@
 {"task": "C", "seed": "1", "id": "s1-c-noplayer", "register": "terse", "in": "TASK:C THEME:salt_counting_house EVENT:whisper REASON:NO_SUCH_PLAYER", "out": "No one by that name is down here with you."}
 {"task": "C", "seed": "1", "id": "s1-c-nothing", "register": "lush", "in": "TASK:C THEME:salt_counting_house EVENT:take REASON:NOTHING_HERE", "out": "There's nothing here to take."}
 {"task": "C", "seed": "1", "id": "s1-c-unknownverb", "register": "plain", "in": "TASK:C THEME:salt_counting_house EVENT:dance REASON:UNKNOWN_VERB", "out": "The golem doesn't know how to do that."}
+{"task": "C", "seed": "1", "id": "s1-c-wall", "register": "terse", "in": "TASK:C THEME:salt_counting_house EVENT:move DIR:n EXITS:s,e REASON:WALL", "out": "A solid wall blocks the way north."}
 {"task": "C", "seed": "1", "id": "s1-c-wrongitem", "register": "lush", "in": "TASK:C THEME:salt_counting_house EVENT:take ITEMS:cracked_seal REASON:WRONG_ITEM", "out": "The cracked seal isn't something you can take."}
 {"task": "D", "seed": "1", "id": "s1-d-distant", "register": "plain", "in": "TASK:D THEME:salt_counting_house TOPIC:distant KNOWS:store DOESNT_KNOW:the_Final_Ledger QUESTION:What's in the deepest chamber?", "out": "I couldn't say \u2014 I've been no deeper than the store; whatever lies past it, I've not seen."}
 {"task": "D", "seed": "1", "id": "s1-r0-room", "register": "terse", "in": "TASK:D THEME:salt_counting_house TOPIC:room KNOWS:store+salt_counting_house DOESNT_KNOW:none QUESTION:What lies deeper in?", "out": "Nothing more that I know of \u2014 the store is as far as this place goes."}
@@ -130,6 +132,7 @@
 {"task": "C", "seed": "2", "id": "s2-c-noplayer", "register": "plain", "in": "TASK:C THEME:deep_mine EVENT:whisper REASON:NO_SUCH_PLAYER", "out": "No one by that name is down here with you."}
 {"task": "C", "seed": "2", "id": "s2-c-nothing", "register": "terse", "in": "TASK:C THEME:deep_mine EVENT:take REASON:NOTHING_HERE", "out": "There's nothing here to take."}
 {"task": "C", "seed": "2", "id": "s2-c-unknownverb", "register": "lush", "in": "TASK:C THEME:deep_mine EVENT:dance REASON:UNKNOWN_VERB", "out": "The golem doesn't know how to do that."}
+{"task": "C", "seed": "2", "id": "s2-c-wall", "register": "plain", "in": "TASK:C THEME:deep_mine EVENT:move DIR:n EXITS:s,e REASON:WALL", "out": "A solid wall blocks the way north."}
 {"task": "C", "seed": "2", "id": "s2-c-wrongitem", "register": "terse", "in": "TASK:C THEME:deep_mine EVENT:take ITEMS:split_pick-haft REASON:WRONG_ITEM", "out": "The split pick-haft isn't something you can take."}
 {"task": "D", "seed": "2", "id": "s2-d-distant", "register": "lush", "in": "TASK:D THEME:deep_mine TOPIC:distant KNOWS:chapel DOESNT_KNOW:stairwell QUESTION:What's in the deepest chamber?", "out": "I couldn't tell you \u2014 I've never been that far, only as deep as the chapel."}
 {"task": "D", "seed": "2", "id": "s2-r0-room", "register": "plain", "in": "TASK:D THEME:deep_mine TOPIC:room KNOWS:chapel+deep_mine DOESNT_KNOW:stairwell QUESTION:Is anything dangerous nearby?", "out": "Not that I've seen \u2014 the chapel's quiet enough, though I can't speak for what's further down."}
@@ -179,6 +182,7 @@
 {"task": "C", "seed": "3", "id": "s3-c-noplayer", "register": "terse", "in": "TASK:C THEME:salt_counting_house EVENT:whisper REASON:NO_SUCH_PLAYER", "out": "No one by that name is down here with you."}
 {"task": "C", "seed": "3", "id": "s3-c-nothing", "register": "lush", "in": "TASK:C THEME:salt_counting_house EVENT:take REASON:NOTHING_HERE", "out": "There's nothing here to take."}
 {"task": "C", "seed": "3", "id": "s3-c-unknownverb", "register": "plain", "in": "TASK:C THEME:salt_counting_house EVENT:dance REASON:UNKNOWN_VERB", "out": "The golem doesn't know how to do that."}
+{"task": "C", "seed": "3", "id": "s3-c-wall", "register": "terse", "in": "TASK:C THEME:salt_counting_house EVENT:move DIR:n EXITS:s,e REASON:WALL", "out": "A solid wall blocks the way north."}
 {"task": "C", "seed": "3", "id": "s3-c-wrongitem", "register": "lush", "in": "TASK:C THEME:salt_counting_house EVENT:take ITEMS:cracked_seal REASON:WRONG_ITEM", "out": "The cracked seal isn't something you can take."}
 {"task": "D", "seed": "3", "id": "s3-d-distant", "register": "plain", "in": "TASK:D THEME:salt_counting_house TOPIC:distant KNOWS:hall DOESNT_KNOW:green_coin QUESTION:What's in the deepest chamber?", "out": "I couldn't say \u2014 I've been no deeper than the hall; whatever's down there, I've not seen it."}
 {"task": "D", "seed": "3", "id": "s3-r0-room", "register": "terse", "in": "TASK:D THEME:salt_counting_house TOPIC:room KNOWS:hall+salt_counting_house DOESNT_KNOW:gallery QUESTION:What lies deeper in?", "out": "I couldn't say \u2014 I've never gone past the hall."}

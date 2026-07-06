@@ -196,9 +196,15 @@ def violations_c(control, explanation):
 
     exits = f.get("EXITS", "")
     exits = exits.split(",") if exits and exits != "none" else []
-    if exits or f.get("DIR"):
+    # The attempted direction (DIR), when the control carries one, is a
+    # GROUNDED thing to name in a denial explanation — a WALL denial's whole
+    # point is "you can't go <DIR>". It is by definition not an exit, so
+    # exempt it from the phantom-exit check; previously this false-flagged
+    # valid WALL explanations like "A wall blocks the way north" (DIR:n).
+    blocked_dir = f.get("DIR", "")
+    if exits or blocked_dir:
         for d, words in DIRWORDS.items():
-            if d not in exits and any(re.search(rf"\b{w}\b", explanation, re.I) for w in words):
+            if d not in exits and d != blocked_dir and any(re.search(rf"\b{w}\b", explanation, re.I) for w in words):
                 v.append(f"phantom-exit:{d}")
 
     items = f.get("ITEMS", "none")

@@ -81,6 +81,20 @@ class TestTaskC(unittest.TestCase):
         v = violations(ctrl, "That is not what you're looking for.", task="C")
         self.assertIn("missing-item:green_coin", v)
 
+    def test_pass_wall_names_blocked_direction(self):
+        # A WALL denial's explanation SHOULD name the blocked direction (DIR),
+        # which is not an exit — this must NOT be flagged phantom-exit (the
+        # false-positive found while eyeballing the L3 smoke batch).
+        ctrl = "TASK:C THEME:deep_mine EVENT:move DIR:n EXITS:s,e REASON:WALL"
+        self.assertEqual(violations(ctrl, "A solid wall blocks the way north.", task="C"), [])
+
+    def test_quarantine_phantom_exit_still_caught(self):
+        # A direction that is neither an exit nor the attempted DIR is still a
+        # phantom exit — the WALL/DIR exemption is targeted, not a blanket off.
+        ctrl = "TASK:C THEME:deep_mine EVENT:move DIR:n EXITS:s,e REASON:WALL"
+        v = violations(ctrl, "The way west lies open past the wall.", task="C")
+        self.assertIn("phantom-exit:w", v)
+
 
 # ── Task D: bounded NPC reply ────────────────────────────────────────────
 class TestTaskD(unittest.TestCase):
