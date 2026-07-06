@@ -1,0 +1,9002 @@
+[
+  {
+    "utterance": "just go left already",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "mind heading down for me",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "can we go west please",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "scoot right please",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "could you head up",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "swing south for a second",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "lets walk toward the right",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "maybe go right next",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "lets try going west",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "can you shift north a bit",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "try heading east instead",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "lets try going west",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "i want to walk up",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "can you shift north a bit",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "scoot down please",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "would you mind going down",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "maybe go south next",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "start moving east now",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "please move east now",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "just go down already",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "start moving right now",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "can we go down please",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "mind heading up for me",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "scoot north please",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "start moving south now",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "could we shift south",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "i think we should head right",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "why dont we head south",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "can we go left please",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "why dont we head down",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "can we go east please",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "maybe go up next",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "lets walk toward the up",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "could you head down",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "i want to walk north",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "lets walk toward the west",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "could we shift south",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "lets walk toward the north",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "mind heading west for me",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "swing north for a second",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "we ought to travel right",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "try heading west instead",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "i think we should head left",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "i want to walk east",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "start moving east now",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "start moving left now",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "lets try going up",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "lets try going east",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "would you mind going right",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "maybe go up next",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "scoot south please",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "we ought to travel right",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "why dont we head left",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "why dont we head north",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "why dont we head right",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "could we shift right",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "try heading right instead",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "can we go south please",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "scoot north please",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "would you mind going down",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "lets walk toward the right",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "try heading east instead",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "i want to walk up",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "would you mind going east",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "try heading up instead",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "try heading up instead",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "please move right now",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "can you shift left a bit",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "start moving down now",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "maybe go south next",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "time to move down",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "mind heading east for me",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "we ought to travel up",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "would you mind going left",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "i want to walk east",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "time to move south",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "could we shift right",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "swing down for a second",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "scoot west please",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "just go west already",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "maybe go north next",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "could we shift left",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "can you shift north a bit",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "i think we should head right",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "time to move down",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "please move west now",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "please move right now",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "please move down now",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "lets try going left",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "scoot north please",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "scoot down please",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "swing right for a second",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "can you shift up a bit",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "maybe go right next",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "just go left already",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "i want to walk up",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "i think we should head north",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "we ought to travel right",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "lets walk toward the left",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "mind heading down for me",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "could you head west",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "could you head right",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "could we shift left",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "please move south now",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "could we shift down",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "can you shift north a bit",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "mind heading south for me",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "could we shift up",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "could we shift south",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "time to move down",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "just go left already",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "could you head right",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "i think we should head east",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "could you head up",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "lets try going west",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "can you shift up a bit",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "i want to walk left",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "would you mind going right",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "would you mind going up",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "would you mind going east",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "lets try going up",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "start moving west now",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "lets walk toward the north",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "mind heading east for me",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "why dont we head north",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "would you mind going north",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "could you head south",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "we ought to travel north",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "swing down for a second",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "can we go right please",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "time to move west",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "time to move left",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "lets walk toward the south",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "scoot down please",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "time to move right",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "try heading up instead",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "lets try going left",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "try heading down instead",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "i want to walk down",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "scoot east please",
+    "label": "move",
+    "split": "train"
+  },
+  {
+    "utterance": "please move south now",
+    "label": "move",
+    "split": "calibration"
+  },
+  {
+    "utterance": "just go down already",
+    "label": "move",
+    "split": "calibration"
+  },
+  {
+    "utterance": "mind heading up for me",
+    "label": "move",
+    "split": "calibration"
+  },
+  {
+    "utterance": "we ought to travel south",
+    "label": "move",
+    "split": "calibration"
+  },
+  {
+    "utterance": "start moving north now",
+    "label": "move",
+    "split": "calibration"
+  },
+  {
+    "utterance": "just go down already",
+    "label": "move",
+    "split": "calibration"
+  },
+  {
+    "utterance": "we ought to travel up",
+    "label": "move",
+    "split": "calibration"
+  },
+  {
+    "utterance": "swing west for a second",
+    "label": "move",
+    "split": "calibration"
+  },
+  {
+    "utterance": "we ought to travel south",
+    "label": "move",
+    "split": "calibration"
+  },
+  {
+    "utterance": "please move down now",
+    "label": "move",
+    "split": "calibration"
+  },
+  {
+    "utterance": "please move south now",
+    "label": "move",
+    "split": "calibration"
+  },
+  {
+    "utterance": "can we go up please",
+    "label": "move",
+    "split": "calibration"
+  },
+  {
+    "utterance": "start moving west now",
+    "label": "move",
+    "split": "calibration"
+  },
+  {
+    "utterance": "start moving right now",
+    "label": "move",
+    "split": "calibration"
+  },
+  {
+    "utterance": "swing up for a second",
+    "label": "move",
+    "split": "calibration"
+  },
+  {
+    "utterance": "i want to walk north",
+    "label": "move",
+    "split": "calibration"
+  },
+  {
+    "utterance": "lets try going north",
+    "label": "move",
+    "split": "calibration"
+  },
+  {
+    "utterance": "we ought to travel east",
+    "label": "move",
+    "split": "calibration"
+  },
+  {
+    "utterance": "maybe go down next",
+    "label": "move",
+    "split": "calibration"
+  },
+  {
+    "utterance": "can we go north please",
+    "label": "move",
+    "split": "calibration"
+  },
+  {
+    "utterance": "mind heading up for me",
+    "label": "move",
+    "split": "calibration"
+  },
+  {
+    "utterance": "why dont we head west",
+    "label": "move",
+    "split": "calibration"
+  },
+  {
+    "utterance": "swing west for a second",
+    "label": "move",
+    "split": "calibration"
+  },
+  {
+    "utterance": "can we go down please",
+    "label": "move",
+    "split": "calibration"
+  },
+  {
+    "utterance": "maybe go left next",
+    "label": "move",
+    "split": "calibration"
+  },
+  {
+    "utterance": "time to move west",
+    "label": "move",
+    "split": "calibration"
+  },
+  {
+    "utterance": "please move left now",
+    "label": "move",
+    "split": "calibration"
+  },
+  {
+    "utterance": "try heading down instead",
+    "label": "move",
+    "split": "calibration"
+  },
+  {
+    "utterance": "time to move down",
+    "label": "move",
+    "split": "calibration"
+  },
+  {
+    "utterance": "why dont we head up",
+    "label": "move",
+    "split": "calibration"
+  },
+  {
+    "utterance": "why dont we head south",
+    "label": "move",
+    "split": "heldout"
+  },
+  {
+    "utterance": "swing left for a second",
+    "label": "move",
+    "split": "heldout"
+  },
+  {
+    "utterance": "could you head south",
+    "label": "move",
+    "split": "heldout"
+  },
+  {
+    "utterance": "can we go south please",
+    "label": "move",
+    "split": "heldout"
+  },
+  {
+    "utterance": "could we shift down",
+    "label": "move",
+    "split": "heldout"
+  },
+  {
+    "utterance": "can you shift west a bit",
+    "label": "move",
+    "split": "heldout"
+  },
+  {
+    "utterance": "lets try going east",
+    "label": "move",
+    "split": "heldout"
+  },
+  {
+    "utterance": "lets walk toward the up",
+    "label": "move",
+    "split": "heldout"
+  },
+  {
+    "utterance": "just go down already",
+    "label": "move",
+    "split": "heldout"
+  },
+  {
+    "utterance": "maybe go right next",
+    "label": "move",
+    "split": "heldout"
+  },
+  {
+    "utterance": "time to move down",
+    "label": "move",
+    "split": "heldout"
+  },
+  {
+    "utterance": "just go north already",
+    "label": "move",
+    "split": "heldout"
+  },
+  {
+    "utterance": "would you mind going down",
+    "label": "move",
+    "split": "heldout"
+  },
+  {
+    "utterance": "i think we should head right",
+    "label": "move",
+    "split": "heldout"
+  },
+  {
+    "utterance": "swing left for a second",
+    "label": "move",
+    "split": "heldout"
+  },
+  {
+    "utterance": "i think we should head left",
+    "label": "move",
+    "split": "heldout"
+  },
+  {
+    "utterance": "can you shift up a bit",
+    "label": "move",
+    "split": "heldout"
+  },
+  {
+    "utterance": "i think we should head up",
+    "label": "move",
+    "split": "heldout"
+  },
+  {
+    "utterance": "we ought to travel up",
+    "label": "move",
+    "split": "heldout"
+  },
+  {
+    "utterance": "why dont we head up",
+    "label": "move",
+    "split": "heldout"
+  },
+  {
+    "utterance": "just go down already",
+    "label": "move",
+    "split": "heldout"
+  },
+  {
+    "utterance": "try heading right instead",
+    "label": "move",
+    "split": "heldout"
+  },
+  {
+    "utterance": "lets walk toward the south",
+    "label": "move",
+    "split": "heldout"
+  },
+  {
+    "utterance": "i think we should head north",
+    "label": "move",
+    "split": "heldout"
+  },
+  {
+    "utterance": "could you head right",
+    "label": "move",
+    "split": "heldout"
+  },
+  {
+    "utterance": "i think we should head up",
+    "label": "move",
+    "split": "heldout"
+  },
+  {
+    "utterance": "can you shift right a bit",
+    "label": "move",
+    "split": "heldout"
+  },
+  {
+    "utterance": "could you head west",
+    "label": "move",
+    "split": "heldout"
+  },
+  {
+    "utterance": "i want to walk south",
+    "label": "move",
+    "split": "heldout"
+  },
+  {
+    "utterance": "mind heading north for me",
+    "label": "move",
+    "split": "heldout"
+  },
+  {
+    "utterance": "please fetch the map",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "we should grab that coin",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "i want the gem please",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "someone grab the banner",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "i want the aria please",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "someone grab the rusty sword",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "we should grab that banner",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "please pick up that idol",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "i really need that gem",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "i should probably take the aria",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "we should grab that torch",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "could we snag a gem",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "i really need that stone sign",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "can you get me the banner",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "would you grab me the chest",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "could we snag a gem",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "we should grab that bram",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "mind snagging the idol for me",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "i should probably take the shield",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "time to grab the map",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "quick grab the idol please",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "could we snag a key",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "i need the gem",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "can somebody take the banner",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "can you get me the banner",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "could we snag a silver sword",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "cn u tak the key",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "please pick up that scroll",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "could you grab the gem",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "we should grab that key",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "mind snagging the lantern for me",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "mind snagging the silver sword for me",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "please pick up that aria",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "quick grab the door please",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "i want the coin please",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "we should grab that stone sign",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "i should probably take the bram",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "can somebody take the door",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "cn u tak the bram",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "would you mind grabbing the coin",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "please fetch the door",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "can you get me the door",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "mind snagging the torch for me",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "lets get the silver sword quickly",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "quick grab the door please",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "time to grab the scroll",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "can you nab the chest",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "can you nab the shield",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "would you grab me the scroll",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "quick grab the coin please",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "would you grab me the lantern",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "could we snag a bram",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "lets get the chest quickly",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "lets get the idol quickly",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "i need the silver sword",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "please pick up that aria",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "please fetch the idol",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "quick grab the rusty sword please",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "i really need that door",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "i want the banner please",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "would you mind grabbing the chest",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "lets get the bram quickly",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "i need the coin",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "please fetch the bram",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "someone grab the idol",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "could we snag a map",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "i should probably take the gem",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "please pick up that torch",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "mind snagging the aria for me",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "i should probably take the shield",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "could we snag a map",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "cn u tak the silver sword",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "can somebody take the silver sword",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "can somebody take the gem",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "please fetch the rusty sword",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "i really need that shield",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "would you mind grabbing the torch",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "quick grab the gem please",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "time to grab the door",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "please pick up that key",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "would you grab me the silver sword",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "mind snagging the idol for me",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "can you get me the coin",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "i need the shield",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "can you get me the scroll",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "would you mind grabbing the scroll",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "i want the bram please",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "cn u tak the stone sign",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "can you get me the aria",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "i should probably take the chest",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "i should probably take the rusty sword",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "i need the lantern",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "could we snag a aria",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "can you get me the gem",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "would you mind grabbing the door",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "lets get the map quickly",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "can somebody take the door",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "someone grab the gem",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "could you grab the aria",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "can somebody take the key",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "can you nab the shield",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "could you grab the silver sword",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "i really need that banner",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "please fetch the idol",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "lets get the map quickly",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "could you grab the lantern",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "i want the chest please",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "could you grab the shield",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "i need the silver sword",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "someone grab the scroll",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "time to grab the chest",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "would you mind grabbing the aria",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "would you grab me the banner",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "can somebody take the coin",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "i want the coin please",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "please fetch the silver sword",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "mind snagging the key for me",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "i need the gem",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "could you grab the aria",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "time to grab the aria",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "could we snag a lantern",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "mind snagging the idol for me",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "could you grab the key",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "can you nab the stone sign",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "quick grab the torch please",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "i really need that door",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "i want the door please",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "someone grab the coin",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "can you nab the shield",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "quick grab the door please",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "can somebody take the shield",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "mind snagging the key for me",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "someone grab the gem",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "please pick up that rusty sword",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "please pick up that gem",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "someone grab the chest",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "we should grab that gem",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "would you grab me the chest",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "i need the map",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "i want the map please",
+    "label": "take",
+    "split": "train"
+  },
+  {
+    "utterance": "time to grab the rusty sword",
+    "label": "take",
+    "split": "calibration"
+  },
+  {
+    "utterance": "i need the gem",
+    "label": "take",
+    "split": "calibration"
+  },
+  {
+    "utterance": "quick grab the silver sword please",
+    "label": "take",
+    "split": "calibration"
+  },
+  {
+    "utterance": "cn u tak the scroll",
+    "label": "take",
+    "split": "calibration"
+  },
+  {
+    "utterance": "can you nab the gem",
+    "label": "take",
+    "split": "calibration"
+  },
+  {
+    "utterance": "i should probably take the map",
+    "label": "take",
+    "split": "calibration"
+  },
+  {
+    "utterance": "time to grab the coin",
+    "label": "take",
+    "split": "calibration"
+  },
+  {
+    "utterance": "we should grab that aria",
+    "label": "take",
+    "split": "calibration"
+  },
+  {
+    "utterance": "can you nab the stone sign",
+    "label": "take",
+    "split": "calibration"
+  },
+  {
+    "utterance": "time to grab the torch",
+    "label": "take",
+    "split": "calibration"
+  },
+  {
+    "utterance": "can you nab the shield",
+    "label": "take",
+    "split": "calibration"
+  },
+  {
+    "utterance": "would you mind grabbing the shield",
+    "label": "take",
+    "split": "calibration"
+  },
+  {
+    "utterance": "i really need that gem",
+    "label": "take",
+    "split": "calibration"
+  },
+  {
+    "utterance": "would you grab me the map",
+    "label": "take",
+    "split": "calibration"
+  },
+  {
+    "utterance": "i really need that bram",
+    "label": "take",
+    "split": "calibration"
+  },
+  {
+    "utterance": "quick grab the door please",
+    "label": "take",
+    "split": "calibration"
+  },
+  {
+    "utterance": "could we snag a rusty sword",
+    "label": "take",
+    "split": "calibration"
+  },
+  {
+    "utterance": "can you get me the stone sign",
+    "label": "take",
+    "split": "calibration"
+  },
+  {
+    "utterance": "could you grab the map",
+    "label": "take",
+    "split": "calibration"
+  },
+  {
+    "utterance": "i want the gem please",
+    "label": "take",
+    "split": "calibration"
+  },
+  {
+    "utterance": "we should grab that gem",
+    "label": "take",
+    "split": "calibration"
+  },
+  {
+    "utterance": "could you grab the key",
+    "label": "take",
+    "split": "calibration"
+  },
+  {
+    "utterance": "would you mind grabbing the aria",
+    "label": "take",
+    "split": "calibration"
+  },
+  {
+    "utterance": "would you mind grabbing the door",
+    "label": "take",
+    "split": "calibration"
+  },
+  {
+    "utterance": "can you get me the stone sign",
+    "label": "take",
+    "split": "calibration"
+  },
+  {
+    "utterance": "i really need that bram",
+    "label": "take",
+    "split": "calibration"
+  },
+  {
+    "utterance": "would you grab me the aria",
+    "label": "take",
+    "split": "calibration"
+  },
+  {
+    "utterance": "someone grab the shield",
+    "label": "take",
+    "split": "calibration"
+  },
+  {
+    "utterance": "time to grab the silver sword",
+    "label": "take",
+    "split": "calibration"
+  },
+  {
+    "utterance": "lets get the gem quickly",
+    "label": "take",
+    "split": "calibration"
+  },
+  {
+    "utterance": "i really need that chest",
+    "label": "take",
+    "split": "heldout"
+  },
+  {
+    "utterance": "i should probably take the torch",
+    "label": "take",
+    "split": "heldout"
+  },
+  {
+    "utterance": "lets get the rusty sword quickly",
+    "label": "take",
+    "split": "heldout"
+  },
+  {
+    "utterance": "cn u tak the chest",
+    "label": "take",
+    "split": "heldout"
+  },
+  {
+    "utterance": "cn u tak the key",
+    "label": "take",
+    "split": "heldout"
+  },
+  {
+    "utterance": "cn u tak the aria",
+    "label": "take",
+    "split": "heldout"
+  },
+  {
+    "utterance": "can you nab the coin",
+    "label": "take",
+    "split": "heldout"
+  },
+  {
+    "utterance": "i should probably take the rusty sword",
+    "label": "take",
+    "split": "heldout"
+  },
+  {
+    "utterance": "cn u tak the gem",
+    "label": "take",
+    "split": "heldout"
+  },
+  {
+    "utterance": "would you grab me the idol",
+    "label": "take",
+    "split": "heldout"
+  },
+  {
+    "utterance": "would you grab me the door",
+    "label": "take",
+    "split": "heldout"
+  },
+  {
+    "utterance": "can you nab the banner",
+    "label": "take",
+    "split": "heldout"
+  },
+  {
+    "utterance": "can you get me the coin",
+    "label": "take",
+    "split": "heldout"
+  },
+  {
+    "utterance": "lets get the coin quickly",
+    "label": "take",
+    "split": "heldout"
+  },
+  {
+    "utterance": "could you grab the chest",
+    "label": "take",
+    "split": "heldout"
+  },
+  {
+    "utterance": "time to grab the key",
+    "label": "take",
+    "split": "heldout"
+  },
+  {
+    "utterance": "please fetch the scroll",
+    "label": "take",
+    "split": "heldout"
+  },
+  {
+    "utterance": "lets get the aria quickly",
+    "label": "take",
+    "split": "heldout"
+  },
+  {
+    "utterance": "someone grab the key",
+    "label": "take",
+    "split": "heldout"
+  },
+  {
+    "utterance": "please fetch the lantern",
+    "label": "take",
+    "split": "heldout"
+  },
+  {
+    "utterance": "please pick up that banner",
+    "label": "take",
+    "split": "heldout"
+  },
+  {
+    "utterance": "please fetch the key",
+    "label": "take",
+    "split": "heldout"
+  },
+  {
+    "utterance": "can somebody take the stone sign",
+    "label": "take",
+    "split": "heldout"
+  },
+  {
+    "utterance": "would you mind grabbing the chest",
+    "label": "take",
+    "split": "heldout"
+  },
+  {
+    "utterance": "i need the door",
+    "label": "take",
+    "split": "heldout"
+  },
+  {
+    "utterance": "we should grab that scroll",
+    "label": "take",
+    "split": "heldout"
+  },
+  {
+    "utterance": "can somebody take the idol",
+    "label": "take",
+    "split": "heldout"
+  },
+  {
+    "utterance": "mind snagging the silver sword for me",
+    "label": "take",
+    "split": "heldout"
+  },
+  {
+    "utterance": "cn u tak the idol",
+    "label": "take",
+    "split": "heldout"
+  },
+  {
+    "utterance": "please pick up that aria",
+    "label": "take",
+    "split": "heldout"
+  },
+  {
+    "utterance": "mind checking the chest for me",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "mind checking the silver sword for me",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can we examine the idol",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "whats that torch look like",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "lets inspect the idol",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "mind checking the door for me",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can somebody examine the key",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "mind checking the torch for me",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "i want a closer look at the lantern",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "we should check the silver sword",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "could you peek at the banner",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can you have a look at the banner",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "peek at the shield please",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "whats on the bram",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can you glance at the lantern",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "whats that banner look like",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "what does the coin look like",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "could you peek at the bram",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can somebody examine the map",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can you glance at the door",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can you have a look at the idol",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "lets check out that stone sign",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "could you check out the banner",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "i want to see the chest",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "whats on the torch",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "mind looking at the idol",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "mind checking the map for me",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "lets check out that key",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can you glance at the banner",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "mind looking at the stone sign",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "i want to see the chest",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "whats on the banner",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "i want to see the scroll",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can you check the gem",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "mind looking at the scroll",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "id like to inspect the silver sword",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "i want a closer look at the door",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can you check the banner",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "i wonder what the chest looks like",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "i want a closer look at the scroll",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "could you check out the door",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "lets inspect the idol",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can we examine the chest",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can you check the torch",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "i wonder what the door looks like",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "lets inspect the stone sign",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "mind looking at the chest",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "mind looking at the gem",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "i wonder what the coin looks like",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can somebody examine the chest",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can somebody examine the scroll",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "mind looking at the bram",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "what does the map look like",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "what does the gem look like",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "i wonder what the scroll looks like",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "whats that silver sword look like",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "we should check the banner",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "peek at the scroll please",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "lets check out that rusty sword",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "id like to inspect the key",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can you have a look at the shield",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can somebody examine the bram",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "i want a closer look at the bram",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can you glance at the stone sign",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "i want a closer look at the silver sword",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can we examine the rusty sword",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "i wonder what the bram looks like",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "i wonder what the shield looks like",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "peek at the aria please",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "could you check out the rusty sword",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "mind looking at the shield",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can you glance at the bram",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "i want to see the aria",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can somebody examine the gem",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can you glance at the bram",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "lets check out that aria",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can you have a look at the torch",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "we should check the aria",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "whats that aria look like",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "whats that coin look like",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can somebody examine the bram",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "lets check out that bram",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "lets inspect the chest",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "we should check the map",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "we should check the door",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "could you peek at the torch",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can somebody examine the banner",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "i wonder what the aria looks like",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "whats on the aria",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can we examine the map",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can you check the chest",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "mind checking the stone sign for me",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "peek at the banner please",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can somebody examine the stone sign",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "i want to see the coin",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "lets check out that stone sign",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can you glance at the lantern",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "lets check out that coin",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "id like to inspect the key",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "i want a closer look at the lantern",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "i want a closer look at the idol",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "could you check out the stone sign",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can we examine the torch",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "id like to inspect the silver sword",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "we should check the chest",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can you have a look at the banner",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can you check the door",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can you check the coin",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "we should check the stone sign",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can you check the map",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "peek at the map please",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "could you check out the coin",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "whats that lantern look like",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "i want to see the rusty sword",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "what does the chest look like",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "mind checking the aria for me",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "id like to inspect the torch",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "mind looking at the map",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "what does the coin look like",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "could you peek at the chest",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "whats that silver sword look like",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "id like to inspect the banner",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "i want to see the idol",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can you glance at the bram",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "whats on the door",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "lets inspect the shield",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "could you peek at the gem",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "lets check out that lantern",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "could you peek at the scroll",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "id like to inspect the torch",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "i wonder what the aria looks like",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can you glance at the silver sword",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "i want to see the key",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "could you peek at the shield",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "could you peek at the rusty sword",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "mind looking at the idol",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "i want to see the rusty sword",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can you check the scroll",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "what does the bram look like",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can we examine the torch",
+    "label": "look",
+    "split": "train"
+  },
+  {
+    "utterance": "can you have a look at the gem",
+    "label": "look",
+    "split": "calibration"
+  },
+  {
+    "utterance": "peek at the shield please",
+    "label": "look",
+    "split": "calibration"
+  },
+  {
+    "utterance": "mind checking the chest for me",
+    "label": "look",
+    "split": "calibration"
+  },
+  {
+    "utterance": "can you check the torch",
+    "label": "look",
+    "split": "calibration"
+  },
+  {
+    "utterance": "i want a closer look at the aria",
+    "label": "look",
+    "split": "calibration"
+  },
+  {
+    "utterance": "id like to inspect the stone sign",
+    "label": "look",
+    "split": "calibration"
+  },
+  {
+    "utterance": "id like to inspect the chest",
+    "label": "look",
+    "split": "calibration"
+  },
+  {
+    "utterance": "we should check the door",
+    "label": "look",
+    "split": "calibration"
+  },
+  {
+    "utterance": "whats that silver sword look like",
+    "label": "look",
+    "split": "calibration"
+  },
+  {
+    "utterance": "can you have a look at the chest",
+    "label": "look",
+    "split": "calibration"
+  },
+  {
+    "utterance": "we should check the idol",
+    "label": "look",
+    "split": "calibration"
+  },
+  {
+    "utterance": "can you have a look at the aria",
+    "label": "look",
+    "split": "calibration"
+  },
+  {
+    "utterance": "whats on the idol",
+    "label": "look",
+    "split": "calibration"
+  },
+  {
+    "utterance": "can you have a look at the gem",
+    "label": "look",
+    "split": "calibration"
+  },
+  {
+    "utterance": "we should check the map",
+    "label": "look",
+    "split": "calibration"
+  },
+  {
+    "utterance": "lets inspect the aria",
+    "label": "look",
+    "split": "calibration"
+  },
+  {
+    "utterance": "can you check the rusty sword",
+    "label": "look",
+    "split": "calibration"
+  },
+  {
+    "utterance": "mind looking at the coin",
+    "label": "look",
+    "split": "calibration"
+  },
+  {
+    "utterance": "what does the lantern look like",
+    "label": "look",
+    "split": "calibration"
+  },
+  {
+    "utterance": "i want to see the silver sword",
+    "label": "look",
+    "split": "calibration"
+  },
+  {
+    "utterance": "can somebody examine the map",
+    "label": "look",
+    "split": "calibration"
+  },
+  {
+    "utterance": "could you peek at the torch",
+    "label": "look",
+    "split": "calibration"
+  },
+  {
+    "utterance": "can we examine the stone sign",
+    "label": "look",
+    "split": "calibration"
+  },
+  {
+    "utterance": "could you check out the bram",
+    "label": "look",
+    "split": "calibration"
+  },
+  {
+    "utterance": "peek at the chest please",
+    "label": "look",
+    "split": "calibration"
+  },
+  {
+    "utterance": "whats on the map",
+    "label": "look",
+    "split": "calibration"
+  },
+  {
+    "utterance": "could you peek at the map",
+    "label": "look",
+    "split": "calibration"
+  },
+  {
+    "utterance": "mind checking the lantern for me",
+    "label": "look",
+    "split": "calibration"
+  },
+  {
+    "utterance": "i want a closer look at the rusty sword",
+    "label": "look",
+    "split": "calibration"
+  },
+  {
+    "utterance": "could you check out the chest",
+    "label": "look",
+    "split": "calibration"
+  },
+  {
+    "utterance": "lets inspect the shield",
+    "label": "look",
+    "split": "heldout"
+  },
+  {
+    "utterance": "could you check out the shield",
+    "label": "look",
+    "split": "heldout"
+  },
+  {
+    "utterance": "could you check out the gem",
+    "label": "look",
+    "split": "heldout"
+  },
+  {
+    "utterance": "what does the rusty sword look like",
+    "label": "look",
+    "split": "heldout"
+  },
+  {
+    "utterance": "can you glance at the shield",
+    "label": "look",
+    "split": "heldout"
+  },
+  {
+    "utterance": "whats that map look like",
+    "label": "look",
+    "split": "heldout"
+  },
+  {
+    "utterance": "whats on the scroll",
+    "label": "look",
+    "split": "heldout"
+  },
+  {
+    "utterance": "can we examine the chest",
+    "label": "look",
+    "split": "heldout"
+  },
+  {
+    "utterance": "mind checking the rusty sword for me",
+    "label": "look",
+    "split": "heldout"
+  },
+  {
+    "utterance": "can you have a look at the chest",
+    "label": "look",
+    "split": "heldout"
+  },
+  {
+    "utterance": "lets inspect the rusty sword",
+    "label": "look",
+    "split": "heldout"
+  },
+  {
+    "utterance": "what does the chest look like",
+    "label": "look",
+    "split": "heldout"
+  },
+  {
+    "utterance": "id like to inspect the silver sword",
+    "label": "look",
+    "split": "heldout"
+  },
+  {
+    "utterance": "peek at the aria please",
+    "label": "look",
+    "split": "heldout"
+  },
+  {
+    "utterance": "i want a closer look at the door",
+    "label": "look",
+    "split": "heldout"
+  },
+  {
+    "utterance": "could you check out the stone sign",
+    "label": "look",
+    "split": "heldout"
+  },
+  {
+    "utterance": "can we examine the chest",
+    "label": "look",
+    "split": "heldout"
+  },
+  {
+    "utterance": "i wonder what the torch looks like",
+    "label": "look",
+    "split": "heldout"
+  },
+  {
+    "utterance": "what does the rusty sword look like",
+    "label": "look",
+    "split": "heldout"
+  },
+  {
+    "utterance": "whats on the coin",
+    "label": "look",
+    "split": "heldout"
+  },
+  {
+    "utterance": "lets check out that shield",
+    "label": "look",
+    "split": "heldout"
+  },
+  {
+    "utterance": "lets check out that silver sword",
+    "label": "look",
+    "split": "heldout"
+  },
+  {
+    "utterance": "lets inspect the gem",
+    "label": "look",
+    "split": "heldout"
+  },
+  {
+    "utterance": "whats on the coin",
+    "label": "look",
+    "split": "heldout"
+  },
+  {
+    "utterance": "peek at the torch please",
+    "label": "look",
+    "split": "heldout"
+  },
+  {
+    "utterance": "lets inspect the door",
+    "label": "look",
+    "split": "heldout"
+  },
+  {
+    "utterance": "can we examine the key",
+    "label": "look",
+    "split": "heldout"
+  },
+  {
+    "utterance": "peek at the map please",
+    "label": "look",
+    "split": "heldout"
+  },
+  {
+    "utterance": "i wonder what the shield looks like",
+    "label": "look",
+    "split": "heldout"
+  },
+  {
+    "utterance": "whats that chest look like",
+    "label": "look",
+    "split": "heldout"
+  },
+  {
+    "utterance": "can you read the inscription out loud",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can you tell me whats written",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "could you decipher that writing",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "could someone read this for me",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can we get a reading of that",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "could you read that for us",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "please tell us what it says",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "lets hear what it says",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "please read it aloud",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "could you read that for us",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can someone read this",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can you read the inscription out loud",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "id like to hear what it says",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "please tell us what it says",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can you make out the words",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "whats the inscription say",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "could you decipher that writing",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "what does it say",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can someone read this",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can you tell me whats written",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "could you read that for us",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "please tell us what it says",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can someone read this",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "what does the stone say",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "whats the inscription say",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "lets hear what it says",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "id like to hear what it says",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "whats written here",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "could someone read this for me",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "what does it say",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can we get a reading of that",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "what does it say",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "lets hear what it says",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can you read the inscription out loud",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can you make out the words",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "please read it aloud",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "whats that inscription about",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "what does the writing say",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can you read the inscription out loud",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "could you decipher that writing",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can you read that sign for us",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "whats written here",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "lets hear what it says",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can someone read this",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "could you decipher that writing",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "id like to hear what it says",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "could you read that for us",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "could you read that for us",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can we get a reading of that",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can you read the inscription out loud",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can you make out the words",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "lets hear what it says",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "please tell us what it says",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "id like to hear what it says",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can we get a reading of that",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "could someone read this for me",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can you tell me whats written",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can you read that sign for us",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can you read that sign for us",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "mind reading that out loud",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "whats written here",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "whats the inscription say",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can you make out the words",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "could you read that for us",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "lets hear what it says",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "could someone read this for me",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "whats the inscription say",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "whats that inscription about",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "lets hear what it says",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "could you read that for us",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "whats the inscription say",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "could you read that for us",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can someone read this",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can you make out the words",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "could you decipher that writing",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "could you decipher that writing",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "id like to hear what it says",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "whats the inscription say",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "what does the writing say",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can you tell me whats written",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "please tell us what it says",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "please read it aloud",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "what does the stone say",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "what does it say",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "whats written here",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can you tell me whats written",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can someone read this",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "what does it say",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "whats written here",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "what does the stone say",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "could you decipher that writing",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "what does the stone say",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "could someone read this for me",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can you make out the words",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "could someone read this for me",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "please tell us what it says",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "lets hear what it says",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can you read the inscription out loud",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can you read the inscription out loud",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can you make out the words",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can you read that sign for us",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can we get a reading of that",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can someone read this",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can someone read this",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "mind reading that out loud",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can you read the inscription out loud",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can we get a reading of that",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "id like to hear what it says",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can you read that sign for us",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can you tell me whats written",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "whats written here",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "mind reading that out loud",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "mind reading that out loud",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "id like to hear what it says",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "what does the writing say",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can you read that sign for us",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "what does it say",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "what does the stone say",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can you read the inscription out loud",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "whats written here",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "whats that inscription about",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "could someone read this for me",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "what does it say",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "whats that inscription about",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "mind reading that out loud",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "whats the inscription say",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "what does the writing say",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "please tell us what it says",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "could someone read this for me",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "what does the stone say",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "what does the stone say",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "lets hear what it says",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "what does the writing say",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "what does the writing say",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "whats that inscription about",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can you make out the words",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "whats written here",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "whats written here",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "whats that inscription about",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "please tell us what it says",
+    "label": "read",
+    "split": "train"
+  },
+  {
+    "utterance": "can we get a reading of that",
+    "label": "read",
+    "split": "calibration"
+  },
+  {
+    "utterance": "can you read the inscription out loud",
+    "label": "read",
+    "split": "calibration"
+  },
+  {
+    "utterance": "whats that inscription about",
+    "label": "read",
+    "split": "calibration"
+  },
+  {
+    "utterance": "can you read that sign for us",
+    "label": "read",
+    "split": "calibration"
+  },
+  {
+    "utterance": "can you read that sign for us",
+    "label": "read",
+    "split": "calibration"
+  },
+  {
+    "utterance": "what does the writing say",
+    "label": "read",
+    "split": "calibration"
+  },
+  {
+    "utterance": "what does the stone say",
+    "label": "read",
+    "split": "calibration"
+  },
+  {
+    "utterance": "can someone read this",
+    "label": "read",
+    "split": "calibration"
+  },
+  {
+    "utterance": "what does the writing say",
+    "label": "read",
+    "split": "calibration"
+  },
+  {
+    "utterance": "could you decipher that writing",
+    "label": "read",
+    "split": "calibration"
+  },
+  {
+    "utterance": "mind reading that out loud",
+    "label": "read",
+    "split": "calibration"
+  },
+  {
+    "utterance": "what does the writing say",
+    "label": "read",
+    "split": "calibration"
+  },
+  {
+    "utterance": "whats that inscription about",
+    "label": "read",
+    "split": "calibration"
+  },
+  {
+    "utterance": "whats that inscription about",
+    "label": "read",
+    "split": "calibration"
+  },
+  {
+    "utterance": "please read it aloud",
+    "label": "read",
+    "split": "calibration"
+  },
+  {
+    "utterance": "can you tell me whats written",
+    "label": "read",
+    "split": "calibration"
+  },
+  {
+    "utterance": "could someone read this for me",
+    "label": "read",
+    "split": "calibration"
+  },
+  {
+    "utterance": "mind reading that out loud",
+    "label": "read",
+    "split": "calibration"
+  },
+  {
+    "utterance": "can you read that sign for us",
+    "label": "read",
+    "split": "calibration"
+  },
+  {
+    "utterance": "can you tell me whats written",
+    "label": "read",
+    "split": "calibration"
+  },
+  {
+    "utterance": "what does the stone say",
+    "label": "read",
+    "split": "calibration"
+  },
+  {
+    "utterance": "what does the stone say",
+    "label": "read",
+    "split": "calibration"
+  },
+  {
+    "utterance": "mind reading that out loud",
+    "label": "read",
+    "split": "calibration"
+  },
+  {
+    "utterance": "can you tell me whats written",
+    "label": "read",
+    "split": "calibration"
+  },
+  {
+    "utterance": "can you read that sign for us",
+    "label": "read",
+    "split": "calibration"
+  },
+  {
+    "utterance": "please tell us what it says",
+    "label": "read",
+    "split": "calibration"
+  },
+  {
+    "utterance": "whats the inscription say",
+    "label": "read",
+    "split": "calibration"
+  },
+  {
+    "utterance": "can you make out the words",
+    "label": "read",
+    "split": "calibration"
+  },
+  {
+    "utterance": "can someone read this",
+    "label": "read",
+    "split": "calibration"
+  },
+  {
+    "utterance": "could you decipher that writing",
+    "label": "read",
+    "split": "calibration"
+  },
+  {
+    "utterance": "could you decipher that writing",
+    "label": "read",
+    "split": "heldout"
+  },
+  {
+    "utterance": "id like to hear what it says",
+    "label": "read",
+    "split": "heldout"
+  },
+  {
+    "utterance": "whats the inscription say",
+    "label": "read",
+    "split": "heldout"
+  },
+  {
+    "utterance": "can we get a reading of that",
+    "label": "read",
+    "split": "heldout"
+  },
+  {
+    "utterance": "whats that inscription about",
+    "label": "read",
+    "split": "heldout"
+  },
+  {
+    "utterance": "could you read that for us",
+    "label": "read",
+    "split": "heldout"
+  },
+  {
+    "utterance": "whats the inscription say",
+    "label": "read",
+    "split": "heldout"
+  },
+  {
+    "utterance": "can we get a reading of that",
+    "label": "read",
+    "split": "heldout"
+  },
+  {
+    "utterance": "id like to hear what it says",
+    "label": "read",
+    "split": "heldout"
+  },
+  {
+    "utterance": "please read it aloud",
+    "label": "read",
+    "split": "heldout"
+  },
+  {
+    "utterance": "what does it say",
+    "label": "read",
+    "split": "heldout"
+  },
+  {
+    "utterance": "what does it say",
+    "label": "read",
+    "split": "heldout"
+  },
+  {
+    "utterance": "please read it aloud",
+    "label": "read",
+    "split": "heldout"
+  },
+  {
+    "utterance": "please read it aloud",
+    "label": "read",
+    "split": "heldout"
+  },
+  {
+    "utterance": "please read it aloud",
+    "label": "read",
+    "split": "heldout"
+  },
+  {
+    "utterance": "can you make out the words",
+    "label": "read",
+    "split": "heldout"
+  },
+  {
+    "utterance": "id like to hear what it says",
+    "label": "read",
+    "split": "heldout"
+  },
+  {
+    "utterance": "can we get a reading of that",
+    "label": "read",
+    "split": "heldout"
+  },
+  {
+    "utterance": "please read it aloud",
+    "label": "read",
+    "split": "heldout"
+  },
+  {
+    "utterance": "could you read that for us",
+    "label": "read",
+    "split": "heldout"
+  },
+  {
+    "utterance": "mind reading that out loud",
+    "label": "read",
+    "split": "heldout"
+  },
+  {
+    "utterance": "can you tell me whats written",
+    "label": "read",
+    "split": "heldout"
+  },
+  {
+    "utterance": "what does it say",
+    "label": "read",
+    "split": "heldout"
+  },
+  {
+    "utterance": "mind reading that out loud",
+    "label": "read",
+    "split": "heldout"
+  },
+  {
+    "utterance": "please tell us what it says",
+    "label": "read",
+    "split": "heldout"
+  },
+  {
+    "utterance": "please read it aloud",
+    "label": "read",
+    "split": "heldout"
+  },
+  {
+    "utterance": "could someone read this for me",
+    "label": "read",
+    "split": "heldout"
+  },
+  {
+    "utterance": "whats written here",
+    "label": "read",
+    "split": "heldout"
+  },
+  {
+    "utterance": "what does the writing say",
+    "label": "read",
+    "split": "heldout"
+  },
+  {
+    "utterance": "lets hear what it says",
+    "label": "read",
+    "split": "heldout"
+  },
+  {
+    "utterance": "figured id mention we found a key",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just saying this place feels off",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "gonna mention the aria is glowing",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "gonna say this dungeon is huge",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just saying this place feels off",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just thought id mention the chest",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "figured id mention we found a aria",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just letting you know about the banner",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just noting the rusty sword seems important",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "gonna say this dungeon is huge",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "wanted to mention something about the lantern",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just wanted to mention the idol looks interesting",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just wanted to say good luck everyone",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just noting the scroll seems important",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "quick thought about heading down",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just noting the shield seems important",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "wanted to mention something about the rusty sword",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "figured id say hi to everyone",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "figured id mention we found a map",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "quick thought about heading left",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just letting you know about the idol",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just thought id mention the aria",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just saying this place feels off",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just wanted to mention the aria looks interesting",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "gonna chime in about the right direction",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "figured id say hi to everyone",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just saying hello to the group",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just thought id mention the coin",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just chiming in about the down path",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just chiming in about the up path",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "gonna say this dungeon is huge",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just wanted to say good luck everyone",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just saying hello to the group",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just saying hello to the group",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just wanted to say good luck everyone",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just noting the coin seems important",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "wanted to note the west side looks clear",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "wanted to mention something about the silver sword",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "gonna say this dungeon is huge",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "figured id say hi to everyone",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "wanted to let you all know i found a rusty sword",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "wanted to say the north route looks safer",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "gonna mention the map is glowing",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "gonna chime in about the down direction",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "gonna say this dungeon is huge",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "wanted to note the west side looks clear",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "wanted to let you all know i found a scroll",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "figured id mention we found a bram",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "gonna say this dungeon is huge",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "wanted to let you all know i found a gem",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "wanted to mention something about the map",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "quick thought about heading south",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just a quick word about the silver sword",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just wanted to mention the banner looks interesting",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just thought everyone should know about the lantern",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "quick thought about heading up",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just a quick word about the shield",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "gonna mention the idol is glowing",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "gonna mention the scroll is glowing",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "figured id say hi to everyone",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "wanted to note the east side looks clear",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "gonna say this dungeon is huge",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just a quick word about the aria",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just wanted to say good luck everyone",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just chiming in about the down path",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "wanted to say the down route looks safer",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just saying this place feels off",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just saying this place feels off",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "wanted to note the down side looks clear",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just saying hello to the group",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "quick thought about heading north",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "figured id say hi to everyone",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just thought id mention the banner",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "gonna chime in about the down direction",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "wanted to let you all know i found a rusty sword",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just a quick word about the map",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just wanted to say good luck everyone",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "wanted to mention something about the bram",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "wanted to note the up side looks clear",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just thought id mention the key",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just chiming in about the right path",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "gonna say this dungeon is huge",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "figured id mention we found a map",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "figured id mention we found a key",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "wanted to say the left route looks safer",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "figured id say hi to everyone",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just thought everyone should know about the stone sign",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "wanted to mention something about the bram",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "figured id mention we found a lantern",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just chiming in about the south path",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "gonna chime in about the down direction",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just wanted to mention the banner looks interesting",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "gonna mention the lantern is glowing",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just thought everyone should know about the rusty sword",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "gonna say this dungeon is huge",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just saying this place feels off",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "quick thought about heading left",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just a quick word about the key",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just saying hello to the group",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just a quick word about the coin",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just a quick word about the torch",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just thought id mention the silver sword",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just a quick word about the rusty sword",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just thought id mention the banner",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "figured id say hi to everyone",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "wanted to say the down route looks safer",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just thought everyone should know about the door",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just letting you know about the key",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just noting the banner seems important",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "figured id mention we found a scroll",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "figured id say hi to everyone",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just chiming in about the north path",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just chiming in about the north path",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "quick thought about heading west",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just thought everyone should know about the door",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just letting you know about the bram",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just letting you know about the map",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "wanted to note the north side looks clear",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just thought everyone should know about the rusty sword",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just wanted to mention the aria looks interesting",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just saying this place feels off",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just noting the scroll seems important",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just wanted to mention the aria looks interesting",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "wanted to let you all know i found a silver sword",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "gonna chime in about the south direction",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just thought everyone should know about the torch",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "wanted to note the up side looks clear",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "wanted to let you all know i found a coin",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just chiming in about the left path",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just wanted to say good luck everyone",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just thought everyone should know about the rusty sword",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just saying this place feels off",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just letting you know about the door",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just thought everyone should know about the torch",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "quick thought about heading up",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just saying this place feels off",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "gonna chime in about the west direction",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "just wanted to say good luck everyone",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "wanted to mention something about the door",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "wanted to let you all know i found a idol",
+    "label": "say",
+    "split": "train"
+  },
+  {
+    "utterance": "wanted to note the up side looks clear",
+    "label": "say",
+    "split": "calibration"
+  },
+  {
+    "utterance": "gonna mention the rusty sword is glowing",
+    "label": "say",
+    "split": "calibration"
+  },
+  {
+    "utterance": "gonna mention the aria is glowing",
+    "label": "say",
+    "split": "calibration"
+  },
+  {
+    "utterance": "just a quick word about the torch",
+    "label": "say",
+    "split": "calibration"
+  },
+  {
+    "utterance": "just wanted to say good luck everyone",
+    "label": "say",
+    "split": "calibration"
+  },
+  {
+    "utterance": "just noting the bram seems important",
+    "label": "say",
+    "split": "calibration"
+  },
+  {
+    "utterance": "just saying hello to the group",
+    "label": "say",
+    "split": "calibration"
+  },
+  {
+    "utterance": "just saying hello to the group",
+    "label": "say",
+    "split": "calibration"
+  },
+  {
+    "utterance": "just noting the silver sword seems important",
+    "label": "say",
+    "split": "calibration"
+  },
+  {
+    "utterance": "just wanted to mention the chest looks interesting",
+    "label": "say",
+    "split": "calibration"
+  },
+  {
+    "utterance": "gonna chime in about the north direction",
+    "label": "say",
+    "split": "calibration"
+  },
+  {
+    "utterance": "wanted to say the east route looks safer",
+    "label": "say",
+    "split": "calibration"
+  },
+  {
+    "utterance": "just wanted to say good luck everyone",
+    "label": "say",
+    "split": "calibration"
+  },
+  {
+    "utterance": "wanted to note the south side looks clear",
+    "label": "say",
+    "split": "calibration"
+  },
+  {
+    "utterance": "just wanted to mention the shield looks interesting",
+    "label": "say",
+    "split": "calibration"
+  },
+  {
+    "utterance": "just noting the key seems important",
+    "label": "say",
+    "split": "calibration"
+  },
+  {
+    "utterance": "wanted to say the east route looks safer",
+    "label": "say",
+    "split": "calibration"
+  },
+  {
+    "utterance": "just wanted to mention the map looks interesting",
+    "label": "say",
+    "split": "calibration"
+  },
+  {
+    "utterance": "figured id mention we found a rusty sword",
+    "label": "say",
+    "split": "calibration"
+  },
+  {
+    "utterance": "just letting you know about the shield",
+    "label": "say",
+    "split": "calibration"
+  },
+  {
+    "utterance": "just thought id mention the idol",
+    "label": "say",
+    "split": "calibration"
+  },
+  {
+    "utterance": "just chiming in about the north path",
+    "label": "say",
+    "split": "calibration"
+  },
+  {
+    "utterance": "just a quick word about the banner",
+    "label": "say",
+    "split": "calibration"
+  },
+  {
+    "utterance": "wanted to say the left route looks safer",
+    "label": "say",
+    "split": "calibration"
+  },
+  {
+    "utterance": "figured id mention we found a rusty sword",
+    "label": "say",
+    "split": "calibration"
+  },
+  {
+    "utterance": "gonna mention the bram is glowing",
+    "label": "say",
+    "split": "calibration"
+  },
+  {
+    "utterance": "wanted to mention something about the bram",
+    "label": "say",
+    "split": "calibration"
+  },
+  {
+    "utterance": "gonna mention the aria is glowing",
+    "label": "say",
+    "split": "calibration"
+  },
+  {
+    "utterance": "just wanted to mention the bram looks interesting",
+    "label": "say",
+    "split": "calibration"
+  },
+  {
+    "utterance": "just saying this place feels off",
+    "label": "say",
+    "split": "calibration"
+  },
+  {
+    "utterance": "quick thought about heading north",
+    "label": "say",
+    "split": "heldout"
+  },
+  {
+    "utterance": "just thought everyone should know about the chest",
+    "label": "say",
+    "split": "heldout"
+  },
+  {
+    "utterance": "wanted to note the east side looks clear",
+    "label": "say",
+    "split": "heldout"
+  },
+  {
+    "utterance": "just chiming in about the down path",
+    "label": "say",
+    "split": "heldout"
+  },
+  {
+    "utterance": "wanted to let you all know i found a banner",
+    "label": "say",
+    "split": "heldout"
+  },
+  {
+    "utterance": "just saying hello to the group",
+    "label": "say",
+    "split": "heldout"
+  },
+  {
+    "utterance": "wanted to mention something about the gem",
+    "label": "say",
+    "split": "heldout"
+  },
+  {
+    "utterance": "just saying hello to the group",
+    "label": "say",
+    "split": "heldout"
+  },
+  {
+    "utterance": "just letting you know about the silver sword",
+    "label": "say",
+    "split": "heldout"
+  },
+  {
+    "utterance": "wanted to let you all know i found a shield",
+    "label": "say",
+    "split": "heldout"
+  },
+  {
+    "utterance": "just letting you know about the lantern",
+    "label": "say",
+    "split": "heldout"
+  },
+  {
+    "utterance": "just wanted to say good luck everyone",
+    "label": "say",
+    "split": "heldout"
+  },
+  {
+    "utterance": "wanted to say the east route looks safer",
+    "label": "say",
+    "split": "heldout"
+  },
+  {
+    "utterance": "just thought id mention the door",
+    "label": "say",
+    "split": "heldout"
+  },
+  {
+    "utterance": "figured id say hi to everyone",
+    "label": "say",
+    "split": "heldout"
+  },
+  {
+    "utterance": "gonna chime in about the south direction",
+    "label": "say",
+    "split": "heldout"
+  },
+  {
+    "utterance": "wanted to let you all know i found a scroll",
+    "label": "say",
+    "split": "heldout"
+  },
+  {
+    "utterance": "just thought id mention the key",
+    "label": "say",
+    "split": "heldout"
+  },
+  {
+    "utterance": "wanted to say the left route looks safer",
+    "label": "say",
+    "split": "heldout"
+  },
+  {
+    "utterance": "just saying hello to the group",
+    "label": "say",
+    "split": "heldout"
+  },
+  {
+    "utterance": "gonna mention the aria is glowing",
+    "label": "say",
+    "split": "heldout"
+  },
+  {
+    "utterance": "just letting you know about the rusty sword",
+    "label": "say",
+    "split": "heldout"
+  },
+  {
+    "utterance": "quick thought about heading down",
+    "label": "say",
+    "split": "heldout"
+  },
+  {
+    "utterance": "wanted to say the west route looks safer",
+    "label": "say",
+    "split": "heldout"
+  },
+  {
+    "utterance": "gonna say this dungeon is huge",
+    "label": "say",
+    "split": "heldout"
+  },
+  {
+    "utterance": "wanted to mention something about the chest",
+    "label": "say",
+    "split": "heldout"
+  },
+  {
+    "utterance": "gonna chime in about the south direction",
+    "label": "say",
+    "split": "heldout"
+  },
+  {
+    "utterance": "gonna chime in about the right direction",
+    "label": "say",
+    "split": "heldout"
+  },
+  {
+    "utterance": "just noting the rusty sword seems important",
+    "label": "say",
+    "split": "heldout"
+  },
+  {
+    "utterance": "figured id say hi to everyone",
+    "label": "say",
+    "split": "heldout"
+  },
+  {
+    "utterance": "everyone meet me by the aria",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "guys we should regroup near the bram",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team wait up for me",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey team we should regroup",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team lets take the down path together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team we need to regroup near the east side",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "guys we should regroup near the coin",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "everyone gather near the shield",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey squad lets meet up",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "everyone gather near the bram",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team lets head west together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team should we head left together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey group lets stick together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey squad lets meet up",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "guys can we regroup for a second",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "guys hold up lets stay together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team lets not split up near the torch",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team should we head north together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "everyone should meet by the rusty sword",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey squad lets meet up",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team wait up for me",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey squad lets meet up",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "guys we should regroup near the bram",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "guys we should regroup near the torch",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "guys hold up lets stay together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey party members lets stick close",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey party members lets stick close",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "guys can we regroup for a second",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team lets not split up near the banner",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey party members lets stick close",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "guys lets go left as a group",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "guys hold up lets stay together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "guys hold up lets stay together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey party members lets stick close",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team lets head right together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team we need to regroup near the down side",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "guys we should regroup near the key",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team should we head south together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team lets head west together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey team check in please",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey party members lets stick close",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey team check in please",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team lets take the west path together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team we need to regroup near the south side",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey group lets stick together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey group lets stick together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team wait up for me",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "everyone should meet by the bram",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey squad lets meet up",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "guys can we regroup for a second",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "guys can we regroup for a second",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey everyone lets meet at the map",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team lets head south together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey everyone lets meet at the door",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey team we should regroup",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "everyone gather near the torch",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "guys lets go north as a group",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "guys lets stay close together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "guys can we regroup for a second",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "everyone meet me by the door",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "everyone should meet by the coin",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "everyone should meet by the key",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "everyone should meet by the bram",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "guys lets stay close together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey team we should regroup",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "everyone should meet by the stone sign",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey group lets stick together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "everyone gather near the bram",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "guys lets stay close together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "guys can we regroup for a second",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "guys hold up lets stay together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team lets take the left path together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey squad lets meet up",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team lets head right together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey team we should regroup",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team we need to regroup near the north side",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "guys we should regroup near the door",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey everyone lets meet at the silver sword",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "everyone meet me by the lantern",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "everyone meet me by the map",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "everyone meet me by the bram",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team should we head up together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "everyone meet me by the rusty sword",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey party members lets stick close",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey everyone lets meet at the map",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "everyone meet me by the door",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "guys can we regroup for a second",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "everyone gather near the silver sword",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team should we head west together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team should we head right together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey everyone lets meet at the shield",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team wait up for me",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey group lets stick together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey party members lets stick close",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team wait up for me",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team should we head west together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team should we head west together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team lets take the north path together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team lets not split up near the torch",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey group lets stick together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team lets not split up near the key",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team lets head right together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team lets not split up near the bram",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "guys hold up lets stay together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "guys we should regroup near the shield",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team lets head north together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "guys lets stay close together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team should we head south together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team lets not split up near the gem",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey team we should regroup",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team lets take the west path together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey party members lets stick close",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team wait up for me",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team lets head south together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team wait up for me",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "everyone should meet by the bram",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey everyone lets meet at the stone sign",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "everyone gather near the map",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "everyone meet me by the silver sword",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "guys lets go north as a group",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey team we should regroup",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey team check in please",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "everyone gather near the lantern",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "everyone should meet by the gem",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "guys lets go right as a group",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey everyone lets meet at the banner",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey team check in please",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "guys we should regroup near the map",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team we need to regroup near the east side",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey everyone lets meet at the lantern",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey group lets stick together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "guys lets stay close together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team we need to regroup near the right side",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "team lets head west together",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey team we should regroup",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "guys can we regroup for a second",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey squad lets meet up",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "hey party members lets stick close",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "guys lets go east as a group",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "guys lets go up as a group",
+    "label": "party",
+    "split": "train"
+  },
+  {
+    "utterance": "guys can we regroup for a second",
+    "label": "party",
+    "split": "calibration"
+  },
+  {
+    "utterance": "team lets take the east path together",
+    "label": "party",
+    "split": "calibration"
+  },
+  {
+    "utterance": "guys lets stay close together",
+    "label": "party",
+    "split": "calibration"
+  },
+  {
+    "utterance": "team wait up for me",
+    "label": "party",
+    "split": "calibration"
+  },
+  {
+    "utterance": "everyone should meet by the idol",
+    "label": "party",
+    "split": "calibration"
+  },
+  {
+    "utterance": "hey team check in please",
+    "label": "party",
+    "split": "calibration"
+  },
+  {
+    "utterance": "guys lets stay close together",
+    "label": "party",
+    "split": "calibration"
+  },
+  {
+    "utterance": "hey group lets stick together",
+    "label": "party",
+    "split": "calibration"
+  },
+  {
+    "utterance": "team we need to regroup near the north side",
+    "label": "party",
+    "split": "calibration"
+  },
+  {
+    "utterance": "team should we head up together",
+    "label": "party",
+    "split": "calibration"
+  },
+  {
+    "utterance": "team we need to regroup near the west side",
+    "label": "party",
+    "split": "calibration"
+  },
+  {
+    "utterance": "team lets head east together",
+    "label": "party",
+    "split": "calibration"
+  },
+  {
+    "utterance": "hey squad lets meet up",
+    "label": "party",
+    "split": "calibration"
+  },
+  {
+    "utterance": "hey squad lets meet up",
+    "label": "party",
+    "split": "calibration"
+  },
+  {
+    "utterance": "guys lets go west as a group",
+    "label": "party",
+    "split": "calibration"
+  },
+  {
+    "utterance": "team lets take the left path together",
+    "label": "party",
+    "split": "calibration"
+  },
+  {
+    "utterance": "hey team check in please",
+    "label": "party",
+    "split": "calibration"
+  },
+  {
+    "utterance": "guys lets go west as a group",
+    "label": "party",
+    "split": "calibration"
+  },
+  {
+    "utterance": "team lets not split up near the lantern",
+    "label": "party",
+    "split": "calibration"
+  },
+  {
+    "utterance": "everyone gather near the gem",
+    "label": "party",
+    "split": "calibration"
+  },
+  {
+    "utterance": "team lets take the north path together",
+    "label": "party",
+    "split": "calibration"
+  },
+  {
+    "utterance": "team we need to regroup near the south side",
+    "label": "party",
+    "split": "calibration"
+  },
+  {
+    "utterance": "team we need to regroup near the up side",
+    "label": "party",
+    "split": "calibration"
+  },
+  {
+    "utterance": "guys lets stay close together",
+    "label": "party",
+    "split": "calibration"
+  },
+  {
+    "utterance": "hey team we should regroup",
+    "label": "party",
+    "split": "calibration"
+  },
+  {
+    "utterance": "hey team check in please",
+    "label": "party",
+    "split": "calibration"
+  },
+  {
+    "utterance": "guys hold up lets stay together",
+    "label": "party",
+    "split": "calibration"
+  },
+  {
+    "utterance": "hey squad lets meet up",
+    "label": "party",
+    "split": "calibration"
+  },
+  {
+    "utterance": "hey everyone lets meet at the aria",
+    "label": "party",
+    "split": "calibration"
+  },
+  {
+    "utterance": "hey everyone lets meet at the stone sign",
+    "label": "party",
+    "split": "calibration"
+  },
+  {
+    "utterance": "guys lets go right as a group",
+    "label": "party",
+    "split": "heldout"
+  },
+  {
+    "utterance": "everyone gather near the torch",
+    "label": "party",
+    "split": "heldout"
+  },
+  {
+    "utterance": "guys hold up lets stay together",
+    "label": "party",
+    "split": "heldout"
+  },
+  {
+    "utterance": "guys hold up lets stay together",
+    "label": "party",
+    "split": "heldout"
+  },
+  {
+    "utterance": "everyone gather near the gem",
+    "label": "party",
+    "split": "heldout"
+  },
+  {
+    "utterance": "guys can we regroup for a second",
+    "label": "party",
+    "split": "heldout"
+  },
+  {
+    "utterance": "everyone meet me by the stone sign",
+    "label": "party",
+    "split": "heldout"
+  },
+  {
+    "utterance": "team lets take the north path together",
+    "label": "party",
+    "split": "heldout"
+  },
+  {
+    "utterance": "hey team check in please",
+    "label": "party",
+    "split": "heldout"
+  },
+  {
+    "utterance": "everyone meet me by the aria",
+    "label": "party",
+    "split": "heldout"
+  },
+  {
+    "utterance": "hey group lets stick together",
+    "label": "party",
+    "split": "heldout"
+  },
+  {
+    "utterance": "guys lets go up as a group",
+    "label": "party",
+    "split": "heldout"
+  },
+  {
+    "utterance": "everyone should meet by the key",
+    "label": "party",
+    "split": "heldout"
+  },
+  {
+    "utterance": "guys we should regroup near the stone sign",
+    "label": "party",
+    "split": "heldout"
+  },
+  {
+    "utterance": "team wait up for me",
+    "label": "party",
+    "split": "heldout"
+  },
+  {
+    "utterance": "team wait up for me",
+    "label": "party",
+    "split": "heldout"
+  },
+  {
+    "utterance": "hey team check in please",
+    "label": "party",
+    "split": "heldout"
+  },
+  {
+    "utterance": "hey team we should regroup",
+    "label": "party",
+    "split": "heldout"
+  },
+  {
+    "utterance": "team lets not split up near the idol",
+    "label": "party",
+    "split": "heldout"
+  },
+  {
+    "utterance": "guys we should regroup near the lantern",
+    "label": "party",
+    "split": "heldout"
+  },
+  {
+    "utterance": "hey team we should regroup",
+    "label": "party",
+    "split": "heldout"
+  },
+  {
+    "utterance": "team lets not split up near the chest",
+    "label": "party",
+    "split": "heldout"
+  },
+  {
+    "utterance": "team lets take the down path together",
+    "label": "party",
+    "split": "heldout"
+  },
+  {
+    "utterance": "hey group lets stick together",
+    "label": "party",
+    "split": "heldout"
+  },
+  {
+    "utterance": "team lets not split up near the bram",
+    "label": "party",
+    "split": "heldout"
+  },
+  {
+    "utterance": "hey party members lets stick close",
+    "label": "party",
+    "split": "heldout"
+  },
+  {
+    "utterance": "hey team check in please",
+    "label": "party",
+    "split": "heldout"
+  },
+  {
+    "utterance": "guys hold up lets stay together",
+    "label": "party",
+    "split": "heldout"
+  },
+  {
+    "utterance": "guys lets stay close together",
+    "label": "party",
+    "split": "heldout"
+  },
+  {
+    "utterance": "guys lets stay close together",
+    "label": "party",
+    "split": "heldout"
+  },
+  {
+    "utterance": "Bram keep this between us",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria one moment please",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram check this out quietly",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria psst over here",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram i found something quietly",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram psst over here",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram quietly follow me",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria check this out quietly",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria quietly follow me",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram come here for a second",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria meet me over here",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria i need to tell you something",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram come take a look",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram i found something quietly",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria just between the two of us",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram hold on a second",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria come here for a second",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram quick question for you",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram dont tell the others yet",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram over here for a moment",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria meet me over here",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram quietly follow me",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria can you come closer",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram just between the two of us",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram come here for a second",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria one moment please",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram psst over here",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram meet me over here",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram keep this between us",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria i found something quietly",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria meet me over here",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram come take a look",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram come take a look",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram dont tell the others yet",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria over here for a moment",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria meet me over here",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram come here for a second",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria check this out quietly",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria can you come closer",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram did you see that",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria i need a word with you",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram over here for a moment",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram come here for a second",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram i need a word with you",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria over here for a moment",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria come take a look",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram i need a word with you",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria wait up please",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram quick question for you",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria check this out quietly",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria come take a look",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria quietly follow me",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram can we talk privately",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria one moment please",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria quick question for you",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria one moment please",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria i need to tell you something",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram come take a look",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram did you see that",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram did you see that",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria quick question for you",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram can we talk privately",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram psst over here",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram wait up please",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria quietly follow me",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram come here for a second",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria keep this between us",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria psst over here",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram come here for a second",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria i need to tell you something",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria i found something quietly",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram quick question for you",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria can we talk privately",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria i found something quietly",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram hold on a second",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram quietly follow me",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram can you come closer",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram meet me over here",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram did you see that",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram check this out quietly",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria dont tell the others yet",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria dont tell the others yet",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria hold on a second",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria did you see that",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria over here for a moment",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram one moment please",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram i need a word with you",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram i need a word with you",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram meet me over here",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram i found something quietly",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram just between the two of us",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram over here for a moment",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria check this out quietly",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria wait up please",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria psst over here",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram can you come closer",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria just between the two of us",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram quick question for you",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram i found something quietly",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria keep this between us",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria did you see that",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria can you come closer",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria dont tell the others yet",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram i need to tell you something",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram meet me over here",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram hold on a second",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram psst over here",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram quick question for you",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria keep this between us",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram dont tell the others yet",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria come here for a second",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria just between the two of us",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram wait up please",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram quietly follow me",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram one moment please",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria hold on a second",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria i need a word with you",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram come here for a second",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria can you come closer",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria come take a look",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram quietly follow me",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria i found something quietly",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria meet me over here",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram i found something quietly",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria one moment please",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria over here for a moment",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram did you see that",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram wait up please",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram over here for a moment",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria i need to tell you something",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria just between the two of us",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram psst over here",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria dont tell the others yet",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram keep this between us",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria psst over here",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Aria i found something quietly",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram wait up please",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram wait up please",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram can we talk privately",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram i need to tell you something",
+    "label": "whisper",
+    "split": "train"
+  },
+  {
+    "utterance": "Bram check this out quietly",
+    "label": "whisper",
+    "split": "calibration"
+  },
+  {
+    "utterance": "Bram hold on a second",
+    "label": "whisper",
+    "split": "calibration"
+  },
+  {
+    "utterance": "Aria one moment please",
+    "label": "whisper",
+    "split": "calibration"
+  },
+  {
+    "utterance": "Aria can we talk privately",
+    "label": "whisper",
+    "split": "calibration"
+  },
+  {
+    "utterance": "Bram can we talk privately",
+    "label": "whisper",
+    "split": "calibration"
+  },
+  {
+    "utterance": "Bram wait up please",
+    "label": "whisper",
+    "split": "calibration"
+  },
+  {
+    "utterance": "Aria quick question for you",
+    "label": "whisper",
+    "split": "calibration"
+  },
+  {
+    "utterance": "Bram dont tell the others yet",
+    "label": "whisper",
+    "split": "calibration"
+  },
+  {
+    "utterance": "Aria i need a word with you",
+    "label": "whisper",
+    "split": "calibration"
+  },
+  {
+    "utterance": "Bram just between the two of us",
+    "label": "whisper",
+    "split": "calibration"
+  },
+  {
+    "utterance": "Aria check this out quietly",
+    "label": "whisper",
+    "split": "calibration"
+  },
+  {
+    "utterance": "Aria come take a look",
+    "label": "whisper",
+    "split": "calibration"
+  },
+  {
+    "utterance": "Aria hold on a second",
+    "label": "whisper",
+    "split": "calibration"
+  },
+  {
+    "utterance": "Aria dont tell the others yet",
+    "label": "whisper",
+    "split": "calibration"
+  },
+  {
+    "utterance": "Aria keep this between us",
+    "label": "whisper",
+    "split": "calibration"
+  },
+  {
+    "utterance": "Aria did you see that",
+    "label": "whisper",
+    "split": "calibration"
+  },
+  {
+    "utterance": "Bram can we talk privately",
+    "label": "whisper",
+    "split": "calibration"
+  },
+  {
+    "utterance": "Bram can you come closer",
+    "label": "whisper",
+    "split": "calibration"
+  },
+  {
+    "utterance": "Bram i need a word with you",
+    "label": "whisper",
+    "split": "calibration"
+  },
+  {
+    "utterance": "Bram come take a look",
+    "label": "whisper",
+    "split": "calibration"
+  },
+  {
+    "utterance": "Bram did you see that",
+    "label": "whisper",
+    "split": "calibration"
+  },
+  {
+    "utterance": "Aria quick question for you",
+    "label": "whisper",
+    "split": "calibration"
+  },
+  {
+    "utterance": "Aria just between the two of us",
+    "label": "whisper",
+    "split": "calibration"
+  },
+  {
+    "utterance": "Aria can you come closer",
+    "label": "whisper",
+    "split": "calibration"
+  },
+  {
+    "utterance": "Bram meet me over here",
+    "label": "whisper",
+    "split": "calibration"
+  },
+  {
+    "utterance": "Bram can you come closer",
+    "label": "whisper",
+    "split": "calibration"
+  },
+  {
+    "utterance": "Bram come here for a second",
+    "label": "whisper",
+    "split": "calibration"
+  },
+  {
+    "utterance": "Aria dont tell the others yet",
+    "label": "whisper",
+    "split": "calibration"
+  },
+  {
+    "utterance": "Bram i need a word with you",
+    "label": "whisper",
+    "split": "calibration"
+  },
+  {
+    "utterance": "Aria just between the two of us",
+    "label": "whisper",
+    "split": "calibration"
+  },
+  {
+    "utterance": "Bram i need to tell you something",
+    "label": "whisper",
+    "split": "heldout"
+  },
+  {
+    "utterance": "Bram keep this between us",
+    "label": "whisper",
+    "split": "heldout"
+  },
+  {
+    "utterance": "Bram i need to tell you something",
+    "label": "whisper",
+    "split": "heldout"
+  },
+  {
+    "utterance": "Aria quietly follow me",
+    "label": "whisper",
+    "split": "heldout"
+  },
+  {
+    "utterance": "Aria wait up please",
+    "label": "whisper",
+    "split": "heldout"
+  },
+  {
+    "utterance": "Bram hold on a second",
+    "label": "whisper",
+    "split": "heldout"
+  },
+  {
+    "utterance": "Bram can you come closer",
+    "label": "whisper",
+    "split": "heldout"
+  },
+  {
+    "utterance": "Bram can we talk privately",
+    "label": "whisper",
+    "split": "heldout"
+  },
+  {
+    "utterance": "Bram check this out quietly",
+    "label": "whisper",
+    "split": "heldout"
+  },
+  {
+    "utterance": "Bram can we talk privately",
+    "label": "whisper",
+    "split": "heldout"
+  },
+  {
+    "utterance": "Bram hold on a second",
+    "label": "whisper",
+    "split": "heldout"
+  },
+  {
+    "utterance": "Bram over here for a moment",
+    "label": "whisper",
+    "split": "heldout"
+  },
+  {
+    "utterance": "Bram keep this between us",
+    "label": "whisper",
+    "split": "heldout"
+  },
+  {
+    "utterance": "Aria i need a word with you",
+    "label": "whisper",
+    "split": "heldout"
+  },
+  {
+    "utterance": "Aria check this out quietly",
+    "label": "whisper",
+    "split": "heldout"
+  },
+  {
+    "utterance": "Bram one moment please",
+    "label": "whisper",
+    "split": "heldout"
+  },
+  {
+    "utterance": "Bram over here for a moment",
+    "label": "whisper",
+    "split": "heldout"
+  },
+  {
+    "utterance": "Bram hold on a second",
+    "label": "whisper",
+    "split": "heldout"
+  },
+  {
+    "utterance": "Bram wait up please",
+    "label": "whisper",
+    "split": "heldout"
+  },
+  {
+    "utterance": "Bram i need to tell you something",
+    "label": "whisper",
+    "split": "heldout"
+  },
+  {
+    "utterance": "Aria psst over here",
+    "label": "whisper",
+    "split": "heldout"
+  },
+  {
+    "utterance": "Bram one moment please",
+    "label": "whisper",
+    "split": "heldout"
+  },
+  {
+    "utterance": "Bram i need to tell you something",
+    "label": "whisper",
+    "split": "heldout"
+  },
+  {
+    "utterance": "Bram did you see that",
+    "label": "whisper",
+    "split": "heldout"
+  },
+  {
+    "utterance": "Aria quietly follow me",
+    "label": "whisper",
+    "split": "heldout"
+  },
+  {
+    "utterance": "Aria can we talk privately",
+    "label": "whisper",
+    "split": "heldout"
+  },
+  {
+    "utterance": "Aria keep this between us",
+    "label": "whisper",
+    "split": "heldout"
+  },
+  {
+    "utterance": "Aria quick question for you",
+    "label": "whisper",
+    "split": "heldout"
+  },
+  {
+    "utterance": "Bram come take a look",
+    "label": "whisper",
+    "split": "heldout"
+  },
+  {
+    "utterance": "Bram just between the two of us",
+    "label": "whisper",
+    "split": "heldout"
+  },
+  {
+    "utterance": "waves at everyone nearby",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "crosses their arms",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "waves goodbye to the group",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "crosses their arms",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "grins mischievously",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "sighs heavily",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "crosses their arms",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "stretches and yawns",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "laughs quietly to themself",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "does a dramatic bow",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "does a little happy dance",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "bows deeply to the party",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "rolls their eyes",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "looks around nervously",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "does a dramatic bow",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "waves goodbye to the group",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "gives a thumbs up",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "crosses their arms",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "looks around nervously",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "taps their foot impatiently",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "does a spooky gesture",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "stretches and yawns",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "crosses their arms",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "waves at everyone nearby",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "stretches and yawns",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "sighs heavily",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "does a victory pose",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "rolls their eyes",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "looks around nervously",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "laughs quietly to themself",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "does a spooky gesture",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "nods slowly",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "nods slowly",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "gives a thumbs up",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "stretches and yawns",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "bows deeply to the party",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "shrugs at the group",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "nods slowly",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "shrugs at the group",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "crosses their arms",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "grins mischievously",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "stretches and yawns",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "nods slowly",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "does a spooky gesture",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "does a victory pose",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "shrugs at the group",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "laughs quietly to themself",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "claps excitedly",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "does a little happy dance",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "rolls their eyes",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "looks around nervously",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "gives a thumbs up",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "grins mischievously",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "scratches their head confused",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "sighs heavily",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "looks around nervously",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "shrugs at the group",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "taps their foot impatiently",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "stretches and yawns",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "scratches their head confused",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "does a spooky gesture",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "bows deeply to the party",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "bows deeply to the party",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "waves goodbye to the group",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "gives a thumbs up",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "shrugs at the group",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "claps excitedly",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "looks around nervously",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "gives a thumbs up",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "looks around nervously",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "does a victory pose",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "nods slowly",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "scratches their head confused",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "does a spooky gesture",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "stretches and yawns",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "nods slowly",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "rolls their eyes",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "does a victory pose",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "does a dramatic bow",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "sighs heavily",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "crosses their arms",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "does a victory pose",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "shrugs at the group",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "taps their foot impatiently",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "taps their foot impatiently",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "does a dramatic bow",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "does a little happy dance",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "claps excitedly",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "does a little happy dance",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "laughs quietly to themself",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "does a dramatic bow",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "waves goodbye to the group",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "does a victory pose",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "taps their foot impatiently",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "scratches their head confused",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "does a victory pose",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "does a little happy dance",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "sighs heavily",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "claps excitedly",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "grins mischievously",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "waves at everyone nearby",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "claps excitedly",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "bows deeply to the party",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "claps excitedly",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "laughs quietly to themself",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "taps their foot impatiently",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "rolls their eyes",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "does a dramatic bow",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "laughs quietly to themself",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "stretches and yawns",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "sighs heavily",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "crosses their arms",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "grins mischievously",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "shrugs at the group",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "does a little happy dance",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "scratches their head confused",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "waves at everyone nearby",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "taps their foot impatiently",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "shrugs at the group",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "bows deeply to the party",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "rolls their eyes",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "taps their foot impatiently",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "grins mischievously",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "nods slowly",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "waves goodbye to the group",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "laughs quietly to themself",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "waves goodbye to the group",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "sighs heavily",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "waves goodbye to the group",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "scratches their head confused",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "does a dramatic bow",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "does a spooky gesture",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "nods slowly",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "rolls their eyes",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "does a victory pose",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "sighs heavily",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "scratches their head confused",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "rolls their eyes",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "nods slowly",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "looks around nervously",
+    "label": "emote",
+    "split": "train"
+  },
+  {
+    "utterance": "claps excitedly",
+    "label": "emote",
+    "split": "calibration"
+  },
+  {
+    "utterance": "does a spooky gesture",
+    "label": "emote",
+    "split": "calibration"
+  },
+  {
+    "utterance": "sighs heavily",
+    "label": "emote",
+    "split": "calibration"
+  },
+  {
+    "utterance": "waves goodbye to the group",
+    "label": "emote",
+    "split": "calibration"
+  },
+  {
+    "utterance": "waves at everyone nearby",
+    "label": "emote",
+    "split": "calibration"
+  },
+  {
+    "utterance": "gives a thumbs up",
+    "label": "emote",
+    "split": "calibration"
+  },
+  {
+    "utterance": "rolls their eyes",
+    "label": "emote",
+    "split": "calibration"
+  },
+  {
+    "utterance": "taps their foot impatiently",
+    "label": "emote",
+    "split": "calibration"
+  },
+  {
+    "utterance": "bows deeply to the party",
+    "label": "emote",
+    "split": "calibration"
+  },
+  {
+    "utterance": "grins mischievously",
+    "label": "emote",
+    "split": "calibration"
+  },
+  {
+    "utterance": "sighs heavily",
+    "label": "emote",
+    "split": "calibration"
+  },
+  {
+    "utterance": "waves at everyone nearby",
+    "label": "emote",
+    "split": "calibration"
+  },
+  {
+    "utterance": "nods slowly",
+    "label": "emote",
+    "split": "calibration"
+  },
+  {
+    "utterance": "claps excitedly",
+    "label": "emote",
+    "split": "calibration"
+  },
+  {
+    "utterance": "claps excitedly",
+    "label": "emote",
+    "split": "calibration"
+  },
+  {
+    "utterance": "stretches and yawns",
+    "label": "emote",
+    "split": "calibration"
+  },
+  {
+    "utterance": "laughs quietly to themself",
+    "label": "emote",
+    "split": "calibration"
+  },
+  {
+    "utterance": "claps excitedly",
+    "label": "emote",
+    "split": "calibration"
+  },
+  {
+    "utterance": "waves goodbye to the group",
+    "label": "emote",
+    "split": "calibration"
+  },
+  {
+    "utterance": "bows deeply to the party",
+    "label": "emote",
+    "split": "calibration"
+  },
+  {
+    "utterance": "does a spooky gesture",
+    "label": "emote",
+    "split": "calibration"
+  },
+  {
+    "utterance": "crosses their arms",
+    "label": "emote",
+    "split": "calibration"
+  },
+  {
+    "utterance": "waves at everyone nearby",
+    "label": "emote",
+    "split": "calibration"
+  },
+  {
+    "utterance": "scratches their head confused",
+    "label": "emote",
+    "split": "calibration"
+  },
+  {
+    "utterance": "gives a thumbs up",
+    "label": "emote",
+    "split": "calibration"
+  },
+  {
+    "utterance": "laughs quietly to themself",
+    "label": "emote",
+    "split": "calibration"
+  },
+  {
+    "utterance": "grins mischievously",
+    "label": "emote",
+    "split": "calibration"
+  },
+  {
+    "utterance": "scratches their head confused",
+    "label": "emote",
+    "split": "calibration"
+  },
+  {
+    "utterance": "waves goodbye to the group",
+    "label": "emote",
+    "split": "calibration"
+  },
+  {
+    "utterance": "scratches their head confused",
+    "label": "emote",
+    "split": "calibration"
+  },
+  {
+    "utterance": "does a victory pose",
+    "label": "emote",
+    "split": "heldout"
+  },
+  {
+    "utterance": "shrugs at the group",
+    "label": "emote",
+    "split": "heldout"
+  },
+  {
+    "utterance": "grins mischievously",
+    "label": "emote",
+    "split": "heldout"
+  },
+  {
+    "utterance": "looks around nervously",
+    "label": "emote",
+    "split": "heldout"
+  },
+  {
+    "utterance": "waves at everyone nearby",
+    "label": "emote",
+    "split": "heldout"
+  },
+  {
+    "utterance": "waves at everyone nearby",
+    "label": "emote",
+    "split": "heldout"
+  },
+  {
+    "utterance": "does a little happy dance",
+    "label": "emote",
+    "split": "heldout"
+  },
+  {
+    "utterance": "looks around nervously",
+    "label": "emote",
+    "split": "heldout"
+  },
+  {
+    "utterance": "gives a thumbs up",
+    "label": "emote",
+    "split": "heldout"
+  },
+  {
+    "utterance": "gives a thumbs up",
+    "label": "emote",
+    "split": "heldout"
+  },
+  {
+    "utterance": "bows deeply to the party",
+    "label": "emote",
+    "split": "heldout"
+  },
+  {
+    "utterance": "crosses their arms",
+    "label": "emote",
+    "split": "heldout"
+  },
+  {
+    "utterance": "does a victory pose",
+    "label": "emote",
+    "split": "heldout"
+  },
+  {
+    "utterance": "waves at everyone nearby",
+    "label": "emote",
+    "split": "heldout"
+  },
+  {
+    "utterance": "grins mischievously",
+    "label": "emote",
+    "split": "heldout"
+  },
+  {
+    "utterance": "shrugs at the group",
+    "label": "emote",
+    "split": "heldout"
+  },
+  {
+    "utterance": "gives a thumbs up",
+    "label": "emote",
+    "split": "heldout"
+  },
+  {
+    "utterance": "does a spooky gesture",
+    "label": "emote",
+    "split": "heldout"
+  },
+  {
+    "utterance": "does a spooky gesture",
+    "label": "emote",
+    "split": "heldout"
+  },
+  {
+    "utterance": "does a little happy dance",
+    "label": "emote",
+    "split": "heldout"
+  },
+  {
+    "utterance": "taps their foot impatiently",
+    "label": "emote",
+    "split": "heldout"
+  },
+  {
+    "utterance": "bows deeply to the party",
+    "label": "emote",
+    "split": "heldout"
+  },
+  {
+    "utterance": "rolls their eyes",
+    "label": "emote",
+    "split": "heldout"
+  },
+  {
+    "utterance": "does a little happy dance",
+    "label": "emote",
+    "split": "heldout"
+  },
+  {
+    "utterance": "stretches and yawns",
+    "label": "emote",
+    "split": "heldout"
+  },
+  {
+    "utterance": "does a dramatic bow",
+    "label": "emote",
+    "split": "heldout"
+  },
+  {
+    "utterance": "laughs quietly to themself",
+    "label": "emote",
+    "split": "heldout"
+  },
+  {
+    "utterance": "does a dramatic bow",
+    "label": "emote",
+    "split": "heldout"
+  },
+  {
+    "utterance": "does a dramatic bow",
+    "label": "emote",
+    "split": "heldout"
+  },
+  {
+    "utterance": "does a little happy dance",
+    "label": "emote",
+    "split": "heldout"
+  },
+  {
+    "utterance": "bbbbbbbbb",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "hklqgxlaocuce",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "ghgmnqbrdfs",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "iiiiiiiiiiiiiiiiiiiiiiiiiiii",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "ryypjlo",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "jjjjjjjjjjjjjjjj",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "ruqknp",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "rtvops",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "oooooooooooooooooooooooooooooooooooo",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "fntforqpdscc",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "uyuyh",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "tbvaljqj",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "pwqu",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "zsymccheme",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": ".#49$6",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "ijklkiolpl",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "jmnbgbgbg",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "lhszfn",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "dfgvbvgvg",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "keviwitwwzv",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "mmmmmmmmmmmmmmmmmm",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "hjhj",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "ptqcicgirv",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "tygf",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "nhgbnbgb",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": ";:5736^14",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "ivwruuzzjiwl",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "jjjjjjjjjjjjjjjj",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "iiiiiiiiii",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "kkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "17462;28$81;",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "lllllllllllllllllllllllllllllll",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "!$19+",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "tevxnovpuawi",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "zsxzasxs",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "cccccccccccccccccccccccccccccccccc",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "fgvg",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "rrrrrrrrrrrrrrrrrrrrrr",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "6806*",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "zbsgqsm",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "wuithw",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "gbgytgyhgfd",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "ggggggggggggggggggggg",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "2686][12_47",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "6-1<!*",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "87!4$55615!",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "79=7*",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "3'8?7-;[.417",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "<[%137&84",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "rrrrrrrr",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "mjiuiujuiu",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "vvvvvvvv",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "kkkkkkkkkkkkkkk",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "pmuslskrverm",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": ";9=43",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "ioiuhuygtf",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "zzzzzzzzzzzzzzzzzzzzzzzzzzzz",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "ronrblizeir",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "xxxxxxxxxxxxxx",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "nbvgh",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "yyyyyyyyyyyyyyyyyyyyy",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "vaespo",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "qpsz",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "3!/9\"7/6:*!56",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "okhsxuksuvxrd",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "2=398>=",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "ikiuhuhbhy",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "yuiuhuio",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "fcxdrdfrfcdsa",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "cdft",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "gvgbhjhgbvbh",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "wawsx",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "pppppppppppppppppppppppppppppppppppppp",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "13{?:@",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "jjjjjjjjjjjjjjjjjjjjjjjjjjjjj",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "jjjjjjjjjjjjjjjjjjjjjjjj",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "jjjjjjjjj",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "?:1]1*$0,4",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "prbtntaqestj",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "jjjjjjjjjjjjjjjjjjjjjjjjjj",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "6$-618-%94>>",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "seaayt",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "iiiiiiiiiiiiiiiiii",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "cderedcx",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "resawewq",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "hhhhhhhhhhh",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "dyscowzwwn",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "3{'4-",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "awsde",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "rfukw",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "lpoiuhn",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "uxmfp",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "hhizxrcvj",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "]54[",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "yhuyhjhbnmjhn",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "lopoplopl",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "kkkkkkkkkkkk",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "frreqtycqfv",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "nbgvgtyt",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "mnhbnjmkj",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "!28}'>-^,!)",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "*900.023@",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "5!4}75",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "cdxzxdcf",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "turn",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "uujnsxvmk",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "ikikmk",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "cccccccccccccc",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "sfkxflkkgyan",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "iiiiiiiiiiiii",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "cjqxgvlefoa",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "wixbyowstjd",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "ujkiu",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "0$19$",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "wawswer",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "}666=",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "ytrdxsxz",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "849##566%",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": ";@\"+758,_7,@",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "--]'8%86!=/",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "ytrtrftrde",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "iokmnhn",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "-*5%88,^5{81",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "ywnvntvrmssx",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "ioik",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "opoplkjnb",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "sbduazjglhc",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "1'9'72)5:",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "83%}",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "%-61",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "wwwwwwwwwwwwwwwww",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "gbnbgyu",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "ldbpcielu",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "1'4,1",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "zasdfty",
+    "label": "unknown",
+    "split": "train"
+  },
+  {
+    "utterance": "koiuhg",
+    "label": "unknown",
+    "split": "calibration"
+  },
+  {
+    "utterance": "eurkpaowmrss",
+    "label": "unknown",
+    "split": "calibration"
+  },
+  {
+    "utterance": "ryqtuym",
+    "label": "unknown",
+    "split": "calibration"
+  },
+  {
+    "utterance": "uytyhbnbhj",
+    "label": "unknown",
+    "split": "calibration"
+  },
+  {
+    "utterance": "_34[,0;4^%4",
+    "label": "unknown",
+    "split": "calibration"
+  },
+  {
+    "utterance": "lldhwihizcvyh",
+    "label": "unknown",
+    "split": "calibration"
+  },
+  {
+    "utterance": "sazawaserfds",
+    "label": "unknown",
+    "split": "calibration"
+  },
+  {
+    "utterance": "wwwwwwwwwwwwwwwwwwwwwwwwwwwww",
+    "label": "unknown",
+    "split": "calibration"
+  },
+  {
+    "utterance": "lqcdpikfozdmh",
+    "label": "unknown",
+    "split": "calibration"
+  },
+  {
+    "utterance": "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm",
+    "label": "unknown",
+    "split": "calibration"
+  },
+  {
+    "utterance": "ijikmkjhj",
+    "label": "unknown",
+    "split": "calibration"
+  },
+  {
+    "utterance": "nnnnnnnn",
+    "label": "unknown",
+    "split": "calibration"
+  },
+  {
+    "utterance": "vvvvvvvvvvvvvvvvvv",
+    "label": "unknown",
+    "split": "calibration"
+  },
+  {
+    "utterance": "rtredewqa",
+    "label": "unknown",
+    "split": "calibration"
+  },
+  {
+    "utterance": "vzplzk",
+    "label": "unknown",
+    "split": "calibration"
+  },
+  {
+    "utterance": "&8:1(03",
+    "label": "unknown",
+    "split": "calibration"
+  },
+  {
+    "utterance": "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
+    "label": "unknown",
+    "split": "calibration"
+  },
+  {
+    "utterance": "wyhdsecose",
+    "label": "unknown",
+    "split": "calibration"
+  },
+  {
+    "utterance": "mjhu",
+    "label": "unknown",
+    "split": "calibration"
+  },
+  {
+    "utterance": "<2[5,77)-(",
+    "label": "unknown",
+    "split": "calibration"
+  },
+  {
+    "utterance": "nhjmnmnh",
+    "label": "unknown",
+    "split": "calibration"
+  },
+  {
+    "utterance": "qdewkuscjte",
+    "label": "unknown",
+    "split": "calibration"
+  },
+  {
+    "utterance": "aaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "label": "unknown",
+    "split": "calibration"
+  },
+  {
+    "utterance": "knjuxjogumh",
+    "label": "unknown",
+    "split": "calibration"
+  },
+  {
+    "utterance": "9#39!)1/",
+    "label": "unknown",
+    "split": "calibration"
+  },
+  {
+    "utterance": "kkkkkkkkkkkk",
+    "label": "unknown",
+    "split": "calibration"
+  },
+  {
+    "utterance": "azswqasd",
+    "label": "unknown",
+    "split": "calibration"
+  },
+  {
+    "utterance": "\"]*/_",
+    "label": "unknown",
+    "split": "calibration"
+  },
+  {
+    "utterance": "klhppggppmww",
+    "label": "unknown",
+    "split": "calibration"
+  },
+  {
+    "utterance": "tttttttttttt",
+    "label": "unknown",
+    "split": "calibration"
+  },
+  {
+    "utterance": "_?5033-*_4*'3",
+    "label": "unknown",
+    "split": "heldout"
+  },
+  {
+    "utterance": "5'6?.;",
+    "label": "unknown",
+    "split": "heldout"
+  },
+  {
+    "utterance": "kjnyuszuf",
+    "label": "unknown",
+    "split": "heldout"
+  },
+  {
+    "utterance": "46)(3?59,6",
+    "label": "unknown",
+    "split": "heldout"
+  },
+  {
+    "utterance": "}%@-.6",
+    "label": "unknown",
+    "split": "heldout"
+  },
+  {
+    "utterance": "zzzzzzzzzzzz",
+    "label": "unknown",
+    "split": "heldout"
+  },
+  {
+    "utterance": "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv",
+    "label": "unknown",
+    "split": "heldout"
+  },
+  {
+    "utterance": "$545@5:8.\"72",
+    "label": "unknown",
+    "split": "heldout"
+  },
+  {
+    "utterance": "yhjhygyuh",
+    "label": "unknown",
+    "split": "heldout"
+  },
+  {
+    "utterance": "1\"^]@5?@18368",
+    "label": "unknown",
+    "split": "heldout"
+  },
+  {
+    "utterance": "pnhpirpdf",
+    "label": "unknown",
+    "split": "heldout"
+  },
+  {
+    "utterance": "xsxdszaqwewaw",
+    "label": "unknown",
+    "split": "heldout"
+  },
+  {
+    "utterance": "412+$097<",
+    "label": "unknown",
+    "split": "heldout"
+  },
+  {
+    "utterance": "ykmxdetkregwc",
+    "label": "unknown",
+    "split": "heldout"
+  },
+  {
+    "utterance": "rtyh",
+    "label": "unknown",
+    "split": "heldout"
+  },
+  {
+    "utterance": "@!/=",
+    "label": "unknown",
+    "split": "heldout"
+  },
+  {
+    "utterance": "$--,6/@05/",
+    "label": "unknown",
+    "split": "heldout"
+  },
+  {
+    "utterance": "olmhjrxfyllum",
+    "label": "unknown",
+    "split": "heldout"
+  },
+  {
+    "utterance": "5:.1(0($=7],",
+    "label": "unknown",
+    "split": "heldout"
+  },
+  {
+    "utterance": "kkkkkkkkkkkk",
+    "label": "unknown",
+    "split": "heldout"
+  },
+  {
+    "utterance": "'*503]67_>",
+    "label": "unknown",
+    "split": "heldout"
+  },
+  {
+    "utterance": "30.3$@",
+    "label": "unknown",
+    "split": "heldout"
+  },
+  {
+    "utterance": "cccccccccccccccc",
+    "label": "unknown",
+    "split": "heldout"
+  },
+  {
+    "utterance": "lllllllllll",
+    "label": "unknown",
+    "split": "heldout"
+  },
+  {
+    "utterance": "bhyuhuh",
+    "label": "unknown",
+    "split": "heldout"
+  },
+  {
+    "utterance": "pppppppppppppp",
+    "label": "unknown",
+    "split": "heldout"
+  },
+  {
+    "utterance": "cpqeav",
+    "label": "unknown",
+    "split": "heldout"
+  },
+  {
+    "utterance": "qqqqqqqqqqqqqqqqqqqqqqqqqq",
+    "label": "unknown",
+    "split": "heldout"
+  },
+  {
+    "utterance": "040%!",
+    "label": "unknown",
+    "split": "heldout"
+  },
+  {
+    "utterance": "xxxxxxxxxxxxxxx",
+    "label": "unknown",
+    "split": "heldout"
+  }
+]
