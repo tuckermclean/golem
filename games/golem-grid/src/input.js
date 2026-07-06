@@ -15,6 +15,8 @@
    keyboard the whole feature exists to avoid. ──────────────────────── */
 import { GW, GH } from "../shared/worldgen.js";
 import { isCoarsePointer } from "@golem-engine/clients";
+import { parse } from "@golem-engine/language";
+import { computeAffordances, dispatchIntent } from "./language-adapter.js";
 
 const COARSE = isCoarsePointer();
 
@@ -38,7 +40,20 @@ export function createInput(S,deps){
   cmdEl.addEventListener("keydown",e=>{
     if(e.key!=="Enter")return;
     const raw=cmdEl.value.trim();cmdEl.value="";if(!raw)return;
-    if(!raw.startsWith("/"))return sendCmd("say "+raw);
+    if(!raw.startsWith("/")){
+      /* L1: route plain-text chat through the tier-1 deterministic
+         parser first — natural commands ("go north", "grab the
+         lantern") resolve without ever touching the (nonexistent, at
+         this phase) decoder. unknown/ambiguous both still fall back to
+         ordinary chat, exactly as every non-slash message did before
+         this wiring (design doc's orchestrator decisions #1/#4). */
+      const me=getP(S.me);
+      const result=parse(raw,{affordances:me?computeAffordances(S,me.x,me.y):[]});
+      if(result.ok)return dispatchIntent(result.intent,{sendCmd,lookAt,me});
+      if(result.reason==="ambiguous")
+        return feedLine("Did you mean: "+result.candidates.join(", ")+"?","sys");
+      return sendCmd("say "+raw);
+    }
     const[sl,...rest]=raw.slice(1).split(/\s+/);const arg=rest.join(" ");
     switch(sl){
       case"take":sendCmd("take "+arg);break;
