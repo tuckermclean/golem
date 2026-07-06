@@ -1,0 +1,210 @@
+{"id": "s0-r0-look", "output": "You stand in a salt-streaked chapel, its altar rimed with dried brine; the air feels watched.\nWays out: n, s, e, w."}
+{"id": "s0-r1-look", "output": "You stand in a long gallery lined with dust-caked ledger-desks; a sense of dread hangs thick. A clerk-thing shuffles among the shadows, its ledger-fingers ceaselessly counting.\nWays out: n, s, e, w."}
+{"id": "s0-r1-read", "output": "The marks scratched into the salt-crusted surface resolve into fragments of an old ledger entry, though most of the sense has flaked away with the brine."}
+{"id": "s0-r10-look", "output": "You stand in a cramped store-room, salt sacks slumped along the walls; everything is hushed and unmoving.\nWays out: n, s, e, w."}
+{"id": "s0-r11-look", "output": "You stand in a long gallery lined with dust-caked ledger-desks; the air feels watched. Half-buried in the grime lies a cracked wax seal.\nWays out: n, s, e, w."}
+{"id": "s0-r11-read", "output": "The marks scratched into the salt-crusted surface resolve into fragments of an old ledger entry, though most of the sense has flaked away with the brine."}
+{"id": "s0-r11-take", "output": "You close your hand around a cracked wax seal and tuck it away beneath your coat."}
+{"id": "s0-r2-look", "output": "You stand in a narrow stairwell, its steps worn smooth by countless clerks; the air feels watched.\nWays out: n, s, e, w."}
+{"id": "s0-r3-look", "output": "You stand in a cramped store-room, salt sacks slumped along the walls; a sense of dread hangs thick.\nWays out: n, s, e, w."}
+{"id": "s0-r4-look", "output": "You stand in a narrow stairwell, its steps worn smooth by countless clerks; everything is hushed and unmoving. Half-buried in the grime lies a notched tally-stick.\nWays out: n, s, e, w."}
+{"id": "s0-r4-take", "output": "You close your hand around a notched tally-stick and tuck it away beneath your coat."}
+{"id": "s0-r5-look", "output": "You stand in an echoing hall, salt drifted thick across the floorboards; the air feels watched.\nWays out: n, s, e, w."}
+{"id": "s0-r6-look", "output": "You stand in an echoing hall, salt drifted thick across the floorboards; everything is hushed and unmoving. Half-buried in the grime lies a tarnished green coin. A clerk-thing shuffles among the shadows, its ledger-fingers ceaselessly counting.\nWays out: n, s, e, w."}
+{"id": "s0-r6-take", "output": "You close your hand around a tarnished green coin and tuck it away beneath your coat."}
+{"id": "s0-r7-look", "output": "You stand in a narrow stairwell, its steps worn smooth by countless clerks; a sense of dread hangs thick. Half-buried in the grime lies a cracked wax seal. A clerk-thing shuffles among the shadows, its ledger-fingers ceaselessly counting.\nWays out: n, s, e, w."}
+{"id": "s0-r7-take", "output": "You close your hand around a cracked wax seal and tuck it away beneath your coat."}
+{"id": "s0-r8-look", "output": "You stand in a salt-streaked chapel, its altar rimed with dried brine; a bone-deep cold presses in.\nWays out: n, s, e, w."}
+{"id": "s0-r8-read", "output": "The marks scratched into the salt-crusted surface resolve into fragments of an old ledger entry, though most of the sense has flaked away with the brine."}
+{"id": "s0-r9-look", "output": "You stand in an iron-strapped vault, its door standing ajar; the air feels watched.\nWays out: n, s, e, w."}
+{"id": "s1-r0-look", "output": "You stand in a cramped store-room, salt sacks slumped along the walls; a bone-deep cold presses in.\nWays out: n, s, e, w."}
+{"id": "s1-r1-look", "output": "You stand in a cramped store-room, salt sacks slumped along the walls; a bone-deep cold presses in.\nWays out: n, s, e, w."}
+{"id": "s1-r10-look", "output": "You stand in an echoing hall, salt drifted thick across the floorboards; a bone-deep cold presses in. A clerk-thing shuffles among the shadows, its ledger-fingers ceaselessly counting.\nWays out: n, s, e, w."}
+{"id": "s1-r11-look", "output": "You stand in an echoing hall, salt drifted thick across the floorboards; a bone-deep cold presses in.\nWays out: n, s, e, w."}
+{"id": "s1-r2-look", "output": "You stand in a long gallery lined with dust-caked ledger-desks; the air feels watched. Half-buried in the grime lies a cracked wax seal. A clerk-thing shuffles among the shadows, its ledger-fingers ceaselessly counting.\nWays out: n, s, e, w."}
+{"id": "s1-r2-take", "output": "You close your hand around a cracked wax seal and tuck it away beneath your coat."}
+{"id": "s1-r3-look", "output": "You stand in an echoing hall, salt drifted thick across the floorboards; everything is hushed and unmoving.\nWays out: n, s, e, w."}
+{"id": "s1-r4-look", "output": "You stand in a narrow stairwell, its steps worn smooth by countless clerks; a sense of dread hangs thick.\nWays out: n, s, e, w."}
+{"id": "s1-r4-read", "output": "The marks scratched into the salt-crusted surface resolve into fragments of an old ledger entry, though most of the sense has flaked away with the brine."}
+{"id": "s1-r5-look", "output": "You stand in a salt-streaked chapel, its altar rimed with dried brine; everything is hushed and unmoving.\nWays out: n, s, e, w."}
+{"id": "s1-r6-look", "output": "You stand in a cramped store-room, salt sacks slumped along the walls; a sense of dread hangs thick. Half-buried in the grime lies a notched tally-stick. A clerk-thing shuffles among the shadows, its ledger-fingers ceaselessly counting.\nWays out: n, s, e, w."}
+{"id": "s1-r6-take", "output": "You close your hand around a notched tally-stick and tuck it away beneath your coat."}
+{"id": "s1-r7-look", "output": "You stand in a narrow stairwell, its steps worn smooth by countless clerks; a sense of dread hangs thick. Half-buried in the grime lies a brass stylus.\nWays out: n, s, e, w."}
+{"id": "s1-r7-read", "output": "The marks scratched into the salt-crusted surface resolve into fragments of an old ledger entry, though most of the sense has flaked away with the brine."}
+{"id": "s1-r7-take", "output": "You close your hand around a brass stylus and tuck it away beneath your coat."}
+{"id": "s1-r8-look", "output": "You stand in a cramped store-room, salt sacks slumped along the walls; a bone-deep cold presses in.\nWays out: n, s, e, w."}
+{"id": "s1-r8-read", "output": "The marks scratched into the salt-crusted surface resolve into fragments of an old ledger entry, though most of the sense has flaked away with the brine."}
+{"id": "s1-r9-look", "output": "You stand in an iron-strapped vault, its door standing ajar; a sense of dread hangs thick. A clerk-thing shuffles among the shadows, its ledger-fingers ceaselessly counting.\nWays out: n, s, e, w."}
+{"id": "s2-r0-look", "output": "You stand in a makeshift chapel hacked into the rock, a miner's shrine; the air feels watched.\nWays out: n, s, e, w."}
+{"id": "s2-r1-look", "output": "You stand in a mine store-room, tool-racks and empty ore sacks; the air feels watched. Half-buried in the grime lies a split pick-haft. An ember-wisp drifts through the dark, its glow pulsing like a dying coal.\nWays out: n, s, e, w."}
+{"id": "s2-r1-read", "output": "Scratched into the stone are a few worn numerals, a half-erased tally left by some long-departed miner."}
+{"id": "s2-r1-take", "output": "You close your hand around a split pick-haft and tuck it away in your pack."}
+{"id": "s2-r10-look", "output": "You stand in a makeshift chapel hacked into the rock, a miner's shrine; everything is hushed and unmoving. An ember-wisp drifts through the dark, its glow pulsing like a dying coal.\nWays out: n, s, e, w."}
+{"id": "s2-r11-look", "output": "You stand in a hewn stone stairwell, the rock still bearing pick-marks; everything is hushed and unmoving. Half-buried in the grime lies a split pick-haft.\nWays out: n, s, e, w."}
+{"id": "s2-r11-take", "output": "You close your hand around a split pick-haft and tuck it away in your pack."}
+{"id": "s2-r2-look", "output": "You stand in a rock-cut vault, a vein of ore glinting in the wall; a bone-deep cold presses in. Half-buried in the grime lies a rough slag ingot.\nWays out: n, s, e, w."}
+{"id": "s2-r2-take", "output": "You close your hand around a rough slag ingot and tuck it away in your pack."}
+{"id": "s2-r3-look", "output": "You stand in a timbered gallery driven deep into the seam; everything is hushed and unmoving.\nWays out: n, s, e, w."}
+{"id": "s2-r3-read", "output": "Scratched into the stone are a few worn numerals, a half-erased tally left by some long-departed miner."}
+{"id": "s2-r4-look", "output": "You stand in an excavated hall, water dripping somewhere in the dark; the air feels watched.\nWays out: n, s, e, w."}
+{"id": "s2-r5-look", "output": "You stand in a hewn stone stairwell, the rock still bearing pick-marks; a bone-deep cold presses in.\nWays out: n, s, e, w."}
+{"id": "s2-r6-look", "output": "You stand in a makeshift chapel hacked into the rock, a miner's shrine; the air feels watched. Half-buried in the grime lies a split pick-haft.\nWays out: n, s, e, w."}
+{"id": "s2-r6-take", "output": "You close your hand around a split pick-haft and tuck it away in your pack."}
+{"id": "s2-r7-look", "output": "You stand in a mine store-room, tool-racks and empty ore sacks; a bone-deep cold presses in.\nWays out: n, s, e, w."}
+{"id": "s2-r8-look", "output": "You stand in a mine store-room, tool-racks and empty ore sacks; a bone-deep cold presses in. An ember-wisp drifts through the dark, its glow pulsing like a dying coal.\nWays out: n, s, e, w."}
+{"id": "s2-r9-look", "output": "You stand in a rock-cut vault, a vein of ore glinting in the wall; a bone-deep cold presses in. An ember-wisp drifts through the dark, its glow pulsing like a dying coal.\nWays out: n, s, e, w."}
+{"id": "s2-r9-read", "output": "Scratched into the stone are a few worn numerals, a half-erased tally left by some long-departed miner."}
+{"id": "s3-r0-look", "output": "You stand in an echoing hall, salt drifted thick across the floorboards; the air feels watched.\nWays out: n, s, e, w."}
+{"id": "s3-r1-look", "output": "You stand in a salt-streaked chapel, its altar rimed with dried brine; everything is hushed and unmoving. A clerk-thing shuffles among the shadows, its ledger-fingers ceaselessly counting.\nWays out: n, s, e, w."}
+{"id": "s3-r10-look", "output": "You stand in a narrow stairwell, its steps worn smooth by countless clerks; a bone-deep cold presses in.\nWays out: n, s, e, w."}
+{"id": "s3-r10-read", "output": "The marks scratched into the salt-crusted surface resolve into fragments of an old ledger entry, though most of the sense has flaked away with the brine."}
+{"id": "s3-r11-look", "output": "You stand in a narrow stairwell, its steps worn smooth by countless clerks; the air feels watched. Half-buried in the grime lies a brass stylus.\nWays out: n, s, e, w."}
+{"id": "s3-r11-take", "output": "You close your hand around a brass stylus and tuck it away beneath your coat."}
+{"id": "s3-r2-look", "output": "You stand in a narrow stairwell, its steps worn smooth by countless clerks; everything is hushed and unmoving.\nWays out: n, s, e, w."}
+{"id": "s3-r3-look", "output": "You stand in a narrow stairwell, its steps worn smooth by countless clerks; a bone-deep cold presses in.\nWays out: n, s, e, w."}
+{"id": "s3-r4-look", "output": "You stand in an echoing hall, salt drifted thick across the floorboards; the air feels watched.\nWays out: n, s, e, w."}
+{"id": "s3-r5-look", "output": "You stand in a narrow stairwell, its steps worn smooth by countless clerks; a bone-deep cold presses in. Half-buried in the grime lies a cracked wax seal.\nWays out: n, s, e, w."}
+{"id": "s3-r5-take", "output": "You close your hand around a cracked wax seal and tuck it away beneath your coat."}
+{"id": "s3-r6-look", "output": "You stand in a long gallery lined with dust-caked ledger-desks; everything is hushed and unmoving. A clerk-thing shuffles among the shadows, its ledger-fingers ceaselessly counting.\nWays out: n, s, e, w."}
+{"id": "s3-r7-look", "output": "You stand in an echoing hall, salt drifted thick across the floorboards; a sense of dread hangs thick.\nWays out: n, s, e, w."}
+{"id": "s3-r7-read", "output": "The marks scratched into the salt-crusted surface resolve into fragments of an old ledger entry, though most of the sense has flaked away with the brine."}
+{"id": "s3-r8-look", "output": "You stand in a long gallery lined with dust-caked ledger-desks; everything is hushed and unmoving. Half-buried in the grime lies a tarnished green coin.\nWays out: n, s, e, w."}
+{"id": "s3-r8-take", "output": "You close your hand around a tarnished green coin and tuck it away beneath your coat."}
+{"id": "s3-r9-look", "output": "You stand in an iron-strapped vault, its door standing ajar; everything is hushed and unmoving.\nWays out: n, s, e, w."}
+{"id": "s3-r9-read", "output": "The marks scratched into the salt-crusted surface resolve into fragments of an old ledger entry, though most of the sense has flaked away with the brine."}
+{"id": "s0-r0-move", "output": "could you head north"}
+{"id": "s0-r1-move", "output": "let's go east"}
+{"id": "s0-r10-move", "output": "let's go west"}
+{"id": "s0-r11-take", "output": "grab the cracked seal"}
+{"id": "s0-r2-move", "output": "head east"}
+{"id": "s0-r3-move", "output": "head west"}
+{"id": "s0-r4-take", "output": "pick up the tally stick"}
+{"id": "s0-r5-move", "output": "east, please"}
+{"id": "s0-r6-take", "output": "could you grab the green coin"}
+{"id": "s0-r7-take", "output": "let's take the cracked seal"}
+{"id": "s0-r8-move", "output": "west, please"}
+{"id": "s0-r9-move", "output": "head south now"}
+{"id": "s1-r0-move", "output": "why not head east"}
+{"id": "s1-r1-move", "output": "let's go south"}
+{"id": "s1-r10-move", "output": "south, please"}
+{"id": "s1-r11-move", "output": "why don't we go south"}
+{"id": "s1-r2-take", "output": "snag the cracked seal"}
+{"id": "s1-r3-move", "output": "why not head west"}
+{"id": "s1-r4-move", "output": "make your way south"}
+{"id": "s1-r5-move", "output": "swing on down south"}
+{"id": "s1-r6-take", "output": "why not grab the tally stick"}
+{"id": "s1-r7-take", "output": "go ahead and grab the brass stylus"}
+{"id": "s1-r8-move", "output": "let's move south"}
+{"id": "s1-r9-move", "output": "swing west"}
+{"id": "s2-r0-move", "output": "swing east"}
+{"id": "s2-r1-take", "output": "pick that split pick-haft up"}
+{"id": "s2-r10-move", "output": "south seems good"}
+{"id": "s2-r11-take", "output": "grab that split pick-haft"}
+{"id": "s2-r2-take", "output": "take the slag ingot, please"}
+{"id": "s2-r3-move", "output": "head down south"}
+{"id": "s2-r4-move", "output": "go on south"}
+{"id": "s2-r5-move", "output": "let's move east"}
+{"id": "s2-r6-take", "output": "let's grab the split pick-haft"}
+{"id": "s2-r7-move", "output": "let's go up north"}
+{"id": "s2-r8-move", "output": "let's move west"}
+{"id": "s2-r9-move", "output": "make your way west"}
+{"id": "s3-r0-move", "output": "make your way east"}
+{"id": "s3-r1-move", "output": "west seems right"}
+{"id": "s3-r10-move", "output": "head over west"}
+{"id": "s3-r11-take", "output": "pick the brass stylus up"}
+{"id": "s3-r2-move", "output": "could you head south"}
+{"id": "s3-r3-move", "output": "east seems right"}
+{"id": "s3-r4-move", "output": "head over east"}
+{"id": "s3-r5-take", "output": "grab the cracked seal"}
+{"id": "s3-r6-move", "output": "north, if you would"}
+{"id": "s3-r7-move", "output": "go east now"}
+{"id": "s3-r8-take", "output": "pick up the green coin"}
+{"id": "s3-r9-move", "output": "could you head east"}
+{"id": "s0-c-gameover", "output": "The delve is already over \u2014 start a new world."}
+{"id": "s0-c-nolore", "output": "There's nothing here worth reading."}
+{"id": "s0-c-noplayer", "output": "No one by that name is down here with you."}
+{"id": "s0-c-nothing", "output": "There's nothing here to take."}
+{"id": "s0-c-unknownverb", "output": "The golem doesn't know how to do that."}
+{"id": "s0-c-wall", "output": "A solid wall blocks the way north."}
+{"id": "s0-c-wrongitem", "output": "The tally stick isn't something you can take."}
+{"id": "s1-c-gameover", "output": "The delve is already over \u2014 start a new world."}
+{"id": "s1-c-nolore", "output": "There's nothing here worth reading."}
+{"id": "s1-c-noplayer", "output": "No one by that name is down here with you."}
+{"id": "s1-c-nothing", "output": "There's nothing here to take."}
+{"id": "s1-c-unknownverb", "output": "The golem doesn't know how to do that."}
+{"id": "s1-c-wall", "output": "A solid wall blocks the way north."}
+{"id": "s1-c-wrongitem", "output": "The cracked seal isn't something you can take."}
+{"id": "s2-c-gameover", "output": "The delve is already over \u2014 start a new world."}
+{"id": "s2-c-nolore", "output": "There's nothing here worth reading."}
+{"id": "s2-c-noplayer", "output": "No one by that name is down here with you."}
+{"id": "s2-c-nothing", "output": "There's nothing here to take."}
+{"id": "s2-c-unknownverb", "output": "The golem doesn't know how to do that."}
+{"id": "s2-c-wall", "output": "A solid wall blocks the way north."}
+{"id": "s2-c-wrongitem", "output": "The split pick-haft isn't something you can take."}
+{"id": "s3-c-gameover", "output": "The delve is already over \u2014 start a new world."}
+{"id": "s3-c-nolore", "output": "There's nothing here worth reading."}
+{"id": "s3-c-noplayer", "output": "No one by that name is down here with you."}
+{"id": "s3-c-nothing", "output": "There's nothing here to take."}
+{"id": "s3-c-unknownverb", "output": "The golem doesn't know how to do that."}
+{"id": "s3-c-wall", "output": "A solid wall blocks the way north."}
+{"id": "s3-c-wrongitem", "output": "The cracked seal isn't something you can take."}
+{"id": "s0-d-distant", "output": "I couldn't tell you \u2014 I've never been that far, only as deep as the chapel."}
+{"id": "s0-r0-room", "output": "I couldn't say \u2014 I've never gone past the chapel."}
+{"id": "s0-r1-room", "output": "Aye \u2014 there's a clerk-thing lurking near the gallery, so keep your wits about you."}
+{"id": "s0-r10-room", "output": "Nothing more, as far as I've seen \u2014 the store is as deep as this counting house goes."}
+{"id": "s0-r11-room", "output": "I couldn't tell you \u2014 I've not been past the gallery."}
+{"id": "s0-r2-room", "output": "I couldn't say \u2014 I've never gone beyond the stairwell."}
+{"id": "s0-r3-room", "output": "Nothing more, as far as I've seen \u2014 the store is as deep as this counting house goes."}
+{"id": "s0-r4-room", "output": "I couldn't say \u2014 I've never gone beyond the stairwell."}
+{"id": "s0-r5-room", "output": "I couldn't say \u2014 I've never been past the hall."}
+{"id": "s0-r6-room", "output": "I couldn't say \u2014 I've never gone past the hall, what with the clerk-thing keeping me from wandering."}
+{"id": "s0-r7-room", "output": "This is the stairwell, in the salt counting house. Mind yourself \u2014 there's a clerk-thing about."}
+{"id": "s0-r8-room", "output": "Not that I've seen \u2014 the chapel's been quiet enough, though I can't speak for what's further in."}
+{"id": "s0-r9-room", "output": "This is the vault, in the salt counting house."}
+{"id": "s1-d-distant", "output": "I couldn't say \u2014 I've been no deeper than the store; whatever lies past it, I've not seen."}
+{"id": "s1-r0-room", "output": "Nothing more that I know of \u2014 the store is as far as this place goes."}
+{"id": "s1-r1-room", "output": "Nothing more that I know of \u2014 the store is as far as this place goes."}
+{"id": "s1-r10-room", "output": "I couldn't say \u2014 I've never gone past the hall, what with the clerk-thing about."}
+{"id": "s1-r11-room", "output": "I couldn't say \u2014 I've never been past the hall."}
+{"id": "s1-r2-room", "output": "Aye \u2014 there's a clerk-thing about near the gallery. Best stay sharp."}
+{"id": "s1-r3-room", "output": "I couldn't say \u2014 I've never been past the hall."}
+{"id": "s1-r4-room", "output": "This is the stairwell, in the salt counting house."}
+{"id": "s1-r5-room", "output": "Nothing I've seen \u2014 the chapel's quiet, though I couldn't tell you what's beyond."}
+{"id": "s1-r6-room", "output": "This is the store, in the salt counting house. There's a clerk-thing about, so mind yourself."}
+{"id": "s1-r7-room", "output": "I couldn't tell you \u2014 I've never gone beyond the stairwell."}
+{"id": "s1-r8-room", "output": "Not that I've noticed \u2014 the store's been quiet."}
+{"id": "s1-r9-room", "output": "This is the vault, in the salt counting house. Mind yourself \u2014 there's a clerk-thing about."}
+{"id": "s2-d-distant", "output": "I couldn't tell you \u2014 I've never been that far, only as deep as the chapel."}
+{"id": "s2-r0-room", "output": "Not that I've seen \u2014 the chapel's quiet enough, though I can't speak for what's further down."}
+{"id": "s2-r1-room", "output": "I couldn't say \u2014 I've never gone past the store, not with an ember wisp about."}
+{"id": "s2-r10-room", "output": "I couldn't say \u2014 I've never gone past the chapel, what with the ember wisp about."}
+{"id": "s2-r11-room", "output": "Nothing more, as far as I know \u2014 the stairwell's as deep as this mine goes."}
+{"id": "s2-r2-room", "output": "This is the vault, deep in the deep mine."}
+{"id": "s2-r3-room", "output": "I couldn't say \u2014 I've never been past the gallery."}
+{"id": "s2-r4-room", "output": "This is the hall, part of the deep mine."}
+{"id": "s2-r5-room", "output": "Nothing more, as far as I know \u2014 the stairwell's as deep as this mine goes."}
+{"id": "s2-r6-room", "output": "Not that I've seen \u2014 the chapel's quiet enough, though I can't speak for what's further down."}
+{"id": "s2-r7-room", "output": "This is the store, part of the deep mine."}
+{"id": "s2-r8-room", "output": "This is the store, part of the deep mine. There's an ember wisp drifting about, so tread carefully."}
+{"id": "s2-r9-room", "output": "I couldn't say \u2014 I've never gone past the vault, not with an ember wisp about."}
+{"id": "s3-d-distant", "output": "I couldn't say \u2014 I've been no deeper than the hall; whatever's down there, I've not seen it."}
+{"id": "s3-r0-room", "output": "I couldn't say \u2014 I've never gone past the hall."}
+{"id": "s3-r1-room", "output": "Aye \u2014 there's a clerk-thing about near the chapel. Mind yourself."}
+{"id": "s3-r10-room", "output": "Not that I've seen \u2014 the stairwell's been quiet, though I can't speak for what lies further in."}
+{"id": "s3-r11-room", "output": "Not that I've seen \u2014 the stairwell's been quiet, though I can't speak for what lies further in."}
+{"id": "s3-r2-room", "output": "I couldn't say \u2014 I've never been past the stairwell."}
+{"id": "s3-r3-room", "output": "This is the stairwell, in the salt counting house."}
+{"id": "s3-r4-room", "output": "This is the hall, part of the salt counting house."}
+{"id": "s3-r5-room", "output": "This is the stairwell, in the salt counting house."}
+{"id": "s3-r6-room", "output": "Aye \u2014 there's a clerk-thing lurking near the gallery, so keep your wits about you."}
+{"id": "s3-r7-room", "output": "Not that I've seen \u2014 the hall's quiet enough, though I couldn't say what's further in."}
+{"id": "s3-r8-room", "output": "This is the gallery, in the salt counting house."}
+{"id": "s3-r9-room", "output": "This is the vault, in the salt counting house."}
+{"id": "s0-r4-take-move", "output": "grab the tally stick and then head east"}
+{"id": "s1-r2-take-move", "output": "grab the cracked seal and then head north"}
+{"id": "s2-r2-take-move", "output": "grab the slag ingot and then head east"}
+{"id": "s3-r8-take-move", "output": "grab the green coin and then head east"}
+{"id": "s0-r4-ref", "output": "take it"}
+{"id": "s1-r2-ref", "output": "pick that up"}
+{"id": "s2-r1-ref", "output": "grab it"}
+{"id": "s3-r5-ref", "output": "take that"}
