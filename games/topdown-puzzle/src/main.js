@@ -22,6 +22,7 @@ import "./style.css";
 import pack from "../content/pack.json";
 import { deriveWorldFromPack } from "../shared/module.js";
 import { createState } from "../shared/reducer.js";
+import { createTouchControls } from "@golem-engine/clients";
 import { createHost, TICK_MS } from "./host.js";
 import { createClient } from "./client.js";
 import { createRenderer } from "./render.js";
@@ -77,6 +78,18 @@ function sendCmd(cmd) {
 }
 
 createInput(S, { sendCmd, isOver: () => S.st.over });
+
+/* ── TOUCH: @golem-engine/clients' shared touch layer (mobile-ergonomics
+   PR2 — movement-only, per the design doc's §5 "topdown-puzzle" section).
+   topdown-puzzle has no text input at all (no chat, no context menu), so
+   this is the whole wiring: onDir funnels through the same sendCmd("move
+   dx dy") the keyboard uses. Inert on mouse-only desktops (createTouchControls
+   shows nothing unless a touch/coarse-pointer signal arrives), so keyboard
+   input stays byte-for-byte unaffected. ──────────────────────────────── */
+createTouchControls({
+  target: canvas,
+  onDir: (dx, dy) => sendCmd(`move ${dx} ${dy}`),
+});
 
 /* ── boot: LEVEL_LOADED seeds entities/diamondsRemaining from `world`
    (design doc's State model — no redundant copy of the level layout in

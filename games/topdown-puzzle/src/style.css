@@ -8,7 +8,18 @@
   --win: #39c6c2;
   --lose: #e0432f;
 }
-* { box-sizing: border-box; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+/* mobile-ergonomics recipe (some-hero's, per golem-grid's style.css —
+   mobile-ergonomics PR2): lock the viewport down so pinch-zoom/pull-to-
+   refresh/double-tap-zoom never fight the touch controls. topdown-puzzle
+   has no scrollable region (no #feed-equivalent), so nothing needs to
+   opt back into panning or text selection. */
+html, body {
+  height: 100%;
+  overflow: hidden;
+  touch-action: none;
+  overscroll-behavior: none;
+}
 body {
   margin: 0;
   background: var(--bg);
@@ -19,6 +30,8 @@ body {
   align-items: center;
   gap: 8px;
   padding: 12px;
+  user-select: none;
+  -webkit-user-select: none;
 }
 #topbar {
   display: flex;
