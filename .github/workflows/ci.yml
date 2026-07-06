@@ -3,6 +3,7 @@ on:
   pull_request:
   push:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
   determinism:
@@ -146,3 +147,47 @@ jobs:
       # topdown-puzzle parse snapshots, in that order, failing fast.
       - name: freeze:verify (golem fixtures + ceremony + tdp snapshots)
         run: npm run freeze:verify
+
+  # Playtest deploy: publish the single-file golem-grid build to GitHub
+  # Pages so a green build is playable at a shareable URL
+  # (https://tuckermclean.github.io/golem/). Gated on the entire suite
+  # above via `needs:` — a red branch is never published, on EITHER
+  # trigger. Runs only on a green push to main or a manual "deploy this
+  # branch" dispatch; pull_request builds the artifact (build job) but
+  # this job is skipped, so PRs never publish. permissions/concurrency
+  # are scoped to THIS job on purpose: a workflow-level `concurrency:
+  # pages` would serialize every CI run, and only this job needs Pages/
+  # OIDC tokens. Design:
+  # docs/superpowers/specs/2026-07-06-playtest-pages-deploy-design.md
+  deploy-pages:
+    needs: [determinism, solver, validator, build, some-hero-legacy,
+            level-manifest, event-schema, freeze-verify]
+    if: >-
+      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+      github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      # Reuse the self-contained golem-grid.html the `build` job produced
+      # in THIS run — no cross-workflow artifact fetch.
+      - uses: actions/download-artifact@v4
+        with:
+          name: golem-grid-html
+          path: site
+      # Pages serves the site root; land the single file as index.html.
+      - name: land single file as index.html
+        run: mv site/golem-grid.html site/index.html
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - id: deploy
+        uses: actions/deploy-pages@v4

@@ -58,21 +58,14 @@ Add `workflow_dispatch` alongside the existing `pull_request` and
 `push: { branches: [main] }`. GitHub's "Run workflow" dropdown selects the
 branch to deploy; CI runs fully on that ref first.
 
-### Workflow-level additions
-```yaml
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: false
-```
-Workflow-level permissions are harmless for the existing jobs (they only read
-`contents`). The concurrency group prevents two Pages deploys from racing.
-
 ### New job: `deploy-pages`
+
+**Correction from first draft (caught during implementation):** `permissions`
+and `concurrency` are scoped to **this job**, not the workflow. A
+workflow-level `concurrency: pages` would put every CI run (every PR, every
+push) into one serialized group and queue them — wrong. Job-level also avoids
+granting `id-token: write` to the seven jobs that only need read.
+
 ```yaml
 deploy-pages:
   needs: [determinism, solver, validator, build, some-hero-legacy,
@@ -81,6 +74,13 @@ deploy-pages:
     (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
     github.event_name == 'workflow_dispatch'
   runs-on: ubuntu-latest
+  permissions:
+    contents: read
+    pages: write
+    id-token: write
+  concurrency:
+    group: pages
+    cancel-in-progress: false
   environment:
     name: github-pages
     url: ${{ steps.deploy.outputs.page_url }}
