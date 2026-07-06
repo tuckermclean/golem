@@ -240,3 +240,16 @@ test("verifyCheckpoint: does NOT by itself detect interior tampering that leaves
   assert.equal(verifyCheckpoint(cp, interiorTamperedLog, publicKey), true);
   assert.equal(verifyChain(interiorTamperedLog).ok, false, "verifyChain must still catch what verifyCheckpoint alone cannot");
 });
+
+test("checkpoint: throws TypeError on non-array entries (guard, Phase-1 review K3 nit)", () => {
+  const { privateKey } = makeDevKeypair();
+  assert.throws(() => checkpoint("not-an-array", privateKey), TypeError);
+  assert.throws(() => checkpoint(null, privateKey), TypeError);
+});
+
+test("verifyCheckpoint: throws TypeError on non-array entries / non-object checkpoint (guards)", () => {
+  const { publicKey, privateKey } = makeDevKeypair();
+  const cp = checkpoint([], privateKey);
+  assert.throws(() => verifyCheckpoint(cp, "not-an-array", publicKey), TypeError);
+  assert.throws(() => verifyCheckpoint("not-an-object", [], publicKey), TypeError);
+});

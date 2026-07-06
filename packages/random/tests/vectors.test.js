@@ -197,3 +197,14 @@ test("re-export plumbing: games/golem-grid/shared/rng.js's channel/pick/chance/r
   assert.equal(oldRng.chance, chance);
   assert.equal(oldRng.rint, rint);
 });
+
+test("composition vector: channel ∘ pick/rint/chance — the full real pipeline", () => {
+  // Phase-1 review K1 nit: the existing pick/rint/chance vectors use only
+  // synthetic constant r() stubs, so a silent h32/channel drift wouldn't be
+  // caught end-to-end. This pins the whole hash→channel→draw pipeline.
+  // `channel` is stateful: pick consumes draw 1, rint draw 2, chance draw 3.
+  const r = channel("golem", "dungeon");
+  assert.equal(pick(r, ["a", "b", "c", "d", "e"]), "c");
+  assert.equal(rint(r, 10), 9);
+  assert.equal(chance(r, 0.5), true);
+});
