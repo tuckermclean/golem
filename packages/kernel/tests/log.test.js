@@ -72,6 +72,34 @@ test("canonicalEvent: throws on function and symbol values", () => {
   assert.throws(() => canonicalEvent({ a: Symbol("x") }), TypeError);
 });
 
+test("canonicalEvent: throws on NaN, +Infinity, -Infinity (top-level and nested)", () => {
+  assert.throws(() => canonicalEvent(NaN), TypeError);
+  assert.throws(() => canonicalEvent(Infinity), TypeError);
+  assert.throws(() => canonicalEvent(-Infinity), TypeError);
+  assert.throws(() => canonicalEvent({ a: NaN }), TypeError);
+  assert.throws(() => canonicalEvent({ a: Infinity }), TypeError);
+  assert.throws(() => canonicalEvent({ a: -Infinity }), TypeError);
+  assert.throws(() => canonicalEvent({ a: [1, NaN] }), TypeError);
+});
+
+test("canonicalEvent: an own __proto__ field is preserved and changes the hash (injectivity)", () => {
+  // A `{__proto__: x}` OBJECT LITERAL is spec-special-cased (it sets the
+  // prototype, producing no own "__proto__" property) and would NOT
+  // reproduce the bug this guards against. JSON.parse, by contrast, uses
+  // CreateDataProperty and genuinely creates an own enumerable
+  // "__proto__" data property — that's the shape that broke the naive
+  // {}-literal + assignment implementation.
+  const withProto = JSON.parse('{"seq":1,"t":"MOVE","__proto__":"evil"}');
+  const withoutProto = JSON.parse('{"seq":1,"t":"MOVE"}');
+
+  assert.deepEqual(Object.keys(withProto).sort(), ["__proto__", "seq", "t"]);
+
+  const a = canonicalEvent(withProto);
+  const b = canonicalEvent(withoutProto);
+  assert.notEqual(a, b, "an event with an own __proto__ field must hash differently from one without it");
+  assert.equal(a, '{"__proto__":"evil","seq":1,"t":"MOVE"}');
+});
+
 // ── chain: append / verify / determinism ──────────────────────────
 
 test("appendEvent: genesis entry's prev is 64 zero characters", () => {

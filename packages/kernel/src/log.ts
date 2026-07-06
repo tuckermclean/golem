@@ -26,16 +26,28 @@ export const GENESIS_PREV = "0".repeat(64);
  * Definition: `JSON.stringify` of the value with every plain object's
  * keys recursively sorted (lexicographic, by `Array.prototype.sort`'s
  * default string comparison); array element order is preserved as-is
- * (arrays are ordered data, not sorted). `undefined`, `function`, and
- * `symbol` values are rejected by throwing a `TypeError` — events are
- * plain JSON data, and silently dropping/coercing those (as bare
- * `JSON.stringify` would) would make the canonical form ambiguous.
+ * (arrays are ordered data, not sorted). `undefined`, `function`,
+ * `symbol`, and non-finite numbers (`NaN`/`Infinity`/`-Infinity`) are
+ * rejected by throwing a `TypeError` — events are plain JSON data, and
+ * silently dropping/coercing those (as bare `JSON.stringify` would,
+ * e.g. `JSON.stringify(NaN) === "null"`) would make the canonical form
+ * ambiguous.
+ *
+ * Own-enumerable keys literally named `__proto__` are preserved: the
+ * sorted object is built via `Object.create(null)` rather than an `{}`
+ * literal, because assigning `sorted["__proto__"] = x` on a normal
+ * object literal hits `Object.prototype`'s inherited `__proto__`
+ * accessor instead of creating an own data property, silently dropping
+ * the key before `JSON.stringify` ever sees it (a real injectivity
+ * break: two events differing only in a `__proto__` field would hash
+ * identically). A null-prototype object has no such accessor to
+ * intercept the assignment.
  */
 export function canonicalEvent(ev: unknown): string {
   return JSON.stringify(sortKeysDeep(ev));
 }
 
-function sortKeysDeep(value: unknown): unknown {
+function assertCanonicalizable(value: unknown): void {
   if (value === undefined) {
     throw new TypeError("canonicalEvent: undefined is not a permitted value");
   }
@@ -45,10 +57,23 @@ function sortKeysDeep(value: unknown): unknown {
   if (typeof value === "symbol") {
     throw new TypeError("canonicalEvent: symbol is not a permitted value");
   }
+  if (typeof value === "number" && !Number.isFinite(value)) {
+    throw new TypeError(
+      `canonicalEvent: ${String(value)} is not a permitted value (NaN/Infinity are not valid JSON numbers)`,
+    );
+  }
+}
+
+function sortKeysDeep(value: unknown): unknown {
+  assertCanonicalizable(value);
   if (value === null || typeof value !== "object") return value;
   if (Array.isArray(value)) return value.map(sortKeysDeep);
   const obj = value as Record<string, unknown>;
-  const sorted: Record<string, unknown> = {};
+  // Object.create(null): a plain `{}` literal inherits Object.prototype's
+  // `__proto__` accessor, which would silently swallow an own key
+  // literally named "__proto__" on assignment below (see canonicalEvent's
+  // doc comment).
+  const sorted: Record<string, unknown> = Object.create(null);
   for (const key of Object.keys(obj).sort()) {
     sorted[key] = sortKeysDeep(obj[key]);
   }
