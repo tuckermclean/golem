@@ -1,0 +1,56 @@
+{
+  "name": "sample-pack",
+  "version": 1,
+  "entities": [
+    {
+      "id": "entity:door_golem",
+      "components": {
+        "Identity": { "name": "Door Golem" },
+        "Interactable": {
+          "prompt": "approach the Door Golem",
+          "enabledWhen": {
+            "all": [{ "not": { "fact": "door_golem:greeted" } }]
+          }
+        },
+        "Lock": {
+          "unlockCondition": {
+            "all": [
+              { "fact": "player:has_credential" },
+              { "cmp": { "op": "gte", "fact": "player:credential_tier", "value": 1 } }
+            ]
+          },
+          "key": { "$ref": "entity:credential_stamp" }
+        }
+      }
+    },
+    {
+      "id": "entity:credential_stamp",
+      "components": {
+        "Identity": { "name": "Ceremony Stamp" },
+        "Portable": {},
+        "Credential": { "tier": 1 }
+      }
+    }
+  ],
+  "tables": [
+    {
+      "id": "table:door_golem_lines",
+      "rows": [
+        "The Door Golem regards you and says nothing.",
+        "Denied. The stamp is missing."
+      ]
+    }
+  ],
+  "maps": [
+    {
+      "id": "map:guild_hall_entry",
+      "floor": ".",
+      "legend": {
+        "#": { "components": { "Identity": { "name": "wall" } } },
+        "G": { "entity": "entity:door_golem" },
+        "B": { "components": { "Portable": {}, "Identity": { "name": "crate" } } }
+      },
+      "cells": ["#####", "#G.B#", "#####"]
+    }
+  ]
+}

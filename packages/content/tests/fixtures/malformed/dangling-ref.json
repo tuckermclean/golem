@@ -1,0 +1,16 @@
+{
+  "name": "dangling-ref",
+  "version": 1,
+  "entities": [
+    {
+      "id": "entity:door_golem",
+      "components": {
+        "Lock": {
+          "key": { "$ref": "entity:credential_stamp_missing" }
+        }
+      }
+    }
+  ],
+  "tables": [],
+  "maps": []
+}

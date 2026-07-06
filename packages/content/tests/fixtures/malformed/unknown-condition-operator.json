@@ -1,0 +1,19 @@
+{
+  "name": "unknown-condition-operator",
+  "version": 1,
+  "entities": [
+    {
+      "id": "entity:door_golem",
+      "components": {
+        "Interactable": {
+          "prompt": "approach the Door Golem",
+          "enabledWhen": {
+            "cmp": { "op": "matches", "fact": "door_golem:greeted", "value": true }
+          }
+        }
+      }
+    }
+  ],
+  "tables": [],
+  "maps": []
+}

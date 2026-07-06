@@ -1,0 +1,22 @@
+{
+  // Mirrors packages/random/net's shape (strict, ES2022, NodeNext,
+  // dist/ from src/). Unlike packages/net (browser-safe, no node:
+  // imports), content's src/hash.ts (node:crypto) and src/schema.ts
+  // (node:fs, to read schemas/pack.v1.json at runtime) are genuinely
+  // Node-only — there is no browser-safety boundary to protect here
+  // (nothing in DELTA C1 requires content to run outside Node), so
+  // unlike packages/kernel's split tsconfig.json/tsconfig.log.json,
+  // one config covers the whole package and "types": ["node"] is set
+  // directly rather than deferred to a second config.
+  "compilerOptions": {
+    "strict": true,
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "declaration": true,
+    "outDir": "dist",
+    "rootDir": "src",
+    "types": ["node"]
+  },
+  "include": ["src"]
+}

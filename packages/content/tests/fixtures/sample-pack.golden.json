@@ -1,0 +1,98 @@
+{
+  "hash": "384aff3b1864e58e570b11990f5a588b3c930570643634cef40c7c8a05a69ef8",
+  "entities": {
+    "entity:door_golem": {
+      "id": "entity:door_golem",
+      "components": {
+        "Identity": {
+          "name": "Door Golem"
+        },
+        "Interactable": {
+          "prompt": "approach the Door Golem",
+          "enabledWhen": {
+            "all": [
+              {
+                "not": {
+                  "fact": "door_golem:greeted"
+                }
+              }
+            ]
+          }
+        },
+        "Lock": {
+          "unlockCondition": {
+            "all": [
+              {
+                "fact": "player:has_credential"
+              },
+              {
+                "cmp": {
+                  "op": "gte",
+                  "fact": "player:credential_tier",
+                  "value": 1
+                }
+              }
+            ]
+          },
+          "key": {
+            "$ref": "entity:credential_stamp"
+          }
+        }
+      }
+    },
+    "entity:credential_stamp": {
+      "id": "entity:credential_stamp",
+      "components": {
+        "Identity": {
+          "name": "Ceremony Stamp"
+        },
+        "Portable": {},
+        "Credential": {
+          "tier": 1
+        }
+      }
+    }
+  },
+  "tables": {
+    "table:door_golem_lines": {
+      "id": "table:door_golem_lines",
+      "rows": [
+        "The Door Golem regards you and says nothing.",
+        "Denied. The stamp is missing."
+      ]
+    }
+  },
+  "maps": {
+    "map:guild_hall_entry": {
+      "id": "map:guild_hall_entry",
+      "rows": 3,
+      "cols": 5,
+      "cells": [
+        "#####",
+        "#G.B#",
+        "#####"
+      ],
+      "floor": ".",
+      "legend": {
+        "#": {
+          "components": {
+            "Identity": {
+              "name": "wall"
+            }
+          }
+        },
+        "G": {
+          "entity": "entity:door_golem"
+        },
+        "B": {
+          "components": {
+            "Portable": {},
+            "Identity": {
+              "name": "crate"
+            }
+          }
+        }
+      }
+    }
+  }
+}
