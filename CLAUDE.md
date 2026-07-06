@@ -209,3 +209,42 @@ reducer/validate/wire file changed; every existing test/fixture/golden/
 ceremony/freeze-verify/solver-band/smoke-e2e still passes unchanged.
 Phase 1 (K1–K6) needs a whole-phase review before Phase 2 (C1 —
 `packages/content`: schema + compiler) begins.
+
+### Update — 2026-07-06 (Phase 1 review → Phase 3 L3; see ARCHITECTURE.md / MIGRATION.md)
+
+The narrative above ends at K6 (end of Phase 1). Since then, `main` has
+advanced substantially — for the authoritative map of the current
+codebase read the new **ARCHITECTURE.md** (package map, kernel contract,
+language tiers) and **MIGRATION.md** (legacy disposition + drawer index).
+Concise status:
+
+- **Phase 1 whole-phase review: DONE.** An adversarial review found and
+  fixed a real shipped **blocker** (`games/golem-grid/src/host.js`
+  double-emitted derived `LIGHT_WARN/WIN/LOSE` — no test exercised the
+  live `hostCmd`→`hostCommit` path) plus two MAJORs (`canonicalEvent`
+  `__proto__`/NaN hash-injectivity; missing `client.js`/`perceive.js`
+  unit coverage) and schema nits. All fixed and merged.
+- **Phase 2: DONE.** C1 `packages/content` (schema + safe `all/any/not/
+  fact/cmp` compiler + hashing); C2 topdown-puzzle ASCII importer; C3
+  kernel components (`packages/kernel/src/components.ts`) + a read-only
+  golem-grid entity overlay (byte-identical by construction); C4
+  topdown-puzzle kernel port — foundation + the fixed-step `TICK_ADVANCED`
+  bridge (movers/baddies/contact damage) + a Canvas-2D client (no Phaser).
+  **C4 PR4 (≥5 real-level solution-log fixtures) remains** — needs
+  playtesting or a solver.
+- **Mobile ergonomics: DONE + live.** `packages/clients` shared touch
+  layer (pure gesture engine + `createTouchControls`); golem-grid is now
+  playable on a phone with the soft-keyboard fix (text input opt-in behind
+  a chat toggle); topdown-puzzle wired too.
+- **Deploy: fixed.** GitHub Pages enabled; green `main` auto-publishes the
+  single-file golem-grid to `https://tuckermclean.github.io/golem/`.
+- **Phase 3 (language) tiers 1–3: DONE.** L1 deterministic parser + L2
+  intent classifier (both in `packages/language`; `route()` composes
+  them); L3 model-data tooling (`tools/harvest.js`/`generate.py`/
+  `validate.py`/`stats.py`) with one real agents-as-teacher smoke batch
+  (95.7% pass). **L4–L6 (the twin: nanoGPT training, WASM runner, real
+  GPU corpus) are NOT built** — they need training/GPU/emsdk
+  infrastructure. `packages/world` is still a stub.
+
+Doctrine (VISION.md) and sequencing (DELTA.md) are unchanged and still
+govern.
