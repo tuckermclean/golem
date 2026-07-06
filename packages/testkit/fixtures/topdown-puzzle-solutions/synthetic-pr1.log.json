@@ -1,0 +1,36 @@
+[
+ {
+  "t": "LEVEL_LOADED",
+  "seq": 1
+ },
+ {
+  "t": "MOVED",
+  "id": "entity:player",
+  "x": 1,
+  "y": 2,
+  "seq": 2
+ },
+ {
+  "t": "MOVED",
+  "id": "entity:player",
+  "x": 2,
+  "y": 2,
+  "seq": 3
+ },
+ {
+  "t": "MOVED",
+  "id": "entity:player",
+  "x": 3,
+  "y": 2,
+  "seq": 4
+ },
+ {
+  "t": "COLLECTED",
+  "id": "entity:diamond@3,2",
+  "seq": 5
+ },
+ {
+  "t": "WIN",
+  "seq": 6
+ }
+]
