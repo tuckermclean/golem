@@ -56,8 +56,8 @@ function cloneEntity(e) {
    event kind, each a pure "copy these resulting fields onto that entity"
    fold (design doc's `reduce(state, world, event)` table) — this is
    games/topdown-puzzle's KernelCore.reduce (see shared/module.js).
-   TICK_ADVANCED / HURT are PR2 additions (shared/tick.js's resolveTick);
-   they fall through the default no-op case here until then. */
+   TICK_ADVANCED / HURT are PR2 additions (shared/tick.js's resolveTick
+   is their only producer). */
 export function reduce(state, world, ev) {
   switch (ev.t) {
     case "LEVEL_LOADED": {
@@ -102,12 +102,23 @@ export function reduce(state, world, ev) {
         seq: ev.seq,
       };
     }
+    case "HURT": {
+      const entities = new Map(state.entities);
+      const e = entities.get(ev.id);
+      if (e) {
+        const next = cloneEntity(e);
+        next.components.Health = { ...next.components.Health, hp: ev.hp };
+        entities.set(ev.id, next);
+      }
+      return { ...state, entities, seq: ev.seq };
+    }
+    case "TICK_ADVANCED":
+      return { ...state, tick: ev.tick, seq: ev.seq };
     case "WIN":
       return { ...state, over: true, outcome: "WIN", seq: ev.seq };
     case "LOSE":
       return { ...state, over: true, outcome: "LOSE", seq: ev.seq };
     default:
-      // TICK_ADVANCED / HURT land here in PR2 (shared/tick.js).
       return { ...state, seq: ev.seq };
   }
 }

@@ -1,10 +1,13 @@
 /* ── MODULE: topdown-puzzle's KernelCore (deriveWorld/validate/reduce) —
    see @golem-engine/kernel's GameModule shape and docs/superpowers/specs/
-   2026-07-06-c4-topdown-port-design.md. PR1 scope only: the "move" verb
+   2026-07-06-c4-topdown-port-design.md. PR1 covered the "move" verb
    (wall/bounds denial, diamond collection, push chains, the static
-   memory-hole LOSE check, the diamond-count WIN check). No baddie/
-   moving-block simulation and no "tick" verb yet — those are PR2's
-   shared/tick.js + resolveTick.
+   memory-hole LOSE check, the diamond-count WIN check). PR2 adds the
+   "tick" verb (shared/tick.js's resolveTick — moving blocks, baddies,
+   contact damage, HP-derived LOSE), the player's Health component, and
+   baddies' per-instance initial moveDir (both attached below, at
+   deriveWorld time, same treatment as moving_block's per-instance
+   `facing`).
 
    deriveWorld's "seed" is a level id, not an RNG seed (design doc's
    "structural decision #1": topdown-puzzle is authored content, not
@@ -22,12 +25,24 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { reduce } from "./reducer.js";
 import { resolveMove } from "./push.js";
+import { resolveTick } from "./tick.js";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const PACK_PATH = join(HERE, "..", "content", "pack.json");
 
 // Loaded once, synchronously, at module scope — see header comment.
 const PACK = JSON.parse(readFileSync(PACK_PATH, "utf8"));
+
+// PR2 (C4 design doc, orchestrator decision #8): small, legible canonical
+// HP numbers ("3 HP, 1 damage per contact... 3 hits ⇒ LOSE") instead of
+// porting legacy's inconsistent 20/100/10 tuning byte-for-byte.
+const PLAYER_MAX_HP = 3;
+
+// Legacy always seeds a fresh baddie's moveDir to 1 ("always start moving
+// right or down" — addBaddie, ~681). Not part of entities.mjs's shared
+// Actor template (a per-instance runtime value, same treatment as
+// moving_block's per-instance `facing` below), so it's attached here.
+const BADDIE_INITIAL_MOVE_DIR = 1;
 
 /** Resolve a map legend entry to a fresh (shallow-cloned) component bag:
  *  either an authored template entity's components (legendEntry.entity,
@@ -96,11 +111,17 @@ export function deriveWorldFromPack(pack, levelId) {
       if (legendEntry.facing) {
         components.Actor = { ...actor, facing: legendEntry.facing };
       }
+      if (actor.kind === "baddie") {
+        components.Actor = { ...actor, moveDir: BADDIE_INITIAL_MOVE_DIR };
+      }
 
       if (actor.kind === "player_start") {
         // Exactly one per level; the map marker becomes the ongoing
         // "player" kind (not the transient "player_start" spawn marker).
         components.Actor = { ...components.Actor, kind: "player", controlledBy: "player" };
+        // PR2 addition: the player needs a Health component for tick.js's
+        // contact-damage resolution + HP-derived LOSE (see shared/tick.js).
+        components.Health = { hp: PLAYER_MAX_HP, max: PLAYER_MAX_HP };
         initialEntities.push({ id: "entity:player", components });
         continue;
       }
@@ -136,6 +157,13 @@ export function validate(ctx, cmd) {
       if (Math.abs(dx) + Math.abs(dy) !== 1) return []; // garbage deltas silently ignored (golem-grid's own move convention)
       return resolveMove(state, world, dx, dy);
     }
+    case "tick":
+      // The fixed-step beat (design doc's "The fixed-step tick bridge").
+      // world.mapId is threaded through as resolveTick's `seed` param —
+      // the sanctioned named-channel path (orchestrator decision #4),
+      // unexercised by any of the six shipped levels' deterministic
+      // movers, reserved for a future nondeterministic one.
+      return resolveTick(state, world, world.mapId);
     default:
       return { deny: `The world does not know the verb "${verb}".` };
   }

@@ -1,0 +1,69 @@
+[
+ {
+  "t": "LEVEL_LOADED",
+  "seq": 1
+ },
+ {
+  "t": "TICK_ADVANCED",
+  "tick": 1,
+  "seq": 2
+ },
+ {
+  "t": "MOVED",
+  "id": "entity:moving_block@1,2",
+  "x": 2,
+  "y": 2,
+  "seq": 3
+ },
+ {
+  "t": "MOVED",
+  "id": "entity:baddie@3,3",
+  "x": 4,
+  "y": 3,
+  "moveDir": 1,
+  "seq": 4
+ },
+ {
+  "t": "TICK_ADVANCED",
+  "tick": 2,
+  "seq": 5
+ },
+ {
+  "t": "MOVED",
+  "id": "entity:moving_block@1,2",
+  "x": 3,
+  "y": 2,
+  "seq": 6
+ },
+ {
+  "t": "MOVED",
+  "id": "entity:baddie@3,3",
+  "x": 4,
+  "y": 3,
+  "moveDir": -1,
+  "seq": 7
+ },
+ {
+  "t": "MOVED",
+  "id": "entity:player",
+  "x": 1,
+  "y": 2,
+  "seq": 8
+ },
+ {
+  "t": "MOVED",
+  "id": "entity:player",
+  "x": 1,
+  "y": 3,
+  "seq": 9
+ },
+ {
+  "t": "COLLECTED",
+  "id": "entity:diamond@1,3",
+  "seq": 10
+ },
+ {
+  "t": "WIN",
+  "seq": 11
+ }
+]
