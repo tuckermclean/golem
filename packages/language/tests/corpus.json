@@ -1,0 +1,2235 @@
+[
+  {
+    "name": "direction x aliases",
+    "cases": [
+      {
+        "utterance": "north",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 0,
+            "dy": -1
+          }
+        }
+      },
+      {
+        "utterance": "n",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 0,
+            "dy": -1
+          }
+        }
+      },
+      {
+        "utterance": "↑",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 0,
+            "dy": -1
+          }
+        }
+      },
+      {
+        "utterance": "up",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 0,
+            "dy": -1
+          }
+        }
+      },
+      {
+        "utterance": "go north",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 0,
+            "dy": -1
+          }
+        }
+      },
+      {
+        "utterance": "walk north",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 0,
+            "dy": -1
+          }
+        }
+      },
+      {
+        "utterance": "head north",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 0,
+            "dy": -1
+          }
+        }
+      },
+      {
+        "utterance": "move north",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 0,
+            "dy": -1
+          }
+        }
+      },
+      {
+        "utterance": "run north",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 0,
+            "dy": -1
+          }
+        }
+      },
+      {
+        "utterance": "travel north",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 0,
+            "dy": -1
+          }
+        }
+      },
+      {
+        "utterance": "go up",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 0,
+            "dy": -1
+          }
+        }
+      },
+      {
+        "utterance": "south",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 0,
+            "dy": 1
+          }
+        }
+      },
+      {
+        "utterance": "s",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 0,
+            "dy": 1
+          }
+        }
+      },
+      {
+        "utterance": "↓",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 0,
+            "dy": 1
+          }
+        }
+      },
+      {
+        "utterance": "down",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 0,
+            "dy": 1
+          }
+        }
+      },
+      {
+        "utterance": "go south",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 0,
+            "dy": 1
+          }
+        }
+      },
+      {
+        "utterance": "walk south",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 0,
+            "dy": 1
+          }
+        }
+      },
+      {
+        "utterance": "head south",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 0,
+            "dy": 1
+          }
+        }
+      },
+      {
+        "utterance": "move south",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 0,
+            "dy": 1
+          }
+        }
+      },
+      {
+        "utterance": "run south",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 0,
+            "dy": 1
+          }
+        }
+      },
+      {
+        "utterance": "travel south",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 0,
+            "dy": 1
+          }
+        }
+      },
+      {
+        "utterance": "go down",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 0,
+            "dy": 1
+          }
+        }
+      },
+      {
+        "utterance": "east",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 1,
+            "dy": 0
+          }
+        }
+      },
+      {
+        "utterance": "e",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 1,
+            "dy": 0
+          }
+        }
+      },
+      {
+        "utterance": "→",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 1,
+            "dy": 0
+          }
+        }
+      },
+      {
+        "utterance": "right",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 1,
+            "dy": 0
+          }
+        }
+      },
+      {
+        "utterance": "go east",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 1,
+            "dy": 0
+          }
+        }
+      },
+      {
+        "utterance": "walk east",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 1,
+            "dy": 0
+          }
+        }
+      },
+      {
+        "utterance": "head east",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 1,
+            "dy": 0
+          }
+        }
+      },
+      {
+        "utterance": "move east",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 1,
+            "dy": 0
+          }
+        }
+      },
+      {
+        "utterance": "run east",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 1,
+            "dy": 0
+          }
+        }
+      },
+      {
+        "utterance": "travel east",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 1,
+            "dy": 0
+          }
+        }
+      },
+      {
+        "utterance": "go right",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 1,
+            "dy": 0
+          }
+        }
+      },
+      {
+        "utterance": "west",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": -1,
+            "dy": 0
+          }
+        }
+      },
+      {
+        "utterance": "w",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": -1,
+            "dy": 0
+          }
+        }
+      },
+      {
+        "utterance": "←",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": -1,
+            "dy": 0
+          }
+        }
+      },
+      {
+        "utterance": "left",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": -1,
+            "dy": 0
+          }
+        }
+      },
+      {
+        "utterance": "go west",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": -1,
+            "dy": 0
+          }
+        }
+      },
+      {
+        "utterance": "walk west",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": -1,
+            "dy": 0
+          }
+        }
+      },
+      {
+        "utterance": "head west",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": -1,
+            "dy": 0
+          }
+        }
+      },
+      {
+        "utterance": "move west",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": -1,
+            "dy": 0
+          }
+        }
+      },
+      {
+        "utterance": "run west",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": -1,
+            "dy": 0
+          }
+        }
+      },
+      {
+        "utterance": "travel west",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": -1,
+            "dy": 0
+          }
+        }
+      },
+      {
+        "utterance": "go left",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": -1,
+            "dy": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "take x phrasings x grounding",
+    "cases": [
+      {
+        "utterance": "take",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "take"
+          }
+        }
+      },
+      {
+        "utterance": "get",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "take"
+          }
+        }
+      },
+      {
+        "utterance": "grab",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "take"
+          }
+        }
+      },
+      {
+        "utterance": "pick up",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "take"
+          }
+        }
+      },
+      {
+        "utterance": "pick-up",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "take"
+          }
+        }
+      },
+      {
+        "utterance": "pickup",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "take"
+          }
+        }
+      },
+      {
+        "utterance": "snag",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "take"
+          }
+        }
+      },
+      {
+        "utterance": "take the lantern",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "take",
+            "item": "lantern"
+          }
+        }
+      },
+      {
+        "utterance": "get the lantern",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "take",
+            "item": "lantern"
+          }
+        }
+      },
+      {
+        "utterance": "grab the lantern",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "take",
+            "item": "lantern"
+          }
+        }
+      },
+      {
+        "utterance": "pick up the lantern",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "take",
+            "item": "lantern"
+          }
+        }
+      },
+      {
+        "utterance": "pick-up the lantern",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "take",
+            "item": "lantern"
+          }
+        }
+      },
+      {
+        "utterance": "pickup the lantern",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "take",
+            "item": "lantern"
+          }
+        }
+      },
+      {
+        "utterance": "snag the lantern",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "take",
+            "item": "lantern"
+          }
+        }
+      },
+      {
+        "utterance": "take lantern",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "take",
+            "item": "lantern"
+          }
+        }
+      },
+      {
+        "utterance": "grab lantern",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "take",
+            "item": "lantern"
+          }
+        }
+      },
+      {
+        "utterance": "take the lamp",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "take",
+            "item": "lantern"
+          }
+        }
+      },
+      {
+        "utterance": "snag the lamp",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "take",
+            "item": "lantern"
+          }
+        }
+      },
+      {
+        "utterance": "grab lamp",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "take",
+            "item": "lantern"
+          }
+        }
+      },
+      {
+        "utterance": "take the sword",
+        "useAffordances": true,
+        "expect": {
+          "ok": false,
+          "reason": "ambiguous",
+          "candidates": [
+            "sword-a",
+            "sword-b"
+          ]
+        }
+      },
+      {
+        "utterance": "take sword",
+        "useAffordances": true,
+        "expect": {
+          "ok": false,
+          "reason": "ambiguous",
+          "candidates": [
+            "sword-a",
+            "sword-b"
+          ]
+        }
+      },
+      {
+        "utterance": "get the sword",
+        "useAffordances": true,
+        "expect": {
+          "ok": false,
+          "reason": "ambiguous",
+          "candidates": [
+            "sword-a",
+            "sword-b"
+          ]
+        }
+      },
+      {
+        "utterance": "grab sword",
+        "useAffordances": true,
+        "expect": {
+          "ok": false,
+          "reason": "ambiguous",
+          "candidates": [
+            "sword-a",
+            "sword-b"
+          ]
+        }
+      },
+      {
+        "utterance": "take the gremlin",
+        "useAffordances": true,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "get the rock",
+        "useAffordances": true,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "grab nothing here",
+        "useAffordances": true,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "take the moon",
+        "useAffordances": true,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "snag the void",
+        "useAffordances": true,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "pick up the wall",
+        "useAffordances": true,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "take the lantern please",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "take",
+            "item": "lantern"
+          }
+        }
+      },
+      {
+        "utterance": "take that lantern over there",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "take",
+            "item": "lantern"
+          }
+        }
+      },
+      {
+        "utterance": "get me the lantern",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "take",
+            "item": "lantern"
+          }
+        }
+      },
+      {
+        "utterance": "grab the rusty sword",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "take",
+            "item": "sword-a"
+          }
+        }
+      },
+      {
+        "utterance": "take the silver sword",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "take",
+            "item": "sword-b"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "look/examine (client-local)",
+    "cases": [
+      {
+        "utterance": "look",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "look"
+          }
+        }
+      },
+      {
+        "utterance": "l",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "look"
+          }
+        }
+      },
+      {
+        "utterance": "x",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "look"
+          }
+        }
+      },
+      {
+        "utterance": "look at the sign",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "look",
+            "target": "sign"
+          }
+        }
+      },
+      {
+        "utterance": "look at sign",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "look",
+            "target": "sign"
+          }
+        }
+      },
+      {
+        "utterance": "examine the sign",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "look",
+            "target": "sign"
+          }
+        }
+      },
+      {
+        "utterance": "inspect the sign",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "look",
+            "target": "sign"
+          }
+        }
+      },
+      {
+        "utterance": "look at the door",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "look",
+            "target": "door"
+          }
+        }
+      },
+      {
+        "utterance": "examine door",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "look",
+            "target": "door"
+          }
+        }
+      },
+      {
+        "utterance": "inspect the door",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "look",
+            "target": "door"
+          }
+        }
+      },
+      {
+        "utterance": "look at aria",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "look",
+            "target": "aria"
+          }
+        }
+      },
+      {
+        "utterance": "look at bram",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "look",
+            "target": "bram"
+          }
+        }
+      },
+      {
+        "utterance": "examine bram",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "look",
+            "target": "bram"
+          }
+        }
+      },
+      {
+        "utterance": "look at the wall",
+        "useAffordances": true,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "examine nothing here",
+        "useAffordances": true,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "x lantern",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "look",
+            "target": "lantern"
+          }
+        }
+      },
+      {
+        "utterance": "look at the lantern",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "look",
+            "target": "lantern"
+          }
+        }
+      },
+      {
+        "utterance": "examine the lantern",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "look",
+            "target": "lantern"
+          }
+        }
+      },
+      {
+        "utterance": "inspect the inscription",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "look",
+            "target": "sign"
+          }
+        }
+      },
+      {
+        "utterance": "look at the lamp",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "look",
+            "target": "lantern"
+          }
+        }
+      },
+      {
+        "utterance": "look at nothing",
+        "useAffordances": true,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "examine the sword",
+        "useAffordances": true,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      }
+    ]
+  },
+  {
+    "name": "read",
+    "cases": [
+      {
+        "utterance": "read",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "read"
+          }
+        }
+      },
+      {
+        "utterance": "Read.",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "read"
+          }
+        }
+      },
+      {
+        "utterance": "read the sign",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "read"
+          }
+        }
+      },
+      {
+        "utterance": "read the inscription please",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "read"
+          }
+        }
+      },
+      {
+        "utterance": "read it now",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "read"
+          }
+        }
+      },
+      {
+        "utterance": "read stuff",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "read"
+          }
+        }
+      },
+      {
+        "utterance": "read the whole thing",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "read"
+          }
+        }
+      },
+      {
+        "utterance": "READ",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "read"
+          }
+        }
+      },
+      {
+        "utterance": "read the wall",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "read"
+          }
+        }
+      },
+      {
+        "utterance": "read carefully",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "read"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "say/chat (plain sentences, no false positives)",
+    "cases": [
+      {
+        "utterance": "hello everyone",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "anyone else stuck down here",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "this place gives me the creeps",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "i found a lantern earlier",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "nice weather for a delve",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "does anyone have a torch",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "brb checking my other tab",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "lol that mob almost got me",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "who else is playing",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "i think the north wall looks different",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "we should go that way soon",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "the lantern is glowing weird",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "sword fighting would be fun here",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "what a strange sign that was",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "is the door locked",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "can we take a break soon",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "honestly this maze is huge",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "seriously who designed this place",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "ugh i am lost again",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "great now what",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "cool find over there",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "thanks for the read earlier",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "yo is bram still around",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "hmm that door looks off",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "maybe we should look for another way",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      }
+    ]
+  },
+  {
+    "name": "party/whisper/emote x aliases",
+    "cases": [
+      {
+        "utterance": "party regroup",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "party",
+            "text": "regroup"
+          }
+        }
+      },
+      {
+        "utterance": "party need light",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "party",
+            "text": "need light"
+          }
+        }
+      },
+      {
+        "utterance": "party wait for me",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "party",
+            "text": "wait for me"
+          }
+        }
+      },
+      {
+        "utterance": "party at the stair",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "party",
+            "text": "at the stair"
+          }
+        }
+      },
+      {
+        "utterance": "party watch out",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "party",
+            "text": "watch out"
+          }
+        }
+      },
+      {
+        "utterance": "party good work",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "party",
+            "text": "good work"
+          }
+        }
+      },
+      {
+        "utterance": "whisper bram over here",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "whisper",
+            "to": "bram",
+            "text": "over here"
+          }
+        }
+      },
+      {
+        "utterance": "whisper aria wait up",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "whisper",
+            "to": "aria",
+            "text": "wait up"
+          }
+        }
+      },
+      {
+        "utterance": "tell bram meet me here",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "whisper",
+            "to": "bram",
+            "text": "meet me here"
+          }
+        }
+      },
+      {
+        "utterance": "tell aria hurry",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "whisper",
+            "to": "aria",
+            "text": "hurry"
+          }
+        }
+      },
+      {
+        "utterance": "whisper bram watch your back",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "whisper",
+            "to": "bram",
+            "text": "watch your back"
+          }
+        }
+      },
+      {
+        "utterance": "tell bram",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "whisper",
+            "to": "bram",
+            "text": ""
+          }
+        }
+      },
+      {
+        "utterance": "whisper",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "tell",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "emote waves",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "emote",
+            "text": "waves"
+          }
+        }
+      },
+      {
+        "utterance": "me waves",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "emote",
+            "text": "waves"
+          }
+        }
+      },
+      {
+        "utterance": "emote does a little dance",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "emote",
+            "text": "does a little dance"
+          }
+        }
+      },
+      {
+        "utterance": "me shrugs",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "emote",
+            "text": "shrugs"
+          }
+        }
+      },
+      {
+        "utterance": "emote bows deeply",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "emote",
+            "text": "bows deeply"
+          }
+        }
+      },
+      {
+        "utterance": "me looks around nervously",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "emote",
+            "text": "looks around nervously"
+          }
+        }
+      },
+      {
+        "utterance": "emote laughs",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "emote",
+            "text": "laughs"
+          }
+        }
+      },
+      {
+        "utterance": "me sighs",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "emote",
+            "text": "sighs"
+          }
+        }
+      },
+      {
+        "utterance": "chat hello there",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "say",
+            "text": "hello there"
+          }
+        }
+      },
+      {
+        "utterance": "shout look out",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "say",
+            "text": "look out"
+          }
+        }
+      },
+      {
+        "utterance": "say watch the light",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "say",
+            "text": "watch the light"
+          }
+        }
+      },
+      {
+        "utterance": "chat anyone home",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "say",
+            "text": "anyone home"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "negatives/gibberish",
+    "cases": [
+      {
+        "utterance": "",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "empty"
+        }
+      },
+      {
+        "utterance": "   ",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "empty"
+        }
+      },
+      {
+        "utterance": "asdkjfh",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "zzz qqq",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "blorp",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "xyzzy the frobnicate",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "go",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "walk",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "head",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "run",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "travel",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "borogove",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "asdf1234",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "flibbertigibbet",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "whisper",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "tell",
+        "useAffordances": false,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "take the gremlin",
+        "useAffordances": true,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "look at the moon",
+        "useAffordances": true,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "grab the nonexistent",
+        "useAffordances": true,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      },
+      {
+        "utterance": "examine the void",
+        "useAffordances": true,
+        "expect": {
+          "ok": false,
+          "reason": "unknown"
+        }
+      }
+    ]
+  },
+  {
+    "name": "punctuation/case/whitespace robustness",
+    "cases": [
+      {
+        "utterance": "Go   NORTH!",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 0,
+            "dy": -1
+          }
+        }
+      },
+      {
+        "utterance": "GO SOUTH",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 0,
+            "dy": 1
+          }
+        }
+      },
+      {
+        "utterance": "Walk East?",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 1,
+            "dy": 0
+          }
+        }
+      },
+      {
+        "utterance": "head West.",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": -1,
+            "dy": 0
+          }
+        }
+      },
+      {
+        "utterance": "  north  ",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 0,
+            "dy": -1
+          }
+        }
+      },
+      {
+        "utterance": "TAKE THE LANTERN",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "take",
+            "item": "lantern"
+          }
+        }
+      },
+      {
+        "utterance": "Take The Lantern!",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "take",
+            "item": "lantern"
+          }
+        }
+      },
+      {
+        "utterance": "look AT the SIGN?",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "look",
+            "target": "sign"
+          }
+        }
+      },
+      {
+        "utterance": "READ.",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "read"
+          }
+        }
+      },
+      {
+        "utterance": "READ",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "read"
+          }
+        }
+      },
+      {
+        "utterance": "  take   lantern  ",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "take",
+            "item": "lantern"
+          }
+        }
+      },
+      {
+        "utterance": "Look At The Door",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "look",
+            "target": "door"
+          }
+        }
+      },
+      {
+        "utterance": "PARTY regroup NOW",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "party",
+            "text": "regroup now"
+          }
+        }
+      },
+      {
+        "utterance": "Emote waves.",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "emote",
+            "text": "waves"
+          }
+        }
+      },
+      {
+        "utterance": "n?",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "move",
+            "dx": 0,
+            "dy": -1
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "multi-word verb aliases",
+    "cases": [
+      {
+        "utterance": "pick up the lantern",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "take",
+            "item": "lantern"
+          }
+        }
+      },
+      {
+        "utterance": "pick-up the lantern",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "take",
+            "item": "lantern"
+          }
+        }
+      },
+      {
+        "utterance": "pickup the lantern",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "take",
+            "item": "lantern"
+          }
+        }
+      },
+      {
+        "utterance": "pick up lantern",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "take",
+            "item": "lantern"
+          }
+        }
+      },
+      {
+        "utterance": "pick-up lamp",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "take",
+            "item": "lantern"
+          }
+        }
+      },
+      {
+        "utterance": "pickup lamp",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "take",
+            "item": "lantern"
+          }
+        }
+      },
+      {
+        "utterance": "look at the sign",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "look",
+            "target": "sign"
+          }
+        }
+      },
+      {
+        "utterance": "look at sign",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "look",
+            "target": "sign"
+          }
+        }
+      },
+      {
+        "utterance": "look at the door",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "look",
+            "target": "door"
+          }
+        }
+      },
+      {
+        "utterance": "look at aria",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "look",
+            "target": "aria"
+          }
+        }
+      },
+      {
+        "utterance": "look at bram",
+        "useAffordances": true,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "look",
+            "target": "bram"
+          }
+        }
+      },
+      {
+        "utterance": "pick up the sword",
+        "useAffordances": true,
+        "expect": {
+          "ok": false,
+          "reason": "ambiguous",
+          "candidates": [
+            "sword-a",
+            "sword-b"
+          ]
+        }
+      },
+      {
+        "utterance": "pick-up sword",
+        "useAffordances": true,
+        "expect": {
+          "ok": false,
+          "reason": "ambiguous",
+          "candidates": [
+            "sword-a",
+            "sword-b"
+          ]
+        }
+      },
+      {
+        "utterance": "look at",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "look"
+          }
+        }
+      },
+      {
+        "utterance": "pick up",
+        "useAffordances": false,
+        "expect": {
+          "ok": true,
+          "intent": {
+            "type": "take"
+          }
+        }
+      }
+    ]
+  }
+]
