@@ -1,0 +1,453 @@
+{
+  "hash": "d28e34fa1646c0f1a922f9d6d16dd1bc9497ab85c04fae59f005d6da8f9a2026",
+  "entities": {
+    "entity:wall": {
+      "id": "entity:wall",
+      "components": {
+        "Identity": {
+          "name": "Wall"
+        },
+        "Actor": {
+          "kind": "wall",
+          "solid": true,
+          "pushable": false
+        }
+      }
+    },
+    "entity:block": {
+      "id": "entity:block",
+      "components": {
+        "Identity": {
+          "name": "Block"
+        },
+        "Portable": {
+          "pushable": true
+        },
+        "Actor": {
+          "kind": "block",
+          "solid": true
+        }
+      }
+    },
+    "entity:diamond": {
+      "id": "entity:diamond",
+      "components": {
+        "Identity": {
+          "name": "Diamond"
+        },
+        "Portable": {
+          "pushable": true
+        },
+        "Actor": {
+          "kind": "diamond",
+          "collectible": true
+        }
+      }
+    },
+    "entity:player_start": {
+      "id": "entity:player_start",
+      "components": {
+        "Identity": {
+          "name": "Player"
+        },
+        "Actor": {
+          "kind": "player_start"
+        }
+      }
+    },
+    "entity:memory_hole": {
+      "id": "entity:memory_hole",
+      "components": {
+        "Identity": {
+          "name": "Memory Hole"
+        },
+        "Actor": {
+          "kind": "memory_hole",
+          "hazard": true
+        }
+      }
+    },
+    "entity:baddie_horizontal": {
+      "id": "entity:baddie_horizontal",
+      "components": {
+        "Identity": {
+          "name": "Baddie (horizontal)"
+        },
+        "Actor": {
+          "kind": "baddie",
+          "axis": "horizontal",
+          "hostile": true
+        }
+      }
+    },
+    "entity:baddie_vertical": {
+      "id": "entity:baddie_vertical",
+      "components": {
+        "Identity": {
+          "name": "Baddie (vertical)"
+        },
+        "Actor": {
+          "kind": "baddie",
+          "axis": "vertical",
+          "hostile": true
+        }
+      }
+    },
+    "entity:moving_block": {
+      "id": "entity:moving_block",
+      "components": {
+        "Identity": {
+          "name": "Moving Block"
+        },
+        "Portable": {
+          "pushable": true
+        },
+        "Actor": {
+          "kind": "moving_block",
+          "moves": true
+        }
+      }
+    }
+  },
+  "tables": {},
+  "maps": {
+    "map:tdp_001": {
+      "id": "map:tdp_001",
+      "rows": 21,
+      "cols": 10,
+      "cells": [
+        "##########",
+        "##########",
+        "#DDD#DDDD#",
+        "#DDD#DDDD#",
+        "#DBD#DDDD#",
+        "#D D#DD  #",
+        "##V##D   #",
+        "#   B    #",
+        "# #      #",
+        "#     M  #",
+        "#        #",
+        "#   @ B  #",
+        "#     B  #",
+        "#     B  #",
+        "#     B  #",
+        "#        #",
+        "#        #",
+        "M B    H #",
+        "#      DD#",
+        "#      DD#",
+        "#M########"
+      ],
+      "floor": " ",
+      "legend": {
+        "#": {
+          "entity": "entity:wall"
+        },
+        "D": {
+          "entity": "entity:diamond"
+        },
+        "B": {
+          "entity": "entity:block"
+        },
+        "V": {
+          "entity": "entity:baddie_vertical"
+        },
+        "M": {
+          "entity": "entity:memory_hole"
+        },
+        "@": {
+          "entity": "entity:player_start"
+        },
+        "H": {
+          "entity": "entity:baddie_horizontal"
+        }
+      }
+    },
+    "map:tdp_002": {
+      "id": "map:tdp_002",
+      "rows": 21,
+      "cols": 10,
+      "cells": [
+        "##########",
+        "##M#######",
+        "#DB MDDDD#",
+        "#    MDDD#",
+        "#   MDDDD#",
+        "#    MDDD#",
+        "#   MB  H#",
+        "#        #",
+        "#  V     #",
+        "#  B     #",
+        "#  MB  @ #",
+        "#   B    #",
+        "# V B    #",
+        "#        #",
+        "#        #",
+        "#   M ####",
+        "#       D#",
+        "#   #  DD#",
+        "#   # DDD#",
+        "#DB #DDDD#",
+        "##M#######"
+      ],
+      "floor": " ",
+      "legend": {
+        "#": {
+          "entity": "entity:wall"
+        },
+        "M": {
+          "entity": "entity:memory_hole"
+        },
+        "D": {
+          "entity": "entity:diamond"
+        },
+        "B": {
+          "entity": "entity:block"
+        },
+        "H": {
+          "entity": "entity:baddie_horizontal"
+        },
+        "V": {
+          "entity": "entity:baddie_vertical"
+        },
+        "@": {
+          "entity": "entity:player_start"
+        }
+      }
+    },
+    "map:tdp_003": {
+      "id": "map:tdp_003",
+      "rows": 21,
+      "cols": 10,
+      "cells": [
+        "##########",
+        "##########",
+        "MB     HD#",
+        "#D #######",
+        "#H      BM",
+        "####### D#",
+        "MB      H#",
+        "#D #######",
+        "#H      BM",
+        "####### D#",
+        "MB      H#",
+        "#D #######",
+        "#H      BM",
+        "####### D#",
+        "MB      H#",
+        "#D #######",
+        "#H      BM",
+        "####### D#",
+        "MB      H#",
+        "#D  @   D#",
+        "##########"
+      ],
+      "floor": " ",
+      "legend": {
+        "#": {
+          "entity": "entity:wall"
+        },
+        "M": {
+          "entity": "entity:memory_hole"
+        },
+        "B": {
+          "entity": "entity:block"
+        },
+        "H": {
+          "entity": "entity:baddie_horizontal"
+        },
+        "D": {
+          "entity": "entity:diamond"
+        },
+        "@": {
+          "entity": "entity:player_start"
+        }
+      }
+    },
+    "map:tdp_004": {
+      "id": "map:tdp_004",
+      "rows": 21,
+      "cols": 10,
+      "cells": [
+        "##########",
+        "##########",
+        "#DDDDD # #",
+        "#DDDD  #V#",
+        "#DDD    D#",
+        "#DD     B#",
+        "#D  # ##M#",
+        "# ##D #DD#",
+        "#  #     #",
+        "#        #",
+        "# HB HB H#",
+        "#     #  #",
+        "#     ## #",
+        "#  #     #",
+        "# ##   @ #",
+        "##DDB    #",
+        "##DD   V #",
+        "#D##    D#",
+        "#    # DD#",
+        "#  H BDDD#",
+        "##########"
+      ],
+      "floor": " ",
+      "legend": {
+        "#": {
+          "entity": "entity:wall"
+        },
+        "D": {
+          "entity": "entity:diamond"
+        },
+        "V": {
+          "entity": "entity:baddie_vertical"
+        },
+        "B": {
+          "entity": "entity:block"
+        },
+        "M": {
+          "entity": "entity:memory_hole"
+        },
+        "H": {
+          "entity": "entity:baddie_horizontal"
+        },
+        "@": {
+          "entity": "entity:player_start"
+        }
+      }
+    },
+    "map:tdp_005": {
+      "id": "map:tdp_005",
+      "rows": 21,
+      "cols": 10,
+      "cells": [
+        "##########",
+        "##########",
+        "#MDESSSBM#",
+        "#B#    #D#",
+        "#S      W#",
+        "#E      W#",
+        "#E      W#",
+        "#E  BB  W#",
+        "#E #D # W#",
+        "#E # V# W#",
+        "#B #  # B#",
+        "#E #V # W#",
+        "#E # D# W#",
+        "#E  BB  W#",
+        "#E      W#",
+        "#E      W#",
+        "#E      W#",
+        "#E      N#",
+        "#D# @  #B#",
+        "#MBNNNWDM#",
+        "##########"
+      ],
+      "floor": " ",
+      "legend": {
+        "#": {
+          "entity": "entity:wall"
+        },
+        "M": {
+          "entity": "entity:memory_hole"
+        },
+        "D": {
+          "entity": "entity:diamond"
+        },
+        "E": {
+          "entity": "entity:moving_block",
+          "facing": "E"
+        },
+        "S": {
+          "entity": "entity:moving_block",
+          "facing": "S"
+        },
+        "B": {
+          "entity": "entity:block"
+        },
+        "W": {
+          "entity": "entity:moving_block",
+          "facing": "W"
+        },
+        "V": {
+          "entity": "entity:baddie_vertical"
+        },
+        "N": {
+          "entity": "entity:moving_block",
+          "facing": "N"
+        },
+        "@": {
+          "entity": "entity:player_start"
+        }
+      }
+    },
+    "map:tdp_006": {
+      "id": "map:tdp_006",
+      "rows": 21,
+      "cols": 10,
+      "cells": [
+        "##########",
+        "##########",
+        "#MDWWWWWM#",
+        "#SH    VD#",
+        "#S #### N#",
+        "#S #BB# N#",
+        "#S #BB# N#",
+        "#S #BB# N#",
+        "#S #BB# N#",
+        "#S #### N#",
+        "#S DDDD N#",
+        "#S D@DD N#",
+        "#S #### N#",
+        "#S #BB# N#",
+        "#S #BB# N#",
+        "#S #BB# N#",
+        "#S #BB# N#",
+        "#S #### N#",
+        "#DV    HN#",
+        "#MEEEEEDM#",
+        "##########"
+      ],
+      "floor": " ",
+      "legend": {
+        "#": {
+          "entity": "entity:wall"
+        },
+        "M": {
+          "entity": "entity:memory_hole"
+        },
+        "D": {
+          "entity": "entity:diamond"
+        },
+        "W": {
+          "entity": "entity:moving_block",
+          "facing": "W"
+        },
+        "S": {
+          "entity": "entity:moving_block",
+          "facing": "S"
+        },
+        "H": {
+          "entity": "entity:baddie_horizontal"
+        },
+        "V": {
+          "entity": "entity:baddie_vertical"
+        },
+        "N": {
+          "entity": "entity:moving_block",
+          "facing": "N"
+        },
+        "B": {
+          "entity": "entity:block"
+        },
+        "@": {
+          "entity": "entity:player_start"
+        },
+        "E": {
+          "entity": "entity:moving_block",
+          "facing": "E"
+        }
+      }
+    }
+  }
+}
