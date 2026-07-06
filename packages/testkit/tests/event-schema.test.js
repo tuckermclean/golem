@@ -116,3 +116,21 @@ test("positive control: a well-formed drawer event (GOLD_TRANSFERRED) DOES valid
   const good = { t: "GOLD_TRANSFERRED", seq: 1, from: "player:p1", to: "player:p2", amount: 10 };
   assert.equal(validateEvent(good), true, JSON.stringify(validateEvent.errors));
 });
+
+// Phase-1 whole-phase review, K6 nit: NamespacedId's pattern
+// (^[a-z][a-z0-9_-]*:) accepted an empty local part and any trailing
+// suffix; it is now required + end-anchored (^[a-z][a-z0-9_-]*:[a-z0-9_-]+$).
+test("negative: NamespacedId with an empty local part ('player:') is rejected", () => {
+  const bad = { t: "GOLD_TRANSFERRED", seq: 1, from: "player:", to: "player:p2", amount: 10 };
+  assert.equal(validateEvent(bad), false);
+});
+
+test("negative: NamespacedId with a trailing/multi-colon suffix ('player:p1:x') is rejected", () => {
+  const bad = { t: "GOLD_TRANSFERRED", seq: 1, from: "player:p1:x", to: "player:p2", amount: 10 };
+  assert.equal(validateEvent(bad), false);
+});
+
+test("positive control: a NamespacedId with an underscore/hyphen local part still validates", () => {
+  const good = { t: "GOLD_TRANSFERRED", seq: 1, from: "region:zone_3", to: "player:p-2", amount: 1 };
+  assert.equal(validateEvent(good), true, JSON.stringify(validateEvent.errors));
+});
