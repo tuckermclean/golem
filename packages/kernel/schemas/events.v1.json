@@ -11,8 +11,8 @@
 
     "NamespacedId": {
       "type": "string",
-      "pattern": "^[a-z][a-z0-9_-]*:",
-      "$comment": "DELTA.md §0.3: 'IDs: string, namespaced (player:x, item:y, region:z)'. K6 brief controller decision #4: pattern ^[a-z][a-z0-9_-]*: applies where a NEW (drawer) field is an entity reference (player, loan, contract, oath, purse, ...). Deliberately NOT applied to existing golem-grid kinds' pid/to fields (see PidLegacy) — those fixtures carry bare ids like 'p1', which this pattern would reject; reality-first wins for shipped kinds."
+      "pattern": "^[a-z][a-z0-9_-]*:[a-z0-9_-]+$",
+      "$comment": "DELTA.md §0.3: 'IDs: string, namespaced (player:x, item:y, region:z)'. K6 brief controller decision #4: applies where a NEW (drawer) field is an entity reference (player, loan, contract, oath, purse, ...). Deliberately NOT applied to existing golem-grid kinds' pid/to fields (see PidLegacy) — those fixtures carry bare ids like 'p1', which this pattern would reject; reality-first wins for shipped kinds. Local part is REQUIRED and the pattern is end-anchored (`:[a-z0-9_-]+$`): an empty local part ('player:'), a trailing colon, or a multi-colon suffix is rejected — the prior `^[a-z][a-z0-9_-]*:` accepted all of those (Phase-1 whole-phase review, K6 nit). No frozen fixture uses a NamespacedId field, so tightening breaks nothing."
     },
 
     "PidLegacy": {
@@ -418,7 +418,11 @@
         "audience": { "$ref": "#/$defs/Audience" },
         "contract": { "$ref": "#/$defs/NamespacedId" },
         "outcome": { "type": "string", "minLength": 1 },
-        "payouts": { "type": "array", "items": { "$ref": "#/$defs/Payout" } }
+        "payouts": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Payout" },
+          "$comment": "No `minItems` here, UNLIKE PURSE_DISTRIBUTED's payouts (which requires >=1). This asymmetry is INTENTIONAL, not the oversight the Phase-1 review flagged as a nit: a market can settle to an outcome that no position backed, paying out to nobody (payouts: []) while the pool is consumed by the separate GOLD_BURNED rake (drawer/MARKET.md:13-14). A distributed purse always has at least one payee; a settled market need not."
+        }
       },
       "required": ["t", "seq", "contract", "outcome", "payouts"],
       "additionalProperties": false
