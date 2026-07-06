@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>topdown-puzzle — kernel port</title>
+</head>
+<body>
+
+<div id="topbar">
+  <span class="kv">level <b id="tb-level">—</b></span>
+  <span class="kv">hp <b id="tb-hp">—</b></span>
+  <span class="kv">diamonds <b id="tb-diamonds">—</b></span>
+  <span class="kv">tick <b id="tb-tick">0</b></span>
+</div>
+
+<div id="gridwrap">
+  <canvas id="cv"></canvas>
+  <div id="banner" class="banner"></div>
+</div>
+
+<div id="hint">arrows walk, push blocks, collect diamonds — avoid memory holes and baddies</div>
+
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>

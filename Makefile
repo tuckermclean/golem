@@ -1,6 +1,6 @@
 # Local mirrors of the pipeline stages. CI runs the same commands.
 
-.PHONY: test solve html dev data-batch train-local wasm infra-plan infra-apply lint-bans smoke-e2e
+.PHONY: test solve html dev data-batch train-local wasm infra-plan infra-apply lint-bans smoke-e2e html-tdp smoke-e2e-tdp
 
 test:
 	npm test
@@ -25,6 +25,14 @@ smoke-e2e: html
 	node games/golem-grid/tests/e2e/two-tab.smoke.mjs
 	@echo "visual-pinning Playwright smoke (deterministic canvas capture, same harness)"
 	node games/golem-grid/tests/e2e/visual.smoke.mjs capture games/golem-grid/tests/e2e/.visual-out
+
+html-tdp:
+	npm run build -w @golem-engine/topdown-puzzle
+	@echo "single-file deliverable: games/topdown-puzzle/dist/index.html (open from file://)"
+
+smoke-e2e-tdp: html-tdp
+	@echo "topdown-puzzle playability Playwright smoke (real Chromium, file://, NOT part of npm test/CI)"
+	node games/topdown-puzzle/tests/e2e/play.smoke.mjs
 
 data-batch:
 	node tools/harvest.js --seeds 100 --out work/controls.jsonl

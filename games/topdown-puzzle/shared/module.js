@@ -15,23 +15,33 @@
    pack, levelId), same non-negotiable determinism, different world-DNA
    source). It is SYNCHRONOUS per the kernel's own discipline
    (packages/kernel/src/index.ts: "no async in validate/reduce/observe/
-   affordances" extends to every GameModule): the compiled pack is
-   loaded once, at module scope, via a plain synchronous readFileSync —
-   deriveWorld itself never touches the filesystem. (PR3's browser
-   client has no node:fs; it will need its own synchronous JSON-loading
-   path — e.g. a bundler JSON import — which is out of PR1's scope.) ── */
-import { readFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
-import { dirname, join } from "node:path";
+   affordances" extends to every GameModule).
+
+   PR3 note (the "sync-vs-async problem"'s browser half): THIS FILE HAS
+   NO node:fs/node:path/node:url IMPORT, on purpose — src/host.js and
+   src/client.js (the browser client) import `validate`/`reduce`/`module`
+   straight from here, and a Vite client build externalizes those node:
+   builtins to an empty stub; even a single, never-called, lazily-placed
+   reference to one of their named exports (e.g. `dirname`) is enough
+   for Rollup to fail the build outright at bundle time, not just warn
+   (tried and confirmed while building PR3's dist/index.html) — the
+   import graph reaching this file has to be completely clean, not just
+   "the call is lazy". So the actual filesystem read
+   (readFileSync(content/pack.json)) now lives in the new, Node-only
+   games/topdown-puzzle/shared/pack-loader.js, which imports
+   `deriveWorldFromPack` FROM this file (never the reverse) and exposes
+   the Node-side `deriveWorld(levelId)` convenience wrapper + a full
+   `{deriveWorld,validate,reduce}` KernelCore for tests/fixture tooling.
+   The browser client (src/main.js) takes a third path that also never
+   touches this file's (nonexistent) fs code: it loads content/pack.json
+   via a plain bundler JSON import and calls `deriveWorldFromPack()`
+   directly. Three consumers, one pure derivation function, zero forked
+   logic — only the "how do I get the pack's bytes on this platform"
+   concern is platform-specific, and it now lives outside this file
+   entirely. */
 import { reduce } from "./reducer.js";
 import { resolveMove } from "./push.js";
 import { resolveTick } from "./tick.js";
-
-const HERE = dirname(fileURLToPath(import.meta.url));
-const PACK_PATH = join(HERE, "..", "content", "pack.json");
-
-// Loaded once, synchronously, at module scope — see header comment.
-const PACK = JSON.parse(readFileSync(PACK_PATH, "utf8"));
 
 // PR2 (C4 design doc, orchestrator decision #8): small, legible canonical
 // HP numbers ("3 HP, 1 damage per contact... 3 hits ⇒ LOSE") instead of
@@ -63,14 +73,17 @@ function resolveComponents(pack, legendEntry) {
 /** Pure: given an already-loaded RuntimePack and a level id, derive the
  *  immutable World — walls/memoryHoles as Sets (geometry, never part of
  *  mutable state, mirroring golem-grid's dun.grid), initialEntities with
- *  deterministic ids + a fresh GridPosition, and diamondTotal. Factored
- *  out of deriveWorld() so callers with their OWN already-compiled pack
- *  can derive a world too — the PR1 mechanism-proof synthetic level
- *  (games/topdown-puzzle/tests/fixtures/synthetic-level.mjs) is never
- *  part of the committed content/pack.json, so its fixture toolchain
- *  (packages/testkit/tools/gen-tdp-solution-fixtures.mjs /
- *  verify-tdp-solution-fixtures.mjs) calls this directly instead of the
- *  production deriveWorld(levelId) below. */
+ *  deterministic ids + a fresh GridPosition, and diamondTotal. This is
+ *  the ONE pure derivation function every consumer shares — the PR1
+ *  mechanism-proof synthetic level (games/topdown-puzzle/tests/fixtures/
+ *  synthetic-level.mjs) is never part of the committed content/pack.json,
+ *  so its fixture toolchain (packages/testkit/tools/
+ *  gen-tdp-solution-fixtures.mjs/verify-tdp-solution-fixtures.mjs) calls
+ *  this directly with its own compiled pack; the Node-side production
+ *  `deriveWorld(levelId)` convenience wrapper (shared/pack-loader.js)
+ *  and the browser client (src/main.js) both call this too, each
+ *  supplying the committed content/pack.json via their own
+ *  platform-appropriate loading path (see this file's header comment). */
 export function deriveWorldFromPack(pack, levelId) {
   const mapId = `map:tdp_${levelId}`;
   const map = pack.maps[mapId];
@@ -138,10 +151,6 @@ export function deriveWorldFromPack(pack, levelId) {
   return { mapId, rows: map.rows, cols: map.cols, walls, memoryHoles, initialEntities, diamondTotal };
 }
 
-export function deriveWorld(levelId) {
-  return deriveWorldFromPack(PACK, levelId);
-}
-
 export { reduce };
 
 export function validate(ctx, cmd) {
@@ -169,7 +178,13 @@ export function validate(ctx, cmd) {
   }
 }
 
-/** Satisfies @golem-engine/kernel's KernelCore<World, State, Cmd> shape
- *  (deriveWorld/validate/reduce) structurally — no runtime dependency on
- *  the kernel package, same posture as games/golem-grid/shared/module.js. */
-export const module = { deriveWorld, validate, reduce };
+/** A partial KernelCore — `{validate, reduce}`, deliberately WITHOUT
+ *  `deriveWorld` (see this file's header comment: deriveWorld's Node-side
+ *  filesystem read lives in shared/pack-loader.js, which is what
+ *  assembles the FULL `{deriveWorld,validate,reduce}` KernelCore for
+ *  Node consumers). This is enough for @golem-engine/kernel's replay(),
+ *  which only ever reads `.reduce` — src/client.js's browser-safe
+ *  consumer of this object. Satisfies KernelCore<World,State,Cmd>
+ *  structurally for the fields it carries, same posture as
+ *  games/golem-grid/shared/module.js's own `module` export. */
+export const module = { validate, reduce };
