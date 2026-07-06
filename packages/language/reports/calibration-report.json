@@ -1,0 +1,130 @@
+{
+  "generatedAt": "(deterministic build artifact — no wall-clock timestamp per DELTA §0.3)",
+  "weightsModule": "(committed, not retrained)",
+  "temperature": 0.035,
+  "labels": [
+    "move",
+    "take",
+    "look",
+    "read",
+    "say",
+    "party",
+    "whisper",
+    "emote",
+    "unknown"
+  ],
+  "train": {
+    "n": 1260,
+    "accuracy": 1
+  },
+  "calibration": {
+    "n": 270,
+    "accuracy": 1
+  },
+  "heldout": {
+    "n": 270,
+    "accuracy": 1,
+    "ece": 0,
+    "confusion": [
+      [
+        30,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        30,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        30,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        30,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        30,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        30,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        30,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        30,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        30
+      ]
+    ]
+  }
+}

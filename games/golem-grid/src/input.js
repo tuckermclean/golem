@@ -15,7 +15,7 @@
    keyboard the whole feature exists to avoid. ──────────────────────── */
 import { GW, GH } from "../shared/worldgen.js";
 import { isCoarsePointer } from "@golem-engine/clients";
-import { parse } from "@golem-engine/language";
+import { route } from "@golem-engine/language";
 import { computeAffordances, dispatchIntent } from "./language-adapter.js";
 
 const COARSE = isCoarsePointer();
@@ -41,14 +41,16 @@ export function createInput(S,deps){
     if(e.key!=="Enter")return;
     const raw=cmdEl.value.trim();cmdEl.value="";if(!raw)return;
     if(!raw.startsWith("/")){
-      /* L1: route plain-text chat through the tier-1 deterministic
-         parser first — natural commands ("go north", "grab the
-         lantern") resolve without ever touching the (nonexistent, at
-         this phase) decoder. unknown/ambiguous both still fall back to
+      /* L1+L2: route plain-text chat through @golem-engine/language's
+         route() — the tier-1 deterministic parser first ("go north",
+         "grab the lantern" resolve without ever touching a model), then
+         tier-2's intent classifier for anything L1 gives up on
+         ("could you head north", "can you get me the lantern"), per
+         the L2 design doc. unknown/ambiguous both still fall back to
          ordinary chat, exactly as every non-slash message did before
-         this wiring (design doc's orchestrator decisions #1/#4). */
+         this wiring (L1 design doc's orchestrator decisions #1/#4). */
       const me=getP(S.me);
-      const result=parse(raw,{affordances:me?computeAffordances(S,me.x,me.y):[]});
+      const result=route(raw,{affordances:me?computeAffordances(S,me.x,me.y):[]});
       if(result.ok)return dispatchIntent(result.intent,{sendCmd,lookAt,me});
       if(result.reason==="ambiguous")
         return feedLine("Did you mean: "+result.candidates.join(", ")+"?","sys");

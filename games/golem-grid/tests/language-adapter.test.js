@@ -1,24 +1,31 @@
-/* L1 chat-wiring proof: drives the REAL @golem-engine/language `parse`,
- * the REAL games/golem-grid/src/language-adapter.js (`computeAffordances`/
- * `dispatchIntent`), and the REAL host (src/host.js -> shared/module.js's
- * `validate` -> shared/reducer.js's `reduce`) against a real dungeon
- * (genDungeon("plagueis"), the same fixed seed reducer.test.js already
- * uses) — no reimplementation of any of those.
+/* L1+L2 chat-wiring proof: drives the REAL @golem-engine/language
+ * `route` (L1's parse() composed with L2's classifier, per the L2
+ * design doc), the REAL games/golem-grid/src/language-adapter.js
+ * (`computeAffordances`/`dispatchIntent`), and the REAL host
+ * (src/host.js -> shared/module.js's `validate` -> shared/reducer.js's
+ * `reduce`) against a real dungeon (genDungeon("plagueis"), the same
+ * fixed seed reducer.test.js already uses) — no reimplementation of any
+ * of those.
  *
  * `routeChatLine` below is a deliberately tiny mirror of src/input.js's
  * plain-text chat branch (`cmdEl`'s keydown handler) — the same shape as
  * games/topdown-puzzle/tests/e2e/touch.wiring.fallback.mjs reproduces
  * its one-line onDir wrapper verbatim rather than importing DOM-bound
- * code. This is a real `node --test` file (not an e2e/*.mjs script): it
- * needs no DOM/canvas/browser, so unlike the two-tab/visual Playwright
- * smokes it runs in this sandbox and is wired into golem-grid's own
- * `npm test` (and therefore root `npm test`) like any other unit test. */
+ * code. Updated from `parse` to `route` alongside input.js's own L2
+ * wiring (design doc: "the route() swap is transparent") — every case
+ * below is an L1 hit or an L1 "ambiguous", so route()'s answer is
+ * byte-identical to parse()'s; only a genuine L1 "unknown" would ever
+ * reach L2 here, and none of these fixtures produce one. This is a real
+ * `node --test` file (not an e2e/*.mjs script): it needs no DOM/canvas/
+ * browser, so unlike the two-tab/visual Playwright smokes it runs in
+ * this sandbox and is wired into golem-grid's own `npm test` (and
+ * therefore root `npm test`) like any other unit test. */
 import test from "node:test";
 import assert from "node:assert/strict";
 import { genDungeon } from "../shared/worldgen.js";
 import { createState, getP as rGetP, applyEvent } from "../shared/reducer.js";
 import { createHost } from "../src/host.js";
-import { parse } from "@golem-engine/language";
+import { route } from "@golem-engine/language";
 import { computeAffordances, dispatchIntent } from "../src/language-adapter.js";
 
 const dun = genDungeon("plagueis");
@@ -37,7 +44,7 @@ function moveTo(S, x, y) {
 function routeChatLine(raw, S, deps) {
   const { sendCmd, feedLine, lookAt } = deps;
   const me = rGetP(S.st, S.me);
-  const result = parse(raw, { affordances: me ? computeAffordances(S, me.x, me.y) : [] });
+  const result = route(raw, { affordances: me ? computeAffordances(S, me.x, me.y) : [] });
   if (result.ok) return dispatchIntent(result.intent, { sendCmd, lookAt, me });
   if (result.reason === "ambiguous")
     return feedLine("Did you mean: " + result.candidates.join(", ") + "?", "sys");
@@ -112,7 +119,7 @@ test("an ambiguous grounded noun surfaces a 'Did you mean' hint and is NOT sent 
   // own take grammar has no notion of "two items on one tile").
   moveTo(S, x, y);
   const affordances = [...computeAffordances(S, x, y), { verb: "take", target: "seal-b", name: "cracked seal" }];
-  const result = parse("take the cracked seal", { affordances });
+  const result = route("take the cracked seal", { affordances });
   assert.equal(result.ok, false);
   assert.equal(result.reason, "ambiguous");
   const h = makeHarness(S);

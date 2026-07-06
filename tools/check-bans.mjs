@@ -9,13 +9,22 @@
  * wasm/, additional package source roots), extend SCAN_ROOTS/SCAN_GLOBS
  * below rather than special-casing new packages — every packages/*\/src
  * and packages/*\/tools tree is in scope by construction.
- */
+ *
+ * L2 (2026-07-06 design, orchestrator decision #5): tools/lang/
+ * (gen_utterances.js/train_classifier.js) carries the exact same "no
+ * Math.random/Date.now" obligation — both are randomized processes
+ * (template slot selection, gibberish generation, train/calibration/
+ * heldout shuffling, minibatch order) that must draw every random value
+ * from @golem-engine/random's channel(...). It lives at the repo root,
+ * not under packages/, so it needs its own explicit scan root rather
+ * than falling out of the packages/*\/{src,tools} sweep above. */
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 
 const REPO_ROOT = new URL("..", import.meta.url).pathname;
 const PACKAGES_DIR = join(REPO_ROOT, "packages");
 const SCAN_SUBDIRS = ["src", "tools"];
+const EXTRA_ROOTS = [join(REPO_ROOT, "tools", "lang")];
 const SKIP_DIRS = new Set(["node_modules", "dist", "fixtures"]);
 const SOURCE_EXTENSIONS = new Set([".js", ".mjs", ".cjs", ".ts", ".mts", ".cts"]);
 
@@ -61,34 +70,40 @@ function isSourceFile(path) {
   return SOURCE_EXTENSIONS.has(path.slice(dot));
 }
 
+function scanDir(root, violations) {
+  try {
+    statSync(root);
+  } catch {
+    return; // dir doesn't exist; nothing to scan
+  }
+  for (const file of walk(root)) {
+    if (!isSourceFile(file)) continue;
+    const text = readFileSync(file, "utf8");
+    const lines = text.split("\n");
+    for (const ban of BANS) {
+      lines.forEach((line, i) => {
+        if (ban.pattern.test(line)) {
+          violations.push({
+            file: relative(REPO_ROOT, file),
+            line: i + 1,
+            rule: ban.name,
+            text: line.trim(),
+          });
+        }
+      });
+    }
+  }
+}
+
 function scan() {
   const violations = [];
   for (const pkg of listPackageRoots()) {
     for (const sub of SCAN_SUBDIRS) {
-      const root = join(PACKAGES_DIR, pkg, sub);
-      try {
-        statSync(root);
-      } catch {
-        continue; // package has no src/ or tools/ dir; nothing to scan
-      }
-      for (const file of walk(root)) {
-        if (!isSourceFile(file)) continue;
-        const text = readFileSync(file, "utf8");
-        const lines = text.split("\n");
-        for (const ban of BANS) {
-          lines.forEach((line, i) => {
-            if (ban.pattern.test(line)) {
-              violations.push({
-                file: relative(REPO_ROOT, file),
-                line: i + 1,
-                rule: ban.name,
-                text: line.trim(),
-              });
-            }
-          });
-        }
-      }
+      scanDir(join(PACKAGES_DIR, pkg, sub), violations);
     }
+  }
+  for (const root of EXTRA_ROOTS) {
+    scanDir(root, violations);
   }
   return violations;
 }
@@ -102,4 +117,6 @@ if (violations.length > 0) {
   console.error(`\n${violations.length} violation(s).`);
   process.exit(1);
 }
-console.log("check-bans: clean (no Math.random / eval( / new Function under packages/**/src, packages/**/tools).");
+console.log(
+  "check-bans: clean (no Math.random / eval( / new Function under packages/**/src, packages/**/tools, tools/lang).",
+);
