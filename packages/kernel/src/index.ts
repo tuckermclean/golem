@@ -13,6 +13,10 @@
 export type EventBase = { seq: number; t: string };
 export type Event<T extends object = Record<string, unknown>> = EventBase & T;
 
+/** DELTA C3's component vocabulary (Identity/GridPosition/.../Knowledge,
+ *  ComponentName, ComponentDataMap, Entity<C>) — see src/components.ts. */
+export * from "./components.js";
+
 /** A command is whatever shape a game module's `validate` accepts. The
  *  kernel does not constrain it beyond "some value" — each game module
  *  defines its own command vocabulary (golem-grid's is a raw IRC-style
