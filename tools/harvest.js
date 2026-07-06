@@ -129,23 +129,33 @@ function controlString(fields) {
     .join(" ");
 }
 
+// `id` is authored per-seed (e.g. "r0-look") and is NOT globally unique —
+// the same room index / control shape recurs across seeds. Prefix with
+// the seed so the emitted `id` is globally unique across the whole
+// controls.jsonl file; every downstream consumer that joins on `id`
+// alone (tools/generate.py's AgentAuthoredTeacher) is then automatically
+// correct for multi-seed batches instead of silently colliding.
+function uid(seed, id) {
+  return `s${seed}-${id}`;
+}
+
 function taskARow(seed, id, fields) {
-  return { task: "A", seed, id, control: controlString(fields), teacherSlot: "prose", groundTruth: {} };
+  return { task: "A", seed, id: uid(seed, id), control: controlString(fields), teacherSlot: "prose", groundTruth: {} };
 }
 function taskBRow(seed, id, fields, afford, cmd) {
   const control = controlString({ TASK: "B", ...fields, AFFORD: afford.length ? afford.join(";") : "none" });
-  return { task: "B", seed, id, control, teacherSlot: "utterance", groundTruth: { cmd } };
+  return { task: "B", seed, id: uid(seed, id), control, teacherSlot: "utterance", groundTruth: { cmd } };
 }
 function taskCRow(seed, id, fields, reason) {
   const control = controlString({ TASK: "C", ...fields, REASON: reason });
-  return { task: "C", seed, id, control, teacherSlot: "explanation", groundTruth: { reason } };
+  return { task: "C", seed, id: uid(seed, id), control, teacherSlot: "explanation", groundTruth: { reason } };
 }
 function taskDRow(seed, id, fields) {
   const control = controlString({ TASK: "D", ...fields });
   return {
     task: "D",
     seed,
-    id,
+    id: uid(seed, id),
     control,
     teacherSlot: "reply",
     groundTruth: { doesntKnow: fields.DOESNT_KNOW === "none" ? [] : fields.DOESNT_KNOW.split("+") },
@@ -153,11 +163,11 @@ function taskDRow(seed, id, fields) {
 }
 function taskERow(seed, id, fields, afford, cmds) {
   const control = controlString({ TASK: "E", ...fields, AFFORD: afford.length ? afford.join(";") : "none" });
-  return { task: "E", seed, id, control, teacherSlot: "utterance", groundTruth: { cmds } };
+  return { task: "E", seed, id: uid(seed, id), control, teacherSlot: "utterance", groundTruth: { cmds } };
 }
 function taskFRow(seed, id, fields, afford, referent) {
   const control = controlString({ TASK: "F", ...fields, AFFORD: afford.join(";") });
-  return { task: "F", seed, id, control, teacherSlot: "utterance", groundTruth: { referent } };
+  return { task: "F", seed, id: uid(seed, id), control, teacherSlot: "utterance", groundTruth: { referent } };
 }
 
 // ── Per-seed harvesting ────────────────────────────────────────────────
