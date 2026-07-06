@@ -1,0 +1,16 @@
+{
+  "name": "duplicate-entity-id",
+  "version": 1,
+  "entities": [
+    {
+      "id": "entity:door_golem",
+      "components": { "Identity": { "name": "Door Golem" } }
+    },
+    {
+      "id": "entity:door_golem",
+      "components": { "Identity": { "name": "Door Golem (again)" } }
+    }
+  ],
+  "tables": [],
+  "maps": []
+}

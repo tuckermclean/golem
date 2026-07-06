@@ -1,0 +1,8 @@
+{
+  "name": "additional-properties-violation",
+  "version": 1,
+  "entities": [],
+  "tables": [],
+  "maps": [],
+  "extra": "this top-level field is not part of pack.v1.json"
+}

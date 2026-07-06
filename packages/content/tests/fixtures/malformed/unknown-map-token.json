@@ -1,0 +1,16 @@
+{
+  "name": "unknown-map-token",
+  "version": 1,
+  "entities": [],
+  "tables": [],
+  "maps": [
+    {
+      "id": "map:guild_hall_entry",
+      "floor": ".",
+      "legend": {
+        "#": { "components": { "Identity": { "name": "wall" } } }
+      },
+      "cells": ["###", "#X#", "###"]
+    }
+  ]
+}

@@ -1,0 +1,140 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://golem-engine/packages/content/schemas/pack.v1.json",
+  "$comment": "C1 — content-pack source schema v1. Version is IN THE FILENAME (pack.v1.json); there is no in-body version field, matching packages/kernel/schemas/events.v1.json's convention exactly. A source pack is one already-parsed JS value (compile() does no file/YAML IO — see the C1 design doc, Open Questions #6): { name, version, entities[], tables[], maps[] }. name/version are authoring metadata, not hashed (see src/hash.ts). Every id is namespaced per DELTA §0.3 (entity:x, table:y, map:z). Component data (EntitySource.components, TableSource.rows, MapLegendEntrySource.components) is DELIBERATELY generic JsonValue: C1 validates structurally (well-formed JSON, resolved $refs) but not against C3's (not-yet-defined) per-component schemas — orchestrator decision #4 on the C1 design doc. This means conditions (ConditionNode) that live inside component data are NOT reachable from this schema's own $ref graph (there is no Lock/Interactable awareness here); the closed-oneOf 'no dynamic code path' proof for those in-component conditions is instead enforced by src/conditions.ts's hydrateConditions() at compile time, re-validating any object it recognizes (by shape: exactly one own key in {all,any,not,fact,cmp}) against this schema's own #/$defs/ConditionNode fragment. See src/conditions.ts for the full rationale.",
+
+  "$defs": {
+    "EntityId": { "type": "string", "pattern": "^entity:[a-z][a-z0-9_-]*$" },
+    "TableId": { "type": "string", "pattern": "^table:[a-z][a-z0-9_-]*$" },
+    "MapId": { "type": "string", "pattern": "^map:[a-z][a-z0-9_-]*$" },
+
+    "ConditionNode": {
+      "$comment": "THE closed set. Exactly these 5 shapes, nothing else — the structural half of the 'no dynamic code path' proof. There is no escape-hatch key name (no 'expr', no 'js', no 'code') anywhere in this grammar: adding a 6th shape is the only way to add an operator, and doing so requires editing this file.",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": { "all": { "type": "array", "items": { "$ref": "#/$defs/ConditionNode" }, "minItems": 1 } },
+          "required": ["all"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": { "any": { "type": "array", "items": { "$ref": "#/$defs/ConditionNode" }, "minItems": 1 } },
+          "required": ["any"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": { "not": { "$ref": "#/$defs/ConditionNode" } },
+          "required": ["not"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": { "fact": { "type": "string", "minLength": 1 } },
+          "required": ["fact"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "cmp": {
+              "type": "object",
+              "properties": {
+                "op": { "enum": ["eq", "neq", "lt", "lte", "gt", "gte"] },
+                "fact": { "type": "string", "minLength": 1 },
+                "value": { "type": ["string", "number", "boolean"] }
+              },
+              "required": ["op", "fact", "value"],
+              "additionalProperties": false
+            }
+          },
+          "required": ["cmp"],
+          "additionalProperties": false
+        }
+      ]
+    },
+
+    "JsonValue": {
+      "$comment": "Recursive any-JSON-value schema, used for component/table-row/map-legend-component data C1 does not otherwise constrain (see the file-level $comment above for why).",
+      "anyOf": [
+        { "type": "null" },
+        { "type": "boolean" },
+        { "type": "number" },
+        { "type": "string" },
+        { "type": "array", "items": { "$ref": "#/$defs/JsonValue" } },
+        { "type": "object", "additionalProperties": { "$ref": "#/$defs/JsonValue" } }
+      ]
+    },
+
+    "ComponentBag": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/JsonValue" }
+    },
+
+    "EntitySource": {
+      "type": "object",
+      "properties": {
+        "id": { "$ref": "#/$defs/EntityId" },
+        "components": { "$ref": "#/$defs/ComponentBag" }
+      },
+      "required": ["id", "components"],
+      "additionalProperties": false
+    },
+
+    "TableSource": {
+      "type": "object",
+      "properties": {
+        "id": { "$ref": "#/$defs/TableId" },
+        "rows": { "type": "array", "items": { "$ref": "#/$defs/JsonValue" } }
+      },
+      "required": ["id", "rows"],
+      "additionalProperties": false
+    },
+
+    "Direction": { "enum": ["N", "S", "E", "W"] },
+
+    "MapLegendEntrySource": {
+      "$comment": "Either reference an authored template entity, or an inline component bag, or both fields absent (schema allows either/neither/both — see the C1 design doc's Open Q #2 note on why this is left loose rather than requiring exactly-one).",
+      "type": "object",
+      "properties": {
+        "entity": { "$ref": "#/$defs/EntityId" },
+        "components": { "$ref": "#/$defs/ComponentBag" },
+        "facing": { "$ref": "#/$defs/Direction" }
+      },
+      "additionalProperties": false
+    },
+
+    "MapSource": {
+      "type": "object",
+      "properties": {
+        "id": { "$ref": "#/$defs/MapId" },
+        "floor": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1,
+          "$comment": "Single reserved 'empty' legend token per map (design Open Q #7, accepted as-is). Single-character, matching every topdown-puzzle ASCII vocabulary token (# B D @ H V M E/W/N/S) confirmed by games/topdown-puzzle/legacy/src/scenes/KyeScene.js."
+        },
+        "legend": {
+          "type": "object",
+          "propertyNames": { "minLength": 1, "maxLength": 1 },
+          "additionalProperties": { "$ref": "#/$defs/MapLegendEntrySource" }
+        },
+        "cells": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["id", "floor", "legend", "cells"],
+      "additionalProperties": false
+    }
+  },
+
+  "type": "object",
+  "properties": {
+    "name": { "type": "string" },
+    "version": { "type": "integer", "minimum": 1 },
+    "entities": { "type": "array", "items": { "$ref": "#/$defs/EntitySource" } },
+    "tables": { "type": "array", "items": { "$ref": "#/$defs/TableSource" } },
+    "maps": { "type": "array", "items": { "$ref": "#/$defs/MapSource" } }
+  },
+  "required": ["name", "version", "entities", "tables", "maps"],
+  "additionalProperties": false
+}
