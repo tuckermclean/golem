@@ -56,11 +56,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # L3's task B/E/F validators (tools/validate.py) ground commands
+      # through the REAL L1 parser via tools/lang/parse-cli.mjs — so the
+      # validator job needs Node + a built @golem-engine/language dist
+      # (npm ci runs each workspace's `prepare`), not just Python.
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
       - run: python -m pip install pytest
-      - name: grounding validator unit tests
-        run: python -m pytest tools/test_validate.py -q
+      - name: grounding validator unit tests (task A + L3 tasks A–F)
+        run: python -m pytest tools/test_validate.py tools/test_l3.py -q
 
   build:
     runs-on: ubuntu-latest

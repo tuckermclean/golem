@@ -17,14 +17,29 @@
  * heldout shuffling, minibatch order) that must draw every random value
  * from @golem-engine/random's channel(...). It lives at the repo root,
  * not under packages/, so it needs its own explicit scan root rather
- * than falling out of the packages/*\/{src,tools} sweep above. */
+ * than falling out of the packages/*\/{src,tools} sweep above.
+ *
+ * L3 (2026-07-06 design, orchestrator decision #10): the model-data
+ * tools (tools/harvest.js, tools/stub_teacher.js, tools/lang/
+ * parse-cli.mjs) carry the same obligation — harvest.js walks worldgen
+ * across thousands of seeds and must be reproducible byte-for-byte, so
+ * EXTRA_ROOTS is widened from tools/lang/ to the whole tools/ root
+ * (tools/lang/ is a subdirectory of it, so this is a superset, not a
+ * behavior change for L2's existing files). */
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const REPO_ROOT = new URL("..", import.meta.url).pathname;
 const PACKAGES_DIR = join(REPO_ROOT, "packages");
 const SCAN_SUBDIRS = ["src", "tools"];
-const EXTRA_ROOTS = [join(REPO_ROOT, "tools", "lang")];
+const EXTRA_ROOTS = [join(REPO_ROOT, "tools")];
+// This script itself necessarily mentions the ban patterns literally (in
+// comments, the BANS table, and this very message) now that EXTRA_ROOTS
+// widened to the whole tools/ root (L3 decision #10) — it would
+// otherwise flag itself. Not app code; excluded by construction, not by
+// a documentation dodge.
+const SELF_PATH = fileURLToPath(import.meta.url);
 const SKIP_DIRS = new Set(["node_modules", "dist", "fixtures"]);
 const SOURCE_EXTENSIONS = new Set([".js", ".mjs", ".cjs", ".ts", ".mts", ".cts"]);
 
@@ -78,6 +93,7 @@ function scanDir(root, violations) {
   }
   for (const file of walk(root)) {
     if (!isSourceFile(file)) continue;
+    if (file === SELF_PATH) continue;
     const text = readFileSync(file, "utf8");
     const lines = text.split("\n");
     for (const ban of BANS) {
@@ -118,5 +134,5 @@ if (violations.length > 0) {
   process.exit(1);
 }
 console.log(
-  "check-bans: clean (no Math.random / eval( / new Function under packages/**/src, packages/**/tools, tools/lang).",
+  "check-bans: clean (no Math.random / eval( / new Function under packages/**/src, packages/**/tools, tools/**).",
 );
