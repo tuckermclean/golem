@@ -417,3 +417,31 @@ export function generateFloor(seed, floorNum, pinnedSpecs = [], opts = {}) {
     props,
   };
 }
+
+/* ── S3 PR3: deterministic, JSON-stable serialization of a generated
+   floor — mirrors games/golem-grid/shared/worldgen.js's
+   `serializeDungeon` exactly (same shape of transform, same reason):
+   golden-fixture tests need `JSON.stringify(serializeFloor(...))` to be
+   byte-identical across runs and across processes. The only
+   non-JSON-native field `generateFloor` returns is `walls` (a Set,
+   whose iteration order is insertion order and therefore NOT a stable
+   serialization key) — sorted to an array here. Every other field is
+   already a plain array/object built in deterministic generation order,
+   so it passes through unchanged (arrays are not re-sorted — order IS
+   the signal, same as golem-grid's `rooms`/`dist`). */
+export function serializeFloor(floor) {
+  return {
+    gridW: floor.gridW,
+    gridH: floor.gridH,
+    walls: [...floor.walls].sort(),
+    spawn: floor.spawn,
+    stairsAt: floor.stairsAt,
+    rooms: floor.rooms,
+    pinnedRooms: floor.pinnedRooms,
+    enemies: floor.enemies,
+    pickups: floor.pickups,
+    puzzle: floor.puzzle,
+    boss: floor.boss,
+    props: floor.props,
+  };
+}
