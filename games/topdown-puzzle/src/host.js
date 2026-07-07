@@ -20,7 +20,7 @@ import { validate } from "../shared/module.js";
 export const TICK_MS = 200;
 
 export function createHost(S, hooks) {
-  const { onCommit, onDenyLocal } = hooks;
+  const { onCommit, onDenyLocal, onCmd } = hooks;
 
   function hostCommit(ev) {
     ev.seq = S.st.seq + 1;
@@ -35,6 +35,12 @@ export function createHost(S, hooks) {
   function hostCmd(from, cmd) {
     const r = validate({ state: S.st, world: S.world, from }, cmd);
     if (!Array.isArray(r)) return hostDeny(r.deny);
+    // Record the LEGAL command stream in order (moves + the clock's ticks
+    // alike, since both flow through here) BEFORE it commits — this is the
+    // solution-log recording seam (src/main.js): a denied move produced no
+    // events and is a deterministic no-op on replay, so it is skipped, and
+    // the recorded command list replays bit-identically by construction.
+    if (onCmd) onCmd(cmd);
     for (const ev of r) hostCommit(ev);
   }
 

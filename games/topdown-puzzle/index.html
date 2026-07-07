@@ -8,7 +8,7 @@
 <body>
 
 <div id="topbar">
-  <span class="kv">level <b id="tb-level">—</b></span>
+  <span class="kv">level <select id="tb-level-select" aria-label="level"></select></span>
   <span class="kv">hp <b id="tb-hp">—</b></span>
   <span class="kv">diamonds <b id="tb-diamonds">—</b></span>
   <span class="kv">tick <b id="tb-tick">0</b></span>
@@ -20,6 +20,19 @@
 </div>
 
 <div id="hint">arrows walk, push blocks, collect diamonds — avoid memory holes and baddies</div>
+
+<!-- Solution recorder panel (C4 PR4): revealed on game over. On a WIN it
+     holds the exact command sequence (moves + ticks) that solves the level,
+     ready to copy/download into the fixture toolchain. -->
+<div id="solution-panel" hidden>
+  <div id="sol-outcome"></div>
+  <textarea id="sol-text" readonly rows="4" spellcheck="false"></textarea>
+  <div id="sol-actions">
+    <button id="sol-copy" type="button">Copy solution</button>
+    <button id="sol-download" type="button">Download .moves.json</button>
+    <button id="sol-retry" type="button">Retry level</button>
+  </div>
+</div>
 
 <script type="module" src="/src/main.js"></script>
 </body>
