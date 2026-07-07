@@ -661,8 +661,13 @@ export function validate(ctx, cmd) {
       // tests (tests/helpers/build-state.mjs's makeWorld) — see
       // deriveWorldFromPack's own header comment.
       const pickup = world.pickupAt && world.pickupAt.get(`${nx},${ny}`);
-      if (pickup) {
-        events.push({ t: "COLLECTED", kind: pickup.kind, amount: pickup.amount });
+      // Consume-once: skip a pickup whose tile has already been taken this
+      // floor (adversarial-review find — the pickup tile can't record
+      // consumption in the seed-derived World, so `run.collectedTiles`
+      // does, and the COLLECTED event carries `x,y` so the reducer can mark
+      // it). Without this, stepping off and back on re-collected it.
+      if (pickup && !(state.run.collectedTiles || []).includes(`${nx},${ny}`)) {
+        events.push({ t: "COLLECTED", kind: pickup.kind, amount: pickup.amount, x: nx, y: ny });
       }
 
       // The traps-seal resolution (docs/superpowers/specs/2026-07-07-

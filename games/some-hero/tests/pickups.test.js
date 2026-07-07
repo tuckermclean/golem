@@ -23,7 +23,7 @@ test("moving onto a gold tile appends COLLECTED and credits character.gold", () 
   const state = floorEnteredState(world);
 
   const result = validate({ state, world }, "move 1 0");
-  assert.deepEqual(result, [{ t: "MOVED", x: 1, y: 0 }, { t: "COLLECTED", kind: "gold", amount: 5 }]);
+  assert.deepEqual(result, [{ t: "MOVED", x: 1, y: 0 }, { t: "COLLECTED", kind: "gold", amount: 5, x: 1, y: 0 }]);
 
   const next = commit(state, world, result);
   assert.equal(next.character.gold, 5);
@@ -36,7 +36,7 @@ test("moving onto a potion tile credits character.potions", () => {
   const state = floorEnteredState(world);
 
   const result = validate({ state, world }, "move 1 0");
-  assert.deepEqual(result, [{ t: "MOVED", x: 1, y: 0 }, { t: "COLLECTED", kind: "potion", amount: 1 }]);
+  assert.deepEqual(result, [{ t: "MOVED", x: 1, y: 0 }, { t: "COLLECTED", kind: "potion", amount: 1, x: 1, y: 0 }]);
 
   const next = commit(state, world, result);
   assert.equal(next.character.potions, 1);
@@ -67,6 +67,25 @@ test("gold/potions accumulate across multiple pickups", () => {
   assert.equal(state.character.gold, 5);
   state = commit(state, world, validate({ state, world }, "move 1 0"));
   assert.equal(state.character.gold, 8);
+});
+
+test("a pickup is consumed once: stepping off and back onto the tile does NOT re-collect (adversarial-review find)", () => {
+  const world = makeWorld({ rows: 3, cols: 3, spawn: { x: 0, y: 0 }, pickups: [[1, 0, "gold", 5]] });
+  let state = floorEnteredState(world);
+
+  // First step onto (1,0): collected, gold 0 -> 5, tile recorded.
+  let result = validate({ state, world }, "move 1 0");
+  assert.deepEqual(result.map((e) => e.t), ["MOVED", "COLLECTED"]);
+  state = commit(state, world, result);
+  assert.equal(state.character.gold, 5);
+  assert.deepEqual(state.run.collectedTiles, ["1,0"]);
+
+  // Step back to (0,0), then back onto (1,0): NO second COLLECTED.
+  state = commit(state, world, validate({ state, world }, "move -1 0"));
+  result = validate({ state, world }, "move 1 0");
+  assert.deepEqual(result.map((e) => e.t), ["MOVED"], "the already-taken tile yields no COLLECTED");
+  state = commit(state, world, result);
+  assert.equal(state.character.gold, 5, "gold must not be farmed by pacing back and forth");
 });
 
 test("moving onto a plain floor tile with no pickup: only MOVED, no COLLECTED", () => {
