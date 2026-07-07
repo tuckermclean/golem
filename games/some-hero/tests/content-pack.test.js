@@ -4,7 +4,13 @@
    PR1 inventory (docs/superpowers/specs/
    2026-07-07-s1-content-extraction-design.md — "Inventory" / "PR
    decomposition"). Structural only, per PR1 scope: no content-review
-   (PR2) or hash-stability/no-legacy-import (PR3) assertions here. */
+   (PR2) or hash-stability/no-legacy-import (PR3) assertions here.
+
+   One PR1 placeholder assertion ("tables are empty this PR (PR2's
+   job)") is updated in PR2 (this change) now that content/tables.mjs
+   populates them — see games/some-hero/tests/content-review.test.js
+   for PR2's actual content-review checklist (every table === the live
+   legacy constant); this file stays structural/count-only. */
 
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -54,10 +60,29 @@ test("exactly one map is compiled: map:guild_hall", () => {
   assert.deepEqual(mapIds, ["map:guild_hall"]);
 });
 
-test("tables are empty this PR (PR2's job)", () => {
+test("tables are populated (PR2): 16 tables compiled, matching content/tables.mjs's TABLE_DEFS ids", () => {
   const result = compileContentPack();
   assert.equal(result.ok, true);
-  assert.deepEqual(Object.keys(result.pack.tables), []);
+  const tableIds = Object.keys(result.pack.tables).sort();
+  assert.equal(tableIds.length, 16);
+  assert.deepEqual(tableIds, [
+    "table:door_golem_approval_lines",
+    "table:door_golem_credential_lines",
+    "table:door_golem_entry_lines",
+    "table:floors_descent_lines",
+    "table:ledger_cause_reports_consultant",
+    "table:ledger_cause_reports_mailbat",
+    "table:ledger_cause_reports_skeleton",
+    "table:ledger_cause_reports_unknown",
+    "table:ledger_grade_remarks",
+    "table:ledger_house_style",
+    "table:ledger_loot_lines",
+    "table:ledger_misc",
+    "table:riddle_door_sighs",
+    "table:riddle_questions",
+    "table:riddle_shame_options",
+    "table:seal_messages",
+  ]);
 });
 
 test("the Door Golem's Lock gates on the three credential facts via 'all'", () => {

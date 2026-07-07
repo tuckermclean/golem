@@ -1,5 +1,5 @@
 {
-  "hash": "12c52055a463c9923b1be6b3ab7081562fccf0efc72b0eb6f7d789ee4446ba8a",
+  "hash": "c85d0a5095884c149fb54c9002a5683bb1383602f314d20f561d47e60ef29766",
   "entities": {
     "entity:door_golem": {
       "id": "entity:door_golem",
@@ -155,7 +155,245 @@
       }
     }
   },
-  "tables": {},
+  "tables": {
+    "table:ledger_house_style": {
+      "id": "table:ledger_house_style",
+      "rows": [
+        {
+          "word": "original",
+          "replacement": "origenal"
+        },
+        {
+          "word": "definitely",
+          "replacement": "definately"
+        },
+        {
+          "word": "victorious",
+          "replacement": "victoreous"
+        },
+        {
+          "word": "nemesis",
+          "replacement": "nemisis"
+        }
+      ]
+    },
+    "table:ledger_cause_reports_skeleton": {
+      "id": "table:ledger_cause_reports_skeleton",
+      "rows": [
+        "Cause of death: skeleton. Contributing factor: hubris. Recommended action: less hubris.",
+        "Deceased was outperformed by a member of Local 206. The union has filed this under wins.",
+        "Cause of death: skeleton. He was on break. He clocked back in for you."
+      ]
+    },
+    "table:ledger_cause_reports_mailbat": {
+      "id": "table:ledger_cause_reports_mailbat",
+      "rows": [
+        "Cause of death: mailbat. The memo was marked URGENT. So, it turns out, was the mailbat.",
+        "Employee failed to sign for a delivery. Delivery insisted.",
+        "Cause of death: mailbat. Return to sender was not an option. You were the address."
+      ]
+    },
+    "table:ledger_cause_reports_consultant": {
+      "id": "table:ledger_cause_reports_consultant",
+      "rows": [
+        "Cause of death: consultant. Walls are for employees. It is not an employee. It billed for the hour anyway.",
+        "Employee was restructured. The consultant has identified further efficiencies.",
+        "Cause of death: consultant. Invoice attached. The invoice is also attached to you."
+      ]
+    },
+    "table:ledger_cause_reports_unknown": {
+      "id": "table:ledger_cause_reports_unknown",
+      "rows": [
+        "Cause of death: unclear. The form does not have a box for this. We made a box. It says \"?\".",
+        "Employee died of causes. Investigation ongoing. (It is not ongoing.)",
+        "Cause of death: the Downstairs. Broadly."
+      ]
+    },
+    "table:ledger_grade_remarks": {
+      "id": "table:ledger_grade_remarks",
+      "rows": [
+        {
+          "grade": "F",
+          "remark": "The Ledger is not angry. The Ledger is documenting."
+        },
+        {
+          "grade": "D",
+          "remark": "The Ledger has written this page in pencil, out of mercy."
+        },
+        {
+          "grade": "C",
+          "remark": "Our hero strode boldly into the— FINE. Walked. The grade stands."
+        },
+        {
+          "grade": "B",
+          "remark": "Adequate. The king would be proud, which should worry you."
+        },
+        {
+          "grade": "A",
+          "remark": "The Ledger is prepared to call this heroism, with reservations."
+        },
+        {
+          "grade": "S",
+          "remark": "The Ledger has used its BEST pen."
+        }
+      ]
+    },
+    "table:ledger_loot_lines": {
+      "id": "table:ledger_loot_lines",
+      "rows": [
+        {
+          "kind": "sword",
+          "text": "SUN-STEEL. AN ACTUAL SWORD. EXTREMELY THE GOOD KIND. The Ledger is pressing very hard with the pen."
+        },
+        {
+          "kind": "maxheart",
+          "text": "CONSTITUTION INCREASE. The Ledger has underlined it twice."
+        },
+        {
+          "kind": "amulet",
+          "text": "TICKET #44,107: STAMPED. The Ledger is doing a voice. It is the same voice."
+        }
+      ]
+    },
+    "table:ledger_misc": {
+      "id": "table:ledger_misc",
+      "rows": [
+        "The deceased was a dues-paying member of Rattling Brotherhood Local 206. The union has been notified. The union has a newsletter.",
+        "It was an intern. It was TECHNICALLY doing its best. The Ledger has noted this. The Ledger will keep noting it."
+      ]
+    },
+    "table:door_golem_credential_lines": {
+      "id": "table:door_golem_credential_lines",
+      "rows": [
+        {
+          "key": "sword",
+          "text": "Sword-shaped object: NOT DETECTED. The golem has checked both of your hands. Twice. A man in the west meadow has… inventory."
+        },
+        {
+          "key": "backstory",
+          "text": "Tragic backstory: NOT ON FILE. Must be notarized. Clerk Hespeth stamps; the Ledger writes. The Ledger is… available. Unfortunately."
+        },
+        {
+          "key": "debt",
+          "text": "Crippling debt: NONE DETECTED. The golem is concerned. Adventurers without debt have options. Options are dangerous. The gift shop extends credit."
+        }
+      ]
+    },
+    "table:door_golem_entry_lines": {
+      "id": "table:door_golem_entry_lines",
+      "rows": [
+        "HALT. Credential verification. The golem will now verify. Credentials.",
+        "ENTRY: DENIED. The golem takes no pleasure in this. The golem takes no pleasure in anything. It is a compliance feature."
+      ]
+    },
+    "table:door_golem_approval_lines": {
+      "id": "table:door_golem_approval_lines",
+      "rows": [
+        "HALT. Credential verification. The golem will now verify. Credentials.",
+        "Tragic backstory: notarized. The golem read it. The golem does not wish to discuss page two.",
+        "Crippling debt: verified. Congratulations.",
+        "The golem will now stamp your ticket.",
+        "…",
+        "…",
+        "(He is lining it up.)",
+        "…",
+        "*stamp*",
+        "It is crooked. The golem knows it is crooked. Proceed. PROCEED."
+      ]
+    },
+    "table:seal_messages": {
+      "id": "table:seal_messages",
+      "rows": [
+        {
+          "type": "warden",
+          "parts": [
+            "The seal holds — slay the Warden."
+          ]
+        },
+        {
+          "type": "final",
+          "parts": [
+            "The cancellation desk is here. The Hero stands between you and it."
+          ]
+        },
+        {
+          "type": "key",
+          "parts": [
+            "Sealed. A bronze key lies on this floor."
+          ]
+        },
+        {
+          "type": "plates",
+          "parts": [
+            "Sealed. Push the blocks onto the glowing plates (",
+            "/",
+            ")."
+          ]
+        },
+        {
+          "type": "riddle",
+          "parts": [
+            "Sealed. The door has a question. The door has been waiting."
+          ]
+        },
+        {
+          "type": "traps",
+          "parts": [
+            "Sealed. INCIDENT COUNTER: ",
+            "/",
+            ". The traps ran out of darts years ago. Nobody told the counter. Step on them."
+          ]
+        },
+        {
+          "type": "torch",
+          "parts": [
+            "Sealed. All ",
+            " braziers must burn at once."
+          ]
+        }
+      ]
+    },
+    "table:riddle_questions": {
+      "id": "table:riddle_questions",
+      "rows": [
+        "The door sighs. A long one. \"What’s… what’s your name.\"",
+        "\"Fine. What floor is this.\" (It is written on the door. The door knows you won’t check.)",
+        "\"Easier, then. How many Glurps has our hero consumed this run?\" (See label.)",
+        "\"How many foes has our hero dispatched this run? Counting is heroic. Probably.\""
+      ]
+    },
+    "table:riddle_shame_options": {
+      "id": "table:riddle_shame_options",
+      "rows": [
+        {
+          "label": "Some Hero",
+          "correct": true
+        },
+        {
+          "label": "TICKET #44,107",
+          "correct": true
+        },
+        {
+          "label": "The new hire",
+          "correct": true
+        }
+      ]
+    },
+    "table:riddle_door_sighs": {
+      "id": "table:riddle_door_sighs",
+      "rows": [
+        "\"…No.\" The door exhales through a keyhole it does not have.",
+        "\"That is— no. Again, no.\" The hinges creak in a way that means something.",
+        "\"I learned riddles for this.\" A pause you can stand in."
+      ]
+    },
+    "table:floors_descent_lines": {
+      "id": "table:floors_descent_lines",
+      "rows": [
+        "Floor 1 — Reception. Please take a number. The numbers are also bones."
+      ]
+    }
+  },
   "maps": {
     "map:guild_hall": {
       "id": "map:guild_hall",
