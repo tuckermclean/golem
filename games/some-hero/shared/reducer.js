@@ -247,6 +247,15 @@ export function reduce(state, world, ev) {
     case "TRAP_TRIGGERED":
       return { ...state, run: { ...state.run, puzzle: { ...ev.puzzle } }, seq: ev.seq };
 
+    // ── Plates-seal resolution (docs/superpowers/specs/2026-07-07-plates-
+    // seal-resolution-design.md): BLOCK_PUSHED is a dumb copy of the whole
+    // `ev.puzzle`, same idiom as TRAP_TRIGGERED/RIDDLE_ANSWERED above (the
+    // fresh puzzle — including its fresh `blocks`/`plates` arrays — is
+    // built entirely by shared/module.js's "move" case; reduce() never
+    // inspects it).
+    case "BLOCK_PUSHED":
+      return { ...state, run: { ...state.run, puzzle: { ...ev.puzzle } }, seq: ev.seq };
+
     case "DESCENDED": {
       const enemies = (ev.enemies || []).map((e) => ({ ...e, pos: { ...e.pos } }));
       return {
