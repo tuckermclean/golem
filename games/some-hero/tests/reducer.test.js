@@ -17,8 +17,10 @@ test("createState() returns the five-tier State with rules/-sourced defaults", (
   assert.deepEqual(state.world, { zone: null, floorNum: 0, mapId: null });
   // run.puzzle (PR3: docs/superpowers/specs/2026-07-07-s2b-pr3-ceremony-
   // machine-design.md's minimal {type,solved,attempts} slot) starts null
-  // — no puzzle exists outside the tomb.
-  assert.deepEqual(state.run, { runStats: newRunStats(), puzzle: null });
+  // — no puzzle exists outside the tomb. run.enemies (PR4: docs/
+  // superpowers/specs/2026-07-07-s2c-pr4-combat-design.md's run-scoped
+  // entity tier) starts empty — seeded only by ENTERED_TOMB.
+  assert.deepEqual(state.run, { runStats: newRunStats(), puzzle: null, enemies: [] });
   assert.deepEqual(state.character, {
     hp: 10,
     maxhp: 10,
