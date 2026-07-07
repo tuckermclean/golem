@@ -82,6 +82,12 @@ export function createState() {
       // design surface: an entity tier"). Empty outside the tomb / before
       // any ENTERED_TOMB seeds it; wiped fresh on every new descent.
       enemies: [],
+      // The warden-seal boss slot (docs/superpowers/specs/2026-07-07-
+      // warden-boss-resolution-design.md's "State model" — a sibling of
+      // `enemies`). null outside the tomb / on any non-warden floor;
+      // seeded from `ev.boss` (shared/module.js's initBoss()) on every
+      // ENTERED_TOMB/DESCENDED whose generated floor carries one.
+      boss: null,
     },
     character: {
       hp: 10,
@@ -188,10 +194,16 @@ export function reduce(state, world, ev) {
       // this — gradeRun reads it, so a fresh run's very first floor must
       // register at least floorNum 1, not the newRunStats() default of 0.
       const runStats = { ...newRunStats(), depth: Math.max(newRunStats().depth, ev.floorNum) };
+      // Warden-seal boss resolution: `ev.boss` (shared/module.js's
+      // enteredTombEvent()) is a dumb copy in, same "carried on the
+      // event" posture as `enemies` above. null on every non-warden floor
+      // (including the SYNTHETIC_TOMB_FLOOR_1 no-seed branch, threaded
+      // for symmetry — see that function's own header).
+      const boss = ev.boss ? { ...ev.boss } : null;
       return {
         ...state,
         world: { zone: ev.zone, floorNum: ev.floorNum, mapId: ev.mapId },
-        run: { runStats, puzzle: ev.puzzle ?? null, enemies },
+        run: { runStats, puzzle: ev.puzzle ?? null, enemies, boss },
         character: { ...state.character, pos: { ...ev.spawn } },
         knowledge,
         pending: null,
@@ -269,6 +281,9 @@ export function reduce(state, world, ev) {
 
     case "DESCENDED": {
       const enemies = (ev.enemies || []).map((e) => ({ ...e, pos: { ...e.pos } }));
+      // Warden-seal boss resolution: same dumb-copy-in as ENTERED_TOMB's
+      // own `boss` handling above.
+      const boss = ev.boss ? { ...ev.boss } : null;
       return {
         ...state,
         world: { zone: ev.zone, floorNum: ev.floorNum, mapId: ev.mapId },
@@ -277,6 +292,7 @@ export function reduce(state, world, ev) {
           ...state.run,
           puzzle: ev.puzzle ?? null,
           enemies,
+          boss,
           // runStats otherwise preserved — kills/gold carry across
           // floors (design spec: "runStats otherwise preserved"); only
           // `depth` is bumped, to the max of what it already was and the
@@ -393,6 +409,24 @@ export function reduce(state, world, ev) {
         seq: ev.seq,
       };
     }
+
+    // ── Warden-seal boss resolution (docs/superpowers/specs/2026-07-07-
+    // warden-boss-resolution-design.md): WARDEN_HURT (shared/module.js's
+    // "attack" case, a player strike) and WARDEN_ADVANCED (shared/tick.js's
+    // resolveTick, the tick-driven state machine) are both dumb copies of
+    // the whole `ev.boss` — carried wholesale on the event, same idiom as
+    // BLOCK_PUSHED/TORCH_LIT above (a fresh boss object, including its
+    // already-decremented hp, is built entirely by the caller; reduce()
+    // never inspects it). WARDEN_SLAIN reads the CURRENT (already-updated-
+    // by-WARDEN_HURT-this-same-commit) `state.run.boss` and only flips
+    // `dead` — mirrors how ENEMY_KILLED is always preceded by its own
+    // ENEMY_HURT in the same event batch.
+    case "WARDEN_HURT":
+    case "WARDEN_ADVANCED":
+      return { ...state, run: { ...state.run, boss: { ...ev.boss } }, seq: ev.seq };
+
+    case "WARDEN_SLAIN":
+      return { ...state, run: { ...state.run, boss: { ...state.run.boss, dead: true } }, seq: ev.seq };
 
     case "COLLECTED":
       // Tile-entry pickup (shared/module.js's "move" case, sim-and-

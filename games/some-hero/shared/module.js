@@ -451,7 +451,10 @@ const SYNTHETIC_TOMB_FLOOR_1 = {
  *  informational geometry, never fed into run.enemies directly. */
 function enteredTombEvent(state, seed) {
   if (seed == null) {
-    return { t: "ENTERED_TOMB", ...SYNTHETIC_TOMB_FLOOR_1 };
+    // Warden-boss resolution: floor 1 (SYNTHETIC_TOMB_FLOOR_1) is never a
+    // warden floor, so this is always null — threaded anyway, for symmetry
+    // with the seeded branch below (design spec's "spawn threading").
+    return { t: "ENTERED_TOMB", ...SYNTHETIC_TOMB_FLOOR_1, boss: null };
   }
   const floorNum = SYNTHETIC_TOMB_FLOOR_1.floorNum;
   const mapId = `${TOMB_MAP_PREFIX}${seed}:${state.knowledge.runs}:${floorNum}`;
@@ -468,8 +471,34 @@ function enteredTombEvent(state, seed) {
   // Without this, run.puzzle stayed null on every real (seeded) floor and
   // the RIDDLE_ASKED path was dead code outside the synthetic test fixture
   // — an adversarial-scoping find.
-  return { t: "ENTERED_TOMB", zone: "tomb", floorNum, mapId, spawn: floor.spawn, enemies, puzzle: floor.puzzle };
+  const boss = floor.boss ? initBoss(floor.boss) : null;
+  return { t: "ENTERED_TOMB", zone: "tomb", floorNum, mapId, spawn: floor.spawn, enemies, puzzle: floor.puzzle, boss };
 }
+
+/** Builds the `run.boss` slot from floorgen's `floor.boss` ({kind,x,y,
+ *  stats:{hp,dmg,name,telegraph,maxhp}} — shared/floorgen.js's wardenStats/
+ *  FINAL_BOSS_STATS) per the warden-boss-resolution design spec's "State
+ *  model": `pos` from `x`/`y`; `state` starts `"sleep"`; `timer`/`dashDir`
+ *  are inert until shared/tick.js's resolveTick wakes it; `dead` starts
+ *  false. Pure — a fresh object every call, never aliasing `floorBoss`. */
+export function initBoss(floorBoss) {
+  const { kind, x, y, stats } = floorBoss;
+  return {
+    id: "boss",
+    kind,
+    pos: { x, y },
+    hp: stats.hp,
+    maxhp: stats.maxhp,
+    dmg: stats.dmg,
+    name: stats.name,
+    telegraph: stats.telegraph,
+    state: "sleep",
+    timer: 0,
+    dashDir: null,
+    dead: false,
+  };
+}
+
 function exitedTombEvent() {
   return { t: "EXITED_TOMB", zone: "ow", floorNum: 0, mapId: "map:guild_hall", spawn: guildHallSpawn() };
 }
@@ -508,7 +537,8 @@ function descendedEvent(state, world) {
     if (!type) continue; // decor, e.g. "cabinet" — not a pack-authored combatant
     enemies.push({ id: `e${enemies.length}`, kind: e.kind, pos: { x: e.x, y: e.y }, hp: type.hp });
   }
-  return { t: "DESCENDED", zone: "tomb", floorNum: next, mapId, spawn: floor.spawn, enemies, puzzle: floor.puzzle };
+  const boss = floor.boss ? initBoss(floor.boss) : null;
+  return { t: "DESCENDED", zone: "tomb", floorNum: next, mapId, spawn: floor.spawn, enemies, puzzle: floor.puzzle, boss };
 }
 
 /** The riddle door's live `nextRiddle` recomputation, shared verbatim by
@@ -669,25 +699,25 @@ export function validate(ctx, cmd) {
         world.zone === "tomb" &&
         atPoint(world.stairsAt, nx, ny) &&
         sim.run.puzzle &&
-        sim.run.puzzle.type !== "warden" &&
         sim.run.puzzle.type !== "final" &&
-        stairsOpen({ puzzle: sim.run.puzzle, boss: null }) &&
+        stairsOpen({ puzzle: sim.run.puzzle, boss: sim.run.boss }) &&
         typeof world.mapId === "string" &&
         world.mapId.startsWith(TOMB_MAP_PREFIX)
       ) {
         // The seal-resolution descend trigger (docs/superpowers/specs/
         // 2026-07-07-riddle-seal-resolution-design.md, generalized by
         // 2026-07-07-traps-seal-resolution-design.md, generalized again
-        // by 2026-07-07-key-seal-resolution-design.md): the single
-        // source of truth is now rules/puzzles.js's ported `stairsOpen`
-        // — riddle/traps/plates/torch open on `.solved`, key opens on
-        // `.have` (COLLECTED{kind:"key"} flips it — see the reducer's
-        // COLLECTED case). `warden`/`final` are explicitly excluded here
-        // even though stairsOpen would otherwise resolve them (its warden
-        // branch returns true when `game.boss` is null, since boss combat
-        // isn't modeled yet, and final has no down-stairs at all) — both
-        // stay sealed until boss combat lands. Guarded to "tomb:"-
-        // prefixed mapIds only: the synthetic test fixture (map:
+        // by 2026-07-07-key-seal-resolution-design.md, generalized again
+        // by 2026-07-07-warden-boss-resolution-design.md's "Descend
+        // un-exclusion"): the single source of truth is now rules/
+        // puzzles.js's ported `stairsOpen` — riddle/traps/plates/torch
+        // open on `.solved`, key opens on `.have`, warden opens on
+        // `boss.dead` (WARDEN_SLAIN flips it — see the reducer's
+        // WARDEN_SLAIN case). `final` is still explicitly excluded here
+        // (stairsOpen's own final branch always returns false — there is
+        // no down-stairs on the final floor at all; that ceremony is a
+        // distinct follow-up, out of this PR's scope). Guarded to
+        // "tomb:"-prefixed mapIds only: the synthetic test fixture (map:
         // tomb_floor_1_synthetic) has no floor 2 to generate. Mutually
         // exclusive with the unsolved riddle branch below via `.solved`.
         events.push(descendedEvent(state, world));
@@ -772,6 +802,15 @@ export function validate(ctx, cmd) {
       // own "on/adjacent-to" contact-damage rule.
       const id = rest[0];
       const enemy = state.run.enemies.find((e) => e.id === id);
+      // Warden-seal boss resolution (docs/superpowers/specs/2026-07-07-
+      // warden-boss-resolution-design.md's "attack — target the boss"):
+      // resolves to the live boss only when `id` names it AND it isn't
+      // already dead — a dead boss (or any non-warden floor, where
+      // `run.boss` is null) falls through to the existing "nothing here
+      // by that name" deny below, byte-identical. No enemy is ever
+      // assigned the id "boss" (enemy ids are "e0","e1",...), so `enemy`
+      // and `boss` never both resolve for the same `id`.
+      const boss = state.run.boss && state.run.boss.id === id && !state.run.boss.dead ? state.run.boss : null;
       const { x, y } = state.character.pos;
 
       // Torch-seal lighting (docs/superpowers/specs/2026-07-07-torch-seal-
@@ -794,12 +833,28 @@ export function validate(ctx, cmd) {
         }
       }
 
-      if (!enemy) {
+      if (!enemy && !boss) {
         // A swing that only lights braziers is still a legal swing; otherwise
         // there is genuinely nothing to strike (unchanged deny).
         if (torchLit) return [{ t: "TORCH_LIT", puzzle: torchLit }];
         return { deny: "There is nothing here by that name to strike." };
       }
+
+      if (boss && !enemy) {
+        // "attack boss" is the strike (design spec's own closing line).
+        // Same melee-range rule as the enemy path below (Manhattan <= 1).
+        const dist = Math.abs(boss.pos.x - x) + Math.abs(boss.pos.y - y);
+        if (dist > 1) {
+          return { deny: "Too far to strike." };
+        }
+        const amount = attackDamage(state.character.swordLv);
+        const hp = boss.hp - amount;
+        const events = [{ t: "WARDEN_HURT", boss: { ...boss, hp } }];
+        if (hp <= 0) events.push({ t: "WARDEN_SLAIN" });
+        if (torchLit) events.push({ t: "TORCH_LIT", puzzle: torchLit });
+        return events;
+      }
+
       const dist = Math.abs(enemy.pos.x - x) + Math.abs(enemy.pos.y - y);
       if (dist > 1) {
         return { deny: "Too far to strike." };

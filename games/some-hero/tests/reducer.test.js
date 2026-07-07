@@ -19,8 +19,10 @@ test("createState() returns the five-tier State with rules/-sourced defaults", (
   // machine-design.md's minimal {type,solved,attempts} slot) starts null
   // — no puzzle exists outside the tomb. run.enemies (PR4: docs/
   // superpowers/specs/2026-07-07-s2c-pr4-combat-design.md's run-scoped
-  // entity tier) starts empty — seeded only by ENTERED_TOMB.
-  assert.deepEqual(state.run, { runStats: newRunStats(), puzzle: null, enemies: [] });
+  // entity tier) starts empty — seeded only by ENTERED_TOMB. run.boss
+  // (the warden-seal boss resolution's own run.boss slot) starts null —
+  // seeded only by ENTERED_TOMB/DESCENDED on a warden floor.
+  assert.deepEqual(state.run, { runStats: newRunStats(), puzzle: null, enemies: [], boss: null });
   assert.deepEqual(state.character, {
     hp: 10,
     maxhp: 10,

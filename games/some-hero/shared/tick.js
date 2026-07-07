@@ -27,8 +27,31 @@
    the player's (ties broken by a fixed axis order), so nothing draws
    from `seed` yet — reserved, not speculative, same posture as PR2/PR3's
    own unused param. */
+import { channel, rint } from "@golem-engine/random";
 import { reduce } from "./reducer.js";
 import { T } from "../rules/constants.js";
+
+/* ── Warden-seal boss resolution (docs/superpowers/specs/2026-07-07-
+   warden-boss-resolution-design.md's "Canonicalization to the grid/tick
+   kernel"): the legacy pixel/second-continuous dash-boss AI (legacy/src/
+   systems/boss-ai.js, 40 lines) canonicalized to grid-cardinal, tick-
+   discrete steps — same discipline as this file's own skeleton port
+   above (pixel radii -> round(px/T), T=36; per-tick cells; seeded jitter
+   via @golem-engine/random's channel(), never Math.random). These are
+   FEEL constants (aggro range, telegraph dodge window, dash reach,
+   cooldown) the design spec flags as playtest-tunable defaults, not
+   headlessly verifiable — kept in one named block so tuning is a
+   one-line edit. */
+const WARDEN = {
+  aggroTiles: 5, // round(170/36) — wake when player within Manhattan 5
+  idleTicks: 3, // creep steps before the telegraph
+  creepCells: 1, // cells/tick toward player during idle (skeleton-like)
+  teleTicks: 2, // telegraph window (boss stands still — the dodge beat)
+  dashTicks: 3, // dash duration
+  dashCells: 2, // cells/tick during dash (=> reach 6 in a straight line)
+  cooldownBase: 4, // post-dash idle before re-aggro
+  cooldownJitter: 3, // + channel-picked 0..(jitter-1), seeded
+};
 
 function key(x, y) {
   return `${x},${y}`;
@@ -90,7 +113,11 @@ function stepToward(fromX, fromY, tx, ty) {
 }
 
 export function resolveTick(state, world, seed) {
-  void seed; // reserved for a future nondeterministic mover — see header.
+  // `seed` (world.mapId, threaded by shared/module.js's "tick" case) is
+  // now consumed below by the warden boss's post-dash cooldown jitter —
+  // the series' first seeded nondeterminism. It stays reserved/unused for
+  // every other mover (the skeleton family's greedy step needs no RNG at
+  // all — see this file's own header).
 
   const events = [];
   let sim = state;
@@ -171,6 +198,115 @@ export function resolveTick(state, world, seed) {
       return tm <= 0 ? { ...to, lit: false, tm: 0 } : { ...to, tm };
     });
     commit({ t: "TORCHES_BURNED", puzzle: { ...tpz, torches } });
+  }
+
+  // Warden-seal boss resolution (docs/superpowers/specs/2026-07-07-
+  // warden-boss-resolution-design.md's "shared/tick.js — resolveTick
+  // boss state machine"): advances the boss one state-step per tick,
+  // guarded to `sim.run.boss && !sim.run.boss.dead` — every non-warden
+  // floor (`run.boss` null) and every already-slain boss leave this
+  // block a pure no-op, so no existing tick is affected. Never mutates
+  // `sim.run.boss` — each branch below builds a fresh `next` boss object
+  // (or leaves it `null`, meaning "no change this tick": a sleeping boss
+  // with the player out of aggro range).
+  if (sim.run.boss && !sim.run.boss.dead) {
+    const boss = sim.run.boss;
+    const player = sim.character.pos;
+    // Contact state going INTO this tick's own boss action — captured
+    // before the boss moves, same "newly-established adjacency" idiom
+    // playerTouchingHostile/wasContact use for the skeleton family above.
+    const wasBossContact = Math.abs(boss.pos.x - player.x) + Math.abs(boss.pos.y - player.y) <= 1;
+
+    let next = null; // null = no state/pos/timer change this tick (asleep, out of range)
+
+    if (boss.state === "sleep") {
+      const dist = Math.abs(boss.pos.x - player.x) + Math.abs(boss.pos.y - player.y);
+      if (dist <= WARDEN.aggroTiles) {
+        // The "PERFORMANCE REVIEW" wake — `state` alone carries it for
+        // narration; no separate toast needed headless (design spec).
+        next = { ...boss, state: "idle", timer: WARDEN.idleTicks };
+      }
+    } else if (boss.state === "idle") {
+      // Creep one cell toward the player (wall/enemy-blocked -> skip
+      // this step, same silent-retry idiom the skeleton loop above
+      // uses) — this ALSO drives the post-dash cooldown wait, which is
+      // just "idle" with a longer starting timer (see the dash branch).
+      const { dx, dy } = stepToward(boss.pos.x, boss.pos.y, player.x, player.y);
+      let pos = boss.pos;
+      if (dx !== 0 || dy !== 0) {
+        const nx = boss.pos.x + dx;
+        const ny = boss.pos.y + dy;
+        const blocked =
+          !inBounds(world, nx, ny) ||
+          isWall(world, nx, ny) ||
+          sim.run.enemies.some((e) => e.pos.x === nx && e.pos.y === ny);
+        if (!blocked) pos = { x: nx, y: ny };
+      }
+      const timer = boss.timer - 1;
+      next =
+        timer <= 0
+          ? { ...boss, pos, state: "tele", timer: WARDEN.teleTicks }
+          : { ...boss, pos, timer };
+    } else if (boss.state === "tele") {
+      // Stand still — the dodge window. Never moves, even on the tick
+      // that transitions into "dash".
+      const timer = boss.timer - 1;
+      next =
+        timer <= 0
+          ? {
+              ...boss,
+              state: "dash",
+              timer: WARDEN.dashTicks,
+              // Lock a single cardinal direction NOW — the telegraph
+              // committed to it (design spec: "stepToward(boss->player)").
+              dashDir: stepToward(boss.pos.x, boss.pos.y, player.x, player.y),
+            }
+          : { ...boss, timer };
+    } else if (boss.state === "dash") {
+      // Fly up to dashCells cells along the locked dashDir, stopping at
+      // the first wall/out-of-bounds (a partial dash) — never checks
+      // enemy occupancy (unlike idle's creep), matching the design
+      // spec's own wording.
+      let pos = boss.pos;
+      for (let i = 0; i < WARDEN.dashCells; i++) {
+        const nx = pos.x + boss.dashDir.dx;
+        const ny = pos.y + boss.dashDir.dy;
+        if (!inBounds(world, nx, ny) || isWall(world, nx, ny)) break;
+        pos = { x: nx, y: ny };
+      }
+      const timer = boss.timer - 1;
+      if (timer <= 0) {
+        // The ONE seeded, nondeterministic draw in the whole state
+        // machine (design spec's "DETERMINISM" section) — everything
+        // else here is a pure function of position/timer. `seed` is
+        // resolveTick's own param (world.mapId, per shared/module.js's
+        // "tick" case); `sim.tick` is the just-advanced tick number
+        // (this tick's own TICK_ADVANCED, committed at the top).
+        const rng = channel(seed, "warden", String(sim.tick));
+        const pick = rint(rng, WARDEN.cooldownJitter);
+        next = { ...boss, pos, state: "idle", timer: WARDEN.cooldownBase + pick, dashDir: null };
+      } else {
+        next = { ...boss, pos, timer };
+      }
+    }
+
+    if (next) {
+      commit({ t: "WARDEN_ADVANCED", boss: next });
+    }
+
+    // Contact damage: after the boss's own action above (or none, if it
+    // stayed asleep). "Newly established" = not touching at the start of
+    // this tick AND touching now — same re-arms-on-separation rule the
+    // skeleton contact block uses (see this file's header/that block's
+    // own comment); reuses HURT/DIED, the same derived-DIED bridge.
+    const movedBoss = sim.run.boss;
+    const nowBossContact = Math.abs(movedBoss.pos.x - player.x) + Math.abs(movedBoss.pos.y - player.y) <= 1;
+    if (nowBossContact && !wasBossContact) {
+      commit({ t: "HURT", amount: movedBoss.dmg, cause: "warden" });
+      if (sim.character.hp <= 0) {
+        commit({ t: "DIED", cause: "warden" });
+      }
+    }
   }
 
   return events;
