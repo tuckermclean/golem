@@ -21,7 +21,7 @@ import { computeAffordances, dispatchIntent } from "./language-adapter.js";
 const COARSE = isCoarsePointer();
 
 export function createInput(S,deps){
-  const{cmdEl,sendCmd,feedLine,players,getP,itemAt,prizeCarrier,seenT,litT,lookAt}=deps;
+  const{cmdEl,sendCmd,feedLine,players,getP,itemAt,prizeCarrier,seenT,litT,lookAt,askNpc}=deps;
 
   /* arrows are feet — always, everywhere, regardless of focus or input
      text. Capture phase so nothing downstream can swallow them. */
@@ -64,7 +64,13 @@ export function createInput(S,deps){
       case"w":case"whisper":sendCmd("whisper "+rest[0]+" "+rest.slice(1).join(" "));break;
       case"me":sendCmd("emote "+arg);break;
       case"who":feedLine(players().map(p=>`${p.name}${p.id===S.me?" (you)":""} @ ${p.x},${p.y}`).join("\n"),"sys");break;
-      case"help":feedLine("Enter = talk (room) · /party msg · /w name msg · /me does a thing\n/take [item] · /read · /who · arrows walk · click the world for actions","sys");break;
+      /* L7 demo NPC: client-local only — no sendCmd, no wire message, no
+         event, straight to golemLine via src/npc.js's askNpc (main.js's
+         PLUG-section wrapper), exactly like /read's read-local sibling
+         "look"/lookAt above. */
+      case"ask":if(!arg)feedLine("Ask what? Try /ask what is this place?","deny");
+        else askNpc(arg);break;
+      case"help":feedLine("Enter = talk (room) · /party msg · /w name msg · /me does a thing\n/take [item] · /read · /who · /ask question · arrows walk · click the world for actions","sys");break;
       default:feedLine(`Unknown /${sl} — try /help`,"deny");}});
 
   /* click → context menu → same commands the keyboard would send */
