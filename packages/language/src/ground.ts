@@ -5,8 +5,14 @@
  */
 
 /** A dependency the caller provides — packages/language never hardcodes
- * any game's items/lore/players. Shaped to need only a rename/no-op
- * adapter once A1 (Phase 5) lands (see design doc Open Question 2). */
+ * any game's items/lore/players. Matches `@golem-engine/kernel`'s
+ * canonical `Affordance` (DELTA A1 has landed — see docs/superpowers/
+ * specs/2026-07-07-a1-pr1-affordances-hook-design.md) field-for-field.
+ * This is a LOCAL, structurally-duplicated copy, not an import: kernel
+ * stays out of packages/language's dependency graph, the same
+ * dependency-light idiom context.ts's `Knowledge` already uses (see
+ * that file's own header comment) — the caller shapes its own data,
+ * packages/language never hardcodes any game's fact/affordance space. */
 export interface Affordance {
   /** Canonical verb this affordance responds to ("take"|"look"|...).
    * Open vocabulary — grounding only ever filters by exact string
@@ -19,9 +25,16 @@ export interface Affordance {
   name: string;
   /** Extra synonyms grounding may also match. */
   aliases?: readonly string[];
-  /** Default true. Present for forward-compatibility with A1's shape;
-   * tier-1 filters out enabled:false affordances before matching. */
+  /** Default true. tier-1 filters out enabled:false affordances before
+   * matching. */
   enabled?: boolean;
+  /** Opaque condition tree (kernel's `Affordance.requirements` field) —
+   * grounding never reads this; present only for exact structural
+   * parity with the canonical shape. */
+  requirements?: unknown;
+  /** Why this affordance is offered/disabled (tutorial-hint/twin
+   * consumers, A1 PR3) — grounding never reads this either. */
+  reason?: string;
 }
 
 export type GroundResult =

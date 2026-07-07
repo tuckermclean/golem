@@ -136,3 +136,40 @@ export interface Entity<C extends ComponentName = ComponentName> {
   id: string;
   components: { [K in C]?: ComponentDataMap[K] };
 }
+
+/** DELTA A1 (the affordances kernel API — see docs/superpowers/specs/
+ *  2026-07-07-a1-pr1-affordances-hook-design.md): the canonical
+ *  cross-game `Affordance` shape, i.e. the "legal-verb menu"
+ *  `GameModule.affordances` returns (VISION.md: "powering text
+ *  commands, context menus, NPC planning, tutorials, and twin
+ *  grounding"). DELTA's own field list is `{verb, target, requirements,
+ *  enabled, reason}`; this is the superset that also carries L1's
+ *  `packages/language/src/ground.ts` interim shape's `name`/`aliases`
+ *  (required for noun grounding) — one canonical type, not two
+ *  incompatible ones. Non-grounding consumers ignore `name`/`aliases`;
+ *  grounding ignores `requirements`/`reason`.
+ *
+ *  `requirements` is `unknown` — the SAME opaque-condition idiom as this
+ *  file's own `Lock.unlockCondition`/`Interactable.enabledWhen` above:
+ *  kernel never interprets it; only a game's own validate/affordances
+ *  (via @golem-engine/content's evaluate()) does. */
+export interface Affordance {
+  /** Canonical verb this affordance responds to ("take"|"look"|
+   *  "attack"|...). Open vocabulary. */
+  verb: string;
+  /** Opaque identifier the game hands back to itself once grounded/
+   *  chosen — kernel never inspects this beyond returning it. */
+  target: string;
+  /** Primary grounding name, e.g. "lantern", "the keeper". */
+  name: string;
+  /** Extra synonyms grounding may also match. */
+  aliases?: readonly string[];
+  /** Default true — whether this affordance is currently legal. */
+  enabled?: boolean;
+  /** Opaque condition tree (DELTA field): games may put a
+   *  @golem-engine/content `ConditionNode` here; kernel never reads it. */
+  requirements?: unknown;
+  /** Why this affordance is offered/disabled (tutorial-hint/twin/UI
+   *  consumers, A1 PR3). */
+  reason?: string;
+}
