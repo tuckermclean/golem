@@ -52,6 +52,7 @@ import { validate, deriveWorld, initBoss } from "../shared/module.js";
 import { createState, reduce, serializeState } from "../shared/reducer.js";
 import { pack } from "../rules/pack.js";
 import { generateFloor } from "../shared/floorgen.js";
+import { makeWorld, floorEnteredState } from "./helpers/build-state.mjs";
 
 // generateFloor("1", 4).puzzle.type === "warden" (found via the same
 // kind of offline scan this repo's other seal-resolution test files
@@ -472,4 +473,83 @@ test("determinism: replaying a scripted log (a seeded cooldown draw + slay + des
   assert.equal(a.run.boss, null, "sanity: floor 5 is not a warden floor");
   assert.deepEqual(a, b, "two independent runs of the same command log must produce structurally identical state");
   assert.equal(h32(serializeState(a)), h32(serializeState(b)), "and byte-identical hashes");
+});
+
+/* ── Adversarial-review corrections (four finds against PR #70) ───────── */
+
+test("review fix #1: hitting a SLEEPING boss wakes it (sleep -> idle) so it retaliates on later ticks", () => {
+  const world = deriveTombWorld(WARDEN_SEED, 4);
+  const floor = generateFloor(WARDEN_SEED, 4);
+  // boss home is (4,4) for seed 1 floor 4; stand the player adjacent at (4,3).
+  const state = wardenFloorState(world, floor.boss, { x: 4, y: 3 });
+  assert.equal(state.run.boss.state, "sleep", "sanity: initBoss default is sleep");
+
+  const result = validate({ state, world }, "attack boss");
+  assert.ok(Array.isArray(result));
+  assert.equal(result[0].t, "WARDEN_HURT");
+  assert.equal(result[0].boss.state, "idle", "the struck boss wakes (was catatonic before the fix)");
+  assert.ok(result[0].boss.timer > 0, "and gets a fresh idle timer to start its creep->telegraph->dash");
+});
+
+test("review fix #2: EXITED_TOMB and RESURRECTED clear run.boss/enemies/puzzle (no leak into the ow zone)", () => {
+  const world = deriveTombWorld(WARDEN_SEED, 4);
+  const floor = generateFloor(WARDEN_SEED, 4);
+  let state = wardenFloorState(world, floor.boss, { x: 4, y: 3 });
+  state = {
+    ...state,
+    run: { ...state.run, enemies: [{ id: "e0", kind: "skeleton", pos: { x: 1, y: 1 }, hp: 4 }], puzzle: { type: "warden" } },
+  };
+  assert.ok(state.run.boss && !state.run.boss.dead, "sanity: a live boss + enemy + puzzle are present");
+
+  const exited = reduce(state, world, { t: "EXITED_TOMB", zone: "ow", floorNum: 0, mapId: "map:guild_hall", spawn: { x: 0, y: 0 }, seq: state.seq + 1 });
+  assert.equal(exited.run.boss, null, "EXITED_TOMB clears the boss");
+  assert.deepEqual(exited.run.enemies, [], "EXITED_TOMB clears enemies");
+  assert.equal(exited.run.puzzle, null, "EXITED_TOMB clears the puzzle");
+  assert.equal(exited.world.zone, "ow", "and we're back in town");
+
+  const resurrected = reduce(state, world, { t: "RESURRECTED", cause: "warden", spawn: { x: 0, y: 0 }, world: { zone: "ow", floorNum: 0, mapId: "map:guild_hall" }, seq: state.seq + 1 });
+  assert.equal(resurrected.run.boss, null, "RESURRECTED clears the boss");
+  assert.deepEqual(resurrected.run.enemies, [], "RESURRECTED clears enemies");
+  assert.equal(resurrected.run.puzzle, null, "RESURRECTED clears the puzzle");
+});
+
+test("review fix #3: a skeleton kill + boss contact in the SAME tick fires only ONE DIED (no double death / clobbered cause)", () => {
+  // Open 10x10 arena, no walls. Skeleton aggro 150 -> round(150/36)=4 tiles.
+  const world = makeWorld({ rows: 10, cols: 10, spawn: { x: 5, y: 5 }, enemyTypes: { skeleton: { aggro: 150, dmg: 5 } }, mapId: "tomb:x:0:4" });
+  let state = floorEnteredState(world);
+  state = {
+    ...state,
+    character: { ...state.character, hp: 1, maxhp: 10, pos: { x: 5, y: 5 } },
+    run: {
+      ...state.run,
+      // both start 2 tiles away, so both NEWLY establish contact this tick
+      enemies: [{ id: "e0", kind: "skeleton", pos: { x: 7, y: 5 }, hp: 4 }],
+      boss: { id: "boss", kind: "warden", name: "the Warden", pos: { x: 5, y: 7 }, hp: 40, maxhp: 40, dmg: 4, state: "idle", timer: 5, dashDir: null, dead: false },
+    },
+  };
+
+  const res = validate({ state, world }, "tick");
+  const dieds = res.filter((e) => e.t === "DIED");
+  assert.equal(dieds.length, 1, "exactly one DIED — the boss must not double-tap an already-dead player");
+  assert.equal(dieds[0].cause, "skeleton", "the skeleton got the kill; the boss's HURT/DIED was guarded off");
+});
+
+test("review fix #4: a dash that GRAZES adjacent to the player mid-move registers contact (HURT), even when it ends far", () => {
+  const world = makeWorld({ rows: 10, cols: 10, spawn: { x: 0, y: 5 }, mapId: "tomb:x:0:4" });
+  let state = floorEnteredState(world);
+  state = {
+    ...state,
+    character: { ...state.character, pos: { x: 1, y: 4 } },
+    run: {
+      ...state.run,
+      enemies: [],
+      boss: { id: "boss", kind: "warden", name: "the Warden", pos: { x: 0, y: 5 }, hp: 40, maxhp: 40, dmg: 4, state: "dash", timer: 1, dashDir: { dx: 1, dy: 0 }, dead: false },
+    },
+  };
+
+  const res = validate({ state, world }, "tick");
+  const hurts = res.filter((e) => e.t === "HURT" && e.cause === "warden");
+  assert.equal(hurts.length, 1, "the graze at (1,5) — adjacent to the player at (1,4) — registers one HURT");
+  const adv = res.find((e) => e.t === "WARDEN_ADVANCED");
+  assert.deepEqual(adv.boss.pos, { x: 2, y: 5 }, "sanity: the dash ended at (2,5), 2 tiles from the player — a boundary-only check would have missed the graze");
 });

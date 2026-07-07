@@ -42,7 +42,7 @@ import { T } from "../rules/constants.js";
    cooldown) the design spec flags as playtest-tunable defaults, not
    headlessly verifiable — kept in one named block so tuning is a
    one-line edit. */
-const WARDEN = {
+export const WARDEN = {
   aggroTiles: 5, // round(170/36) — wake when player within Manhattan 5
   idleTicks: 3, // creep steps before the telegraph
   creepCells: 1, // cells/tick toward player during idle (skeleton-like)
@@ -218,6 +218,11 @@ export function resolveTick(state, world, seed) {
     const wasBossContact = Math.abs(boss.pos.x - player.x) + Math.abs(boss.pos.y - player.y) <= 1;
 
     let next = null; // null = no state/pos/timer change this tick (asleep, out of range)
+    // Whether the boss's dash PATH grazed adjacent to the player mid-move
+    // (adversarial-review find: a >1-cell dash could pass through a tile
+    // adjacent to the player yet end far away, so a start/end-only contact
+    // check missed it — legacy checks contact continuously along the move).
+    let dashGrazed = false;
 
     if (boss.state === "sleep") {
       const dist = Math.abs(boss.pos.x - player.x) + Math.abs(boss.pos.y - player.y);
@@ -273,6 +278,9 @@ export function resolveTick(state, world, seed) {
         const ny = pos.y + boss.dashDir.dy;
         if (!inBounds(world, nx, ny) || isWall(world, nx, ny)) break;
         pos = { x: nx, y: ny };
+        // Register a graze at EVERY cell the dash passes through — a fast
+        // boss shouldn't slip past an adjacent player uncounted.
+        if (Math.abs(pos.x - player.x) + Math.abs(pos.y - player.y) <= 1) dashGrazed = true;
       }
       const timer = boss.timer - 1;
       if (timer <= 0) {
@@ -300,8 +308,13 @@ export function resolveTick(state, world, seed) {
     // skeleton contact block uses (see this file's header/that block's
     // own comment); reuses HURT/DIED, the same derived-DIED bridge.
     const movedBoss = sim.run.boss;
-    const nowBossContact = Math.abs(movedBoss.pos.x - player.x) + Math.abs(movedBoss.pos.y - player.y) <= 1;
-    if (nowBossContact && !wasBossContact) {
+    const nowBossContact =
+      dashGrazed || Math.abs(movedBoss.pos.x - player.x) + Math.abs(movedBoss.pos.y - player.y) <= 1;
+    // `sim.character.hp > 0` guard (adversarial-review find): a skeleton's
+    // own contact block, earlier in THIS same tick, may have already driven
+    // the player to hp <= 0 and emitted HURT/DIED — the boss must not fire a
+    // SECOND HURT/DIED pair (double death, clobbered pending.cause).
+    if (nowBossContact && !wasBossContact && sim.character.hp > 0) {
       commit({ t: "HURT", amount: movedBoss.dmg, cause: "warden" });
       if (sim.character.hp <= 0) {
         commit({ t: "DIED", cause: "warden" });
