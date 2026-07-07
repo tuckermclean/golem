@@ -28,10 +28,19 @@ import { createClient } from "./client.js";
 import { createRenderer } from "./render.js";
 import { createInput } from "./input.js";
 
-const LEVEL_ID = "001"; // fewest baddie/mover tokens' extremes among the
-// six shipped levels while still exercising the tick bridge (two
-// baddies, no moving blocks) — see docs/superpowers/specs/
-// 2026-07-06-c4-topdown-port-design.md's "Thin client" section.
+/* Level selection: `?level=NNN` (falls back to 001) so all six shipped
+   levels are playable from the built client — the topbar picker just sets
+   this query param and reloads. Level ids come straight from the compiled
+   pack's map ids (`map:tdp_00N` → `00N`). */
+const AVAILABLE_LEVELS = Object.keys(pack.maps)
+  .map((id) => id.replace(/^map:tdp_/, ""))
+  .sort();
+const requestedLevel = new URLSearchParams(location.search).get("level");
+const LEVEL_ID = AVAILABLE_LEVELS.includes(requestedLevel)
+  ? requestedLevel
+  : AVAILABLE_LEVELS.includes("001")
+    ? "001"
+    : AVAILABLE_LEVELS[0];
 
 const ME = "player";
 
@@ -49,7 +58,60 @@ const statusEls = {
   tick: document.getElementById("tb-tick"),
   banner: document.getElementById("banner"),
 };
-document.getElementById("tb-level").textContent = LEVEL_ID;
+/* Level picker: populate the topbar <select>; changing it reloads into the
+   chosen level via ?level=. */
+const levelSelect = document.getElementById("tb-level-select");
+for (const id of AVAILABLE_LEVELS) {
+  const opt = document.createElement("option");
+  opt.value = id;
+  opt.textContent = id;
+  if (id === LEVEL_ID) opt.selected = true;
+  levelSelect.appendChild(opt);
+}
+levelSelect.addEventListener("change", () => {
+  const p = new URLSearchParams(location.search);
+  p.set("level", levelSelect.value);
+  location.search = p.toString();
+});
+
+/* ── Solution panel: on game over reveal the outcome; on a WIN show the
+   recorded command sequence with copy/download so it drops straight into
+   the fixture toolchain (tests/solutions/<level>.moves.json). onGameOver is
+   a hoisted declaration — the Host's onCommit closure above calls it. ──── */
+const solutionPanel = document.getElementById("solution-panel");
+const solOutcomeEl = document.getElementById("sol-outcome");
+const solTextEl = document.getElementById("sol-text");
+
+function onGameOver() {
+  const won = S.st.outcome === "WIN";
+  const payload = JSON.stringify(solution);
+  console.log(
+    `[tdp] level ${LEVEL_ID}: ${S.st.outcome} in ${solution.length} commands` +
+      (won ? " — solution below (also at window.__tdp.getSolution()):" : ""),
+  );
+  if (won) console.log(payload);
+  solOutcomeEl.textContent = won
+    ? `WIN — level ${LEVEL_ID} solved in ${solution.length} commands. Copy or download this solution:`
+    : `LOSE — level ${LEVEL_ID}. Hit Retry to try again.`;
+  solTextEl.value = payload;
+  solTextEl.hidden = !won;
+  document.getElementById("sol-copy").hidden = !won;
+  document.getElementById("sol-download").hidden = !won;
+  solutionPanel.hidden = false;
+}
+
+document.getElementById("sol-copy").addEventListener("click", () => {
+  if (navigator.clipboard) navigator.clipboard.writeText(solTextEl.value);
+});
+document.getElementById("sol-download").addEventListener("click", () => {
+  const blob = new Blob([solTextEl.value], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `${LEVEL_ID}.moves.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+document.getElementById("sol-retry").addEventListener("click", () => location.reload());
 
 function renderFrame() {
   Render.draw(S.world, S.st);
@@ -58,12 +120,31 @@ function renderFrame() {
 
 /* ── HOST: validate → seq-stamp → commit (src/host.js), plus the
    TICK_MS fixed-step clock driving movers/baddies. ───────────────────── */
+/* ── SOLUTION RECORDER (C4 PR4 enablement): capture the exact LEGAL
+   command stream — your moves AND the clock's ticks, in the order the host
+   processed them — so clearing a level yields a bit-identical, replayable
+   solution log with no eyeballing and no manual tick-timing. Recording
+   stops at game over (post-decision ticks aren't part of the solution). ── */
+const solution = [];
+let finished = false;
+
 const Host = createHost(S, {
-  onCommit: () => renderFrame(),
-  onDenyLocal: () => {}, // no chat/feed UI to route denials to (yet) —
-  // a legal "move" command out of the four cardinal directions is always
-  // sendable in this single-player port; a denial just leaves the board
-  // as-is, which is already visible on the very next frame.
+  onCommit: () => {
+    renderFrame();
+    if (!finished && S.st.over) {
+      finished = true;
+      Host.stopClock(); // no more ticks once the level is decided
+      onGameOver();
+    }
+  },
+  onDenyLocal: () => {}, // no chat/feed UI; a denied move just leaves the
+  // board as-is, visible on the very next frame.
+  onCmd: (cmd) => {
+    // Fires (in host.js) before the command's events commit, so `over` is
+    // still false for the deciding command — it IS recorded; the tick that
+    // would follow a win is not (over is true by then).
+    if (!S.st.over) solution.push(cmd);
+  },
 });
 
 /* ── CLIENT: applyRemoteEvent/applySnapshot — unused by this single-
@@ -131,4 +212,9 @@ window.__tdp = {
   }),
   sendCmd,
   TICK_MS,
+  level: LEVEL_ID,
+  availableLevels: AVAILABLE_LEVELS,
+  // The recorded legal command stream so far (moves + ticks) — a
+  // bit-identical, replayable solution once the level is WON.
+  getSolution: () => [...solution],
 };
