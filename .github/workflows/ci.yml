@@ -150,9 +150,11 @@ jobs:
         with: { node-version: 22, cache: npm }
       - run: npm ci
       # Permanent DoD job for DELTA.md P0.3 (behavior freeze): golem
-      # fixture replay, some-hero @ceremony characterization tests, and
-      # topdown-puzzle parse snapshots, in that order, failing fast.
-      - name: freeze:verify (golem fixtures + ceremony + tdp snapshots)
+      # fixture replay, some-hero @ceremony characterization tests,
+      # topdown-puzzle parse snapshots, and (DELTA C4 PR4) the recorded
+      # topdown-puzzle solution logs replaying bit-identically to their
+      # pinned finalHash, in that order, failing fast.
+      - name: freeze:verify (golem fixtures + ceremony + tdp snapshots + tdp solutions)
         run: npm run freeze:verify
 
   # Playtest deploy: publish the single-file golem-grid build to GitHub

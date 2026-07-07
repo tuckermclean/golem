@@ -6,6 +6,7 @@
   "scripts": {
     "verify:golem": "node tools/verify-golem-fixtures.mjs",
     "verify:tdp": "node tools/verify-tdp-snapshots.mjs",
+    "verify:tdp-solutions": "node tools/verify-tdp-solution-fixtures.mjs",
     "test": "node --test"
   },
   "dependencies": {
