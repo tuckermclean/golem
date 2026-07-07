@@ -40,28 +40,25 @@ const T = 36;
 // never rasterizes an overworld tile grid) — out of scope for this PR.
 const TL = { TF: 10, TW: 11, SD: 12, SU: 13, PLATE: 14 };
 
-// legacy/src/entities/enemy.js:12-23 — the LIVE roster ONLY (the "Front
-// Office"/"Greater Pflum" families some-hero's content pack actually
-// authors — see shared/module.js's buildEnemyTypes, which is PACK-
-// scoped). The retired desert roster (scarab/jackal/spirit/mummy,
-// enemy.js:26-29 — "kept for later", explicitly not spawned by
-// pickTombKind) is deliberately excluded, per the DELTA S4 PR1 brief's
-// "LIVE roster only" constraint. Only the RENDERER-relevant visual
-// fields (r = radius, col = fill color) are carried here — `run.enemies`
-// (shared/reducer.js's `{id,kind,pos,hp}` shape) has no per-enemy
-// col/r/maxhp of its own; the kernel's Actor stat bag (content/
-// entities.mjs) never threads those through to run-scoped State, so the
-// renderer needs its own lookup, exactly like legacy's own mkEnemy()
-// resolves `ENEMY_TYPES[kind]` at spawn time.
+// legacy/src/entities/enemy.js:12-23 — the LIVE tomb roster ONLY, exactly
+// the 5 kinds shared/floorgen.js can spawn and its LIVE_ROSTER test pins
+// (skeleton/mailbat/consultant/slime/cabinet). ALL 7 dead gen-1 kinds are
+// excluded — the retired desert roster (scarab/jackal/spirit/mummy) AND
+// the retired overworld roster (pigeon/goose/veteran) — they no longer
+// spawn (floorgen's DEAD_DESERT_KINDS guard), so any appearance would be a
+// regression (project owner; same rule as scarab). The `|| fallback` in
+// enemyVisual() covers any unlisted kind, so listing only live kinds is
+// behavior-safe. Only the RENDERER-relevant visual fields (r = radius,
+// col = fill color) are carried here — `run.enemies` (shared/reducer.js's
+// `{id,kind,pos,hp}` shape) has no per-enemy col/r of its own, so the
+// renderer needs its own lookup, exactly like legacy's mkEnemy() resolves
+// `ENEMY_TYPES[kind]` at spawn time.
 const ENEMY_VISUALS = {
   skeleton: { r: 11, col: "#e8e2d0" },
   mailbat: { r: 12, col: "#5a5a6e" },
   consultant: { r: 12, col: "#9bb0c4" },
   cabinet: { r: 13, col: "#8a8f98" },
   slime: { r: 10, col: "#7fc95f" },
-  pigeon: { r: 11, col: "#9aa0a8" },
-  goose: { r: 12, col: "#f0ede2" },
-  veteran: { r: 12, col: "#8ca3b8" },
 };
 
 /** Unknown/unlisted kind: a readable fallback rather than a crash —
