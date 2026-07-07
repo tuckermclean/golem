@@ -301,3 +301,63 @@ test("determinism: two independent replays of the same log hash identically", ()
   const b = replay(module, world, log, initialState);
   assert.equal(h32(serializeState(a)), h32(serializeState(b)));
 });
+
+// ── Adversarial-review regression tests (2026-07-07) ──────────────────
+
+test("use: the sarcophagus Spawns the rusty sword AT MOST ONCE — no duplication after taking it (review BLOCKER)", () => {
+  const pack = compilePack();
+  const world = deriveWorld({}, pack);
+  let state = { ...createState(world), region: "catacombs", facts: ["mutant"] };
+  const apply = (cmd) => {
+    const r = validate({ state, world }, cmd);
+    assert.ok(Array.isArray(r), `expected ${JSON.stringify(cmd)} legal, got ${JSON.stringify(r)}`);
+    for (const ev of r) state = reduce(state, world, { ...ev, seq: state.seq + 1 });
+    return r;
+  };
+  apply({ verb: "use", noun: "entity:item_sarcophagus" }); // 1st: spawns sword
+  assert.ok(state.roomItems.catacombs.includes("entity:item_rusty_sword"));
+  apply({ verb: "take", noun: "entity:item_rusty_sword" }); // take it out of the room
+  const r2 = apply({ verb: "use", noun: "entity:item_sarcophagus" }); // 2nd: must NOT respawn
+  assert.equal(r2.some((e) => e.t === "SPAWNED"), false, "no second SPAWNED");
+  const swords = [...(state.roomItems.catacombs || []), ...state.inventory].filter((x) => x === "entity:item_rusty_sword");
+  assert.equal(swords.length, 1, "exactly one rusty sword may ever exist");
+});
+
+test("talk: the wizard hands over the odd key AT MOST ONCE — no duplication after taking it (review BLOCKER)", () => {
+  const pack = compilePack();
+  const world = deriveWorld({}, pack);
+  let state = { ...createState(world), region: "wizards_tower", inventory: ["entity:item_rare_mushroom"] };
+  const apply = (cmd) => {
+    const r = validate({ state, world }, cmd);
+    assert.ok(Array.isArray(r), `expected ${JSON.stringify(cmd)} legal, got ${JSON.stringify(r)}`);
+    for (const ev of r) state = reduce(state, world, { ...ev, seq: state.seq + 1 });
+    return r;
+  };
+  apply({ verb: "talk", noun: "entity:char_wizard" }); // spawns key
+  apply({ verb: "take", noun: "entity:item_odd_key" }); // pocket it
+  const r2 = apply({ verb: "talk", noun: "entity:char_wizard" }); // must NOT respawn
+  assert.equal(r2.some((e) => e.t === "SPAWNED"), false, "no second SPAWNED");
+  const keys = [...(state.roomItems.wizards_tower || []), ...state.inventory].filter((x) => x === "entity:item_odd_key");
+  assert.equal(keys.length, 1, "exactly one odd key may ever exist");
+});
+
+test("affordances: an auto-added take honors enabledWhen — disabled until the gate holds, agreeing with validate (review find)", () => {
+  const pack = compilePack();
+  const world = deriveWorld({}, pack);
+  // The sparkling fish (hidden_waterfall) is Portable with an enabledWhen
+  // gate ({any: mushroom_insight, potion_insight}); its own verb is "catch".
+  const before = { ...createState(world), region: "hidden_waterfall" };
+  const takeBefore = module
+    .affordances({ state: before, world }, "player")
+    .find((a) => a.verb === "take" && a.target === "entity:item_sparkling_fish");
+  assert.ok(takeBefore, "a take affordance for the fish must be listed");
+  assert.equal(takeBefore.enabled, false, "take must be DISABLED before the insight gate holds");
+  assert.ok(!Array.isArray(validate({ state: before, world }, { verb: "take", noun: "entity:item_sparkling_fish" })),
+    "validate must deny the take too — affordance/validate must agree");
+  // After gaining insight, both flip to allowed.
+  const after = { ...before, facts: ["mushroom_insight"] };
+  const takeAfter = module
+    .affordances({ state: after, world }, "player")
+    .find((a) => a.verb === "take" && a.target === "entity:item_sparkling_fish");
+  assert.equal(takeAfter.enabled, true, "take must be ENABLED once insight holds");
+});
