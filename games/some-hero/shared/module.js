@@ -47,7 +47,7 @@
 import { evaluate } from "@golem-engine/content";
 import { channel } from "@golem-engine/random";
 import { reduce } from "./reducer.js";
-import { resolveTick } from "./tick.js";
+import { resolveTick, WARDEN } from "./tick.js";
 import { generateFloor } from "./floorgen.js";
 import { stairsOpen } from "../rules/puzzles.js";
 import { missingCredentials } from "../rules/credentials.js";
@@ -863,7 +863,14 @@ export function validate(ctx, cmd) {
         }
         const amount = attackDamage(state.character.swordLv);
         const hp = boss.hp - amount;
-        const events = [{ t: "WARDEN_HURT", boss: { ...boss, hp } }];
+        // A hit WAKES a sleeping boss (legacy attack.js:52-58: a struck
+        // boss goes sleep -> idle). Without this, an adversarial-review
+        // find: a boss in its initBoss default "sleep" state could be
+        // killed by repeated "attack boss" with zero retaliation — it
+        // never creeps/telegraphs/dashes/deals contact damage unless an
+        // independent tick first brings the player into aggro range.
+        const woken = boss.state === "sleep" ? { state: "idle", timer: WARDEN.idleTicks } : {};
+        const events = [{ t: "WARDEN_HURT", boss: { ...boss, hp, ...woken } }];
         if (hp <= 0) events.push({ t: "WARDEN_SLAIN" });
         if (torchLit) events.push({ t: "TORCH_LIT", puzzle: torchLit });
         return events;

@@ -224,6 +224,13 @@ export function reduce(state, world, ev) {
       return {
         ...state,
         world: { zone: ev.zone, floorNum: ev.floorNum, mapId: ev.mapId },
+        // Leaving the tomb clears its per-floor combat/puzzle state, so it
+        // can't leak into the ow zone (adversarial-review find: resolveTick
+        // has no zone guard and the host fires "tick" unconditionally, so a
+        // live boss/enemy left in `run` kept acting in the guild hall,
+        // resolved against the ow world's walls). runStats is preserved (a
+        // voluntary exit does NOT end the run — see above).
+        run: { ...state.run, enemies: [], boss: null, puzzle: null },
         character: { ...state.character, pos: { ...ev.spawn } },
         knowledge,
         seq: ev.seq,
@@ -357,7 +364,11 @@ export function reduce(state, world, ev) {
       // ceremony.test.js:116-124). Died runs are never graded: no
       // gradeRun call here, ever (legacy grades only in the voluntary
       // exitTomb path) — preserve 1:1, do not "fix" this.
-      const run = { ...state.run, runStats: { ...state.run.runStats, died: true } };
+      // Respawning at the guild clears the tomb's per-floor combat/puzzle
+      // state too (same adversarial-review find as EXITED_TOMB above: a
+      // boss/enemy left live in `run` would keep acting in town). runStats
+      // is still preserved (died runs are never reset — see above).
+      const run = { ...state.run, runStats: { ...state.run.runStats, died: true }, enemies: [], boss: null, puzzle: null };
 
       return { ...state, knowledge, character, world, run, pending: null, seq: ev.seq };
     }
