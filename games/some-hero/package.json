@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node --test tests/*.test.js"
+    "test": "node --test tests/*.test.js",
+    "verify:some-hero-content": "node --test tests/*.test.js"
   },
   "dependencies": {
     "@golem-engine/content": "*"
