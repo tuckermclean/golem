@@ -320,3 +320,44 @@ test("determinism: replaying the light-all-three-then-descend command log twice 
   assert.deepEqual(a, b, "two independent runs of the same command log must produce structurally identical state");
   assert.equal(h32(serializeState(a)), h32(serializeState(b)), "and byte-identical hashes");
 });
+
+// ── adversarial-review find: a range-denied swing still lights braziers ──
+//
+// Legacy lights braziers on EVERY tomb swing, independent of whether the
+// named target connects (attack.js:40). Before the fix, an "attack <far
+// enemy/boss>" that denied "Too far to strike." discarded the already-
+// computed torchLit, so an adjacent un-lit brazier stayed dark — while a
+// BARE "attack" in the identical position lit it. These pin the fix at
+// BOTH range-deny sites (the enemy path and the boss path).
+
+test("attack a far ENEMY while adjacent to an un-lit brazier lights it (TORCH_LIT), not a Denial", () => {
+  const world = deriveTombWorld(TORCH_SEED, 1);
+  // Player at APPROACH[0].pos (30,14), brazier (29,14) adjacent + un-lit.
+  let state = torchFloorState(world, APPROACH[0].pos);
+  // A real but far-away enemy on the same floor (torch floors spawn a
+  // normal enemy budget — the common case, not an edge case).
+  state = { ...state, run: { ...state.run, enemies: [{ id: "e0", kind: "skeleton", pos: { x: 2, y: 2 }, hp: 4 }] } };
+
+  const result = validate({ state, world }, "attack e0");
+  assert.ok(Array.isArray(result), "the swing lights the brazier — not a Denial");
+  assert.deepEqual(result.map((e) => e.t), ["TORCH_LIT"]);
+  const to = result[0].puzzle.torches.find((t) => t.x === 29 && t.y === 14);
+  assert.equal(to.lit, true, "the adjacent brazier is now lit");
+});
+
+test("attack a far BOSS while adjacent to an un-lit brazier lights it (TORCH_LIT), not a Denial", () => {
+  const world = deriveTombWorld(TORCH_SEED, 1);
+  let state = torchFloorState(world, APPROACH[0].pos);
+  // A live warden far away (hand-set — a torch floor never naturally has a
+  // boss, but the boss range-deny site must light braziers symmetrically).
+  state = {
+    ...state,
+    run: { ...state.run, boss: { id: "boss", kind: "warden", name: "the Warden", pos: { x: 2, y: 2 }, hp: 40, dead: false } },
+  };
+
+  const result = validate({ state, world }, "attack boss");
+  assert.ok(Array.isArray(result), "the swing lights the brazier — not a Denial");
+  assert.deepEqual(result.map((e) => e.t), ["TORCH_LIT"]);
+  const to = result[0].puzzle.torches.find((t) => t.x === 29 && t.y === 14);
+  assert.equal(to.lit, true, "the adjacent brazier is now lit");
+});
