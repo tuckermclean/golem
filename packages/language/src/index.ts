@@ -23,3 +23,9 @@ export type { ClassifyResult } from "./classify.js";
 // docs/superpowers/specs/2026-07-07-l7-context-compiler-design.md.
 export { compileEnvelope, envelopeToControlString, renderStubReply } from "./context.js";
 export type { TruthEnvelope, WitnessedEvent } from "./context.js";
+
+// A1 PR3 (affordance consumers): two small illustrative helpers proving
+// the `Affordance` contract (ground.ts) is consumable by a tutorial-hint
+// picker and a twin-grounding fact-feeder. See
+// docs/superpowers/specs/2026-07-07-a1-pr1-affordances-hook-design.md.
+export { nextHint, affordancesToFacts } from "./affordances.js";
