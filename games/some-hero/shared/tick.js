@@ -156,5 +156,22 @@ export function resolveTick(state, world, seed) {
     }
   }
 
+  // Torch-seal burn-down (docs/superpowers/specs/2026-07-07-torch-seal-
+  // resolution-design.md): each tick, every lit brazier loses one tick of
+  // fuel; an expired one (tm <= 0) goes dark. The seal's time-pressure is
+  // exactly this — it only holds if all braziers are lit within `time`
+  // ticks of the first. Once solved, braziers stop burning (guarded). Pure:
+  // a fresh torches array; emitted as TORCHES_BURNED only when something
+  // actually changed (i.e. at least one brazier is lit).
+  const tpz = sim.run.puzzle;
+  if (tpz && tpz.type === "torch" && !tpz.solved && tpz.torches.some((to) => to.lit)) {
+    const torches = tpz.torches.map((to) => {
+      if (!to.lit) return to;
+      const tm = to.tm - 1;
+      return tm <= 0 ? { ...to, lit: false, tm: 0 } : { ...to, tm };
+    });
+    commit({ t: "TORCHES_BURNED", puzzle: { ...tpz, torches } });
+  }
+
   return events;
 }

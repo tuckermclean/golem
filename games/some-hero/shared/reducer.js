@@ -256,6 +256,17 @@ export function reduce(state, world, ev) {
     case "BLOCK_PUSHED":
       return { ...state, run: { ...state.run, puzzle: { ...ev.puzzle } }, seq: ev.seq };
 
+    // ── Torch-seal resolution (docs/superpowers/specs/2026-07-07-torch-
+    // seal-resolution-design.md): TORCH_LIT (a swing lighting braziers in
+    // range) and TORCHES_BURNED (the tick burn-down) are both dumb copies
+    // of the whole `ev.puzzle`, same idiom as BLOCK_PUSHED/TRAP_TRIGGERED/
+    // RIDDLE_ANSWERED above (the fresh puzzle — including its fresh
+    // `torches` array — is built entirely by shared/module.js's "attack"
+    // case or shared/tick.js's resolveTick; reduce() never inspects it).
+    case "TORCH_LIT":
+    case "TORCHES_BURNED":
+      return { ...state, run: { ...state.run, puzzle: { ...ev.puzzle } }, seq: ev.seq };
+
     case "DESCENDED": {
       const enemies = (ev.enemies || []).map((e) => ({ ...e, pos: { ...e.pos } }));
       return {
