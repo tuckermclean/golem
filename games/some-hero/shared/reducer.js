@@ -21,7 +21,16 @@
                      this PR only defines the shape). `runStats` reuses
                      rules/ledger.js's own `newRunStats()` byte-for-byte
                      (S2a's already-ported shape), not a re-literalized
-                     copy.
+                     copy. PR4 (docs/superpowers/specs/
+                     2026-07-07-s2c-pr4-combat-design.md) adds
+                     `run.enemies: [{id,kind,pos:{x,y},hp}]` beside
+                     `runStats`/`puzzle` — the run-scoped entity tier
+                     (per-descent: wiped on every ENTERED_TOMB, gone on
+                     exit/death). Seeded from the derived spawn list
+                     carried on the ENTERED_TOMB event (`ev.enemies` —
+                     shared/module.js's enteredTombEvent(), the same
+                     "carried on the event, not read off `world`"
+                     posture that placeholder already uses for `spawn`).
      - `character` — the current embodiment: hp/maxhp/potions/inv/atkT/
                      gold/swordLv/pos{x,y}. Initial numeric values mirror
                      games/some-hero/legacy/src/entities/player.js:7-8's
@@ -69,6 +78,10 @@ export function createState() {
       // puzzle system (plates/traps/torch/warden/final, real generation)
       // is S2c/S3's job. Reset to null on every ENTERED_TOMB.
       puzzle: null,
+      // The run-scoped enemy entity tier (PR4's design spec: "The new
+      // design surface: an entity tier"). Empty outside the tomb / before
+      // any ENTERED_TOMB seeds it; wiped fresh on every new descent.
+      enemies: [],
     },
     character: {
       hp: 10,
@@ -157,7 +170,11 @@ export function reduce(state, world, ev) {
       // call still runs against the STALE ow `world` param, per the
       // design spec's "The real novelty" section, so the tomb's own
       // spawn cannot be read off `world` here and is carried on the
-      // event instead).
+      // event instead). PR4 adds `ev.enemies` to that same carried-on-
+      // the-event list — the derived spawn list (deep-copied per enemy,
+      // never the event's own array/objects, per the copy-on-write
+      // discipline); defaults to `[]` for any ENTERED_TOMB that doesn't
+      // carry one (defensive, not expected in practice).
       const knowledge = {
         ...state.knowledge,
         runs: state.knowledge.runs + 1,
@@ -165,10 +182,11 @@ export function reduce(state, world, ev) {
         credit: { ...state.knowledge.credit },
       };
       accrueInterest(knowledge); // one excursion = one month (credit.js's own doc comment); mutates the FRESH knowledge.credit clone only.
+      const enemies = (ev.enemies || []).map((e) => ({ ...e, pos: { ...e.pos } }));
       return {
         ...state,
         world: { zone: ev.zone, floorNum: ev.floorNum, mapId: ev.mapId },
-        run: { runStats: newRunStats(), puzzle: null },
+        run: { runStats: newRunStats(), puzzle: null, enemies },
         character: { ...state.character, pos: { ...ev.spawn } },
         knowledge,
         pending: null,
@@ -261,6 +279,73 @@ export function reduce(state, world, ev) {
       return { ...state, knowledge, character, world, run, pending: null, seq: ev.seq };
     }
 
+    // ── PR4: combat + pickups + the enemy entity tier (docs/superpowers/
+    // specs/2026-07-07-s2c-pr4-combat-design.md's "Events + reducer
+    // cases"). Every case below is copy-on-write over `run.enemies`
+    // (a fresh array; unmatched enemies are the SAME object reference,
+    // matched ones are fresh objects) — no mutation of `state`/`ev`.
+
+    case "ENEMY_MOVED":
+      // shared/tick.js's resolveTick — one enemy steps one grid cell.
+      return {
+        ...state,
+        run: {
+          ...state.run,
+          enemies: state.run.enemies.map((e) => (e.id === ev.id ? { ...e, pos: { x: ev.x, y: ev.y } } : e)),
+        },
+        seq: ev.seq,
+      };
+
+    case "ENEMY_HURT":
+      // The player attack verb's damage half (shared/module.js's
+      // "attack" case) — hp<=0 is checked by the CALLER (sim-and-inspect,
+      // same idiom as HURT/DIED) which then appends ENEMY_KILLED; this
+      // case never removes the enemy itself.
+      return {
+        ...state,
+        run: {
+          ...state.run,
+          enemies: state.run.enemies.map((e) => (e.id === ev.id ? { ...e, hp: e.hp - ev.amount } : e)),
+        },
+        seq: ev.seq,
+      };
+
+    case "ENEMY_KILLED": {
+      // Removes the enemy from run.enemies and feeds the Ledger (the
+      // riddle's kills-by-kind question + gradeRun's killsByKind.slime
+      // penalty — rules/ledger.js's own gradeRun/newRunStats shape).
+      const killsByKind = { ...state.run.runStats.killsByKind };
+      killsByKind[ev.kind] = (killsByKind[ev.kind] || 0) + 1;
+      return {
+        ...state,
+        run: {
+          ...state.run,
+          enemies: state.run.enemies.filter((e) => e.id !== ev.id),
+          runStats: { ...state.run.runStats, kills: state.run.runStats.kills + 1, killsByKind },
+        },
+        seq: ev.seq,
+      };
+    }
+
+    case "COLLECTED":
+      // Tile-entry pickup (shared/module.js's "move" case, sim-and-
+      // inspect over `world.pickupAt`). `kind` selects which character
+      // field the amount lands on: "gold"/"potion" are named fields;
+      // anything else is a generic inventory count (`inv`) — minimal, no
+      // full inventory system (design spec's "Scope boundaries").
+      return {
+        ...state,
+        character: {
+          ...state.character,
+          ...(ev.kind === "gold"
+            ? { gold: state.character.gold + ev.amount }
+            : ev.kind === "potion"
+              ? { potions: state.character.potions + ev.amount }
+              : { inv: state.character.inv + ev.amount }),
+        },
+        seq: ev.seq,
+      };
+
     default:
       return { ...state, seq: ev.seq };
   }
@@ -269,11 +354,19 @@ export function reduce(state, world, ev) {
 /* Canonical byte-form of state — replay/fixture/determinism tests hash
    this. No Map involved (unlike topdown-puzzle's `entities`), so plain
    JSON.stringify is already deterministic: every code path builds these
-   tier objects via the same literal key order every time. */
+   tier objects via the same literal key order every time. The one
+   exception is `run.enemies` (PR4): its array ORDER is an implementation
+   detail of insertion (spawn order today; ENEMY_KILLED's filter always
+   preserves relative order, but nothing pins that as a permanent
+   contract), so it is sorted by `id` here — a stable, deterministic sort
+   key every enemy always has — before hashing, guaranteeing the hash is
+   a pure function of the SET of enemies-and-their-fields, not of
+   whatever order they happen to sit in the array. */
 export function serializeState(state) {
+  const enemies = [...state.run.enemies].sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
   return JSON.stringify({
     world: state.world,
-    run: state.run,
+    run: { ...state.run, enemies },
     character: state.character,
     knowledge: state.knowledge,
     profile: state.profile,

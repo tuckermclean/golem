@@ -80,6 +80,49 @@ function isUpstairsIdentity(identity) {
   return !!identity && typeof identity.name === "string" && /stairs/i.test(identity.name) && /up/i.test(identity.name);
 }
 
+/* ── PR4: the enemy entity tier (docs/superpowers/specs/
+   2026-07-07-s2c-pr4-combat-design.md's "The new design surface"). A
+   legend entry resolves to an enemy iff its component bag carries an
+   `Actor` stat bag (content/entities.mjs's opaque hp/spd/dmg/xp/r/col/
+   aggro/flags convention, the same "C1 does not validate component
+   shape" latitude that file's own header documents) — same litmus as
+   isWallIdentity/isSpawnIdentity above, just keyed on a different
+   component instead of Identity.name. */
+function isEnemyComponents(components) {
+  return !!components.Actor;
+}
+
+/** kind ("skeleton"/"mailbat"/...) -> stat bag, built from EVERY entity
+ *  in the pack that carries an Actor bag (design spec: "world.enemyTypes
+ *  [kind] — so the reducer reads stats from world, not hardcoded") —
+ *  PACK-scoped, not MAP-scoped: an enemy kind's stats are available even
+ *  if this particular map never places one, mirroring how `pack.entities`
+ *  itself is a flat, map-independent dictionary. `Health.max` is the
+ *  authored hp (content/entities.mjs's Health{hp,max} mirrors mkEnemy()'s
+ *  own `hp: base.hp, maxhp: base.hp`, so `.max` and `.hp` agree at
+ *  authoring time; `.max` is used here since it is the one field every
+ *  Health component is guaranteed to carry). */
+function buildEnemyTypes(pack) {
+  const types = {};
+  for (const entity of Object.values(pack.entities)) {
+    const { components } = entity;
+    if (!isEnemyComponents(components) || !components.Identity) continue;
+    const { Actor, Health, Identity } = components;
+    types[Identity.name] = {
+      hp: Health ? Health.max : undefined,
+      spd: Actor.spd,
+      dmg: Actor.dmg,
+      xp: Actor.xp,
+      r: Actor.r,
+      col: Actor.col,
+      aggro: Actor.aggro,
+      ghost: !!Actor.ghost,
+      passive: !!Actor.passive,
+    };
+  }
+  return types;
+}
+
 /** Does any legend entry in this map resolve to a `Lock` component?
  *  (PR3: the Door Golem gate — content/entities.mjs's `entity:door_golem`
  *  has `Lock: {unlockCondition, key}`, wired onto `map:guild_hall`'s 'G'
@@ -119,10 +162,13 @@ function findGate(pack, map) {
  *  (zone:"ow"), derive from S1's map:guild_hall") and any test's own
  *  synthetic floor, without content/pack.json ever needing a new token.
  *
- *  Every OTHER map token (the Door Golem, credential markers, enemies,
- *  etc.) is deliberately geometry-neutral here — not blocking, not
- *  modeled as a mutable entity. Gating/combat is PR3/S2c's job (design
- *  spec's "Scope boundaries": no Door Golem gate, no combat, in PR2). */
+ *  Every OTHER map token (the Door Golem, credential markers, ...) is
+ *  deliberately geometry-neutral here — not blocking, not modeled as a
+ *  mutable entity. Gating is PR3's job; enemy spawns ARE modeled here as
+ *  of PR4 (`world.enemySpawns`/`world.enemyTypes` — design spec's "The
+ *  new design surface: an entity tier"); pickups are NOT (test-world-
+ *  only, injected directly onto a hand-built/derived world's
+ *  `pickupAt` Map — see tests/helpers/build-state.mjs's `makeWorld`). */
 export function deriveWorldFromPack(pack, worldState) {
   const { zone, floorNum, mapId } = worldState;
   const map = pack.maps[mapId];
@@ -135,6 +181,7 @@ export function deriveWorldFromPack(pack, worldState) {
   let stairsAt = null;
   let upstairsAt = null;
   let firstFloor = null;
+  const enemySpawns = [];
 
   for (let y = 0; y < map.cells.length; y++) {
     const row = map.cells[y];
@@ -166,8 +213,15 @@ export function deriveWorldFromPack(pack, worldState) {
         stairsAt = { x, y };
         continue;
       }
-      // Everything else (Door Golem, credentials, enemies, ...) is
-      // geometry-neutral for PR2/PR3 — walkable, unmodeled. See header.
+      if (isEnemyComponents(components)) {
+        // Walkable, row-major scan order (never reordered by state) —
+        // the deterministic id-assignment order shared/module.js's
+        // enteredTombEvent() / a future S3 floor generator relies on.
+        enemySpawns.push({ kind: identity.name, pos: { x, y } });
+        continue;
+      }
+      // Everything else (Door Golem, credentials, ...) is geometry-
+      // neutral for PR2/PR3/PR4 — walkable, unmodeled. See header.
     }
   }
 
@@ -177,8 +231,29 @@ export function deriveWorldFromPack(pack, worldState) {
   }
 
   const gate = findGate(pack, map);
+  const enemyTypes = buildEnemyTypes(pack);
+  // pickupAt starts empty: no committed map (real or synthetic) authors
+  // gold/potion tokens yet — tests inject entries directly (see this
+  // function's own header comment) — but every World this function
+  // returns carries the field, so "move"'s pickup check never has to
+  // special-case a hand-built vs. derived World.
+  const pickupAt = new Map();
 
-  return { zone, floorNum, mapId, rows: map.rows, cols: map.cols, walls, spawn, stairsAt, upstairsAt, gate };
+  return {
+    zone,
+    floorNum,
+    mapId,
+    rows: map.rows,
+    cols: map.cols,
+    walls,
+    spawn,
+    stairsAt,
+    upstairsAt,
+    gate,
+    enemySpawns,
+    enemyTypes,
+    pickupAt,
+  };
 }
 
 export { reduce };
@@ -224,12 +299,20 @@ function guildHallSpawn() {
 // "the tomb exists" placeholder, standing in for S3's real floor
 // generation. Whoever builds S3 replaces this constant (and
 // `enteredTombEvent` below) wholesale — nothing else in this file reads
-// tomb geometry.
+// tomb geometry. PR4 extends the same placeholder with `enemies` — the
+// derived spawn list an ENTERED_TOMB carries (design spec: "ENTERED_TOMB
+// seeds run.enemies from the derived spawn list"); this literal MUST
+// match tests/fixtures/synthetic-floor.mjs's own 's' token (deriveWorldFromPack(
+// compileSyntheticFloorPack().pack, ...).enemySpawns === [{kind:"skeleton",
+// pos:{x:3,y:3}}]) and content/entities.mjs's entity:enemy_skeleton's
+// Health.max (4) — cross-checked by tests/combat.test.js so drift between
+// this literal and the real derivation is caught, not silent.
 const SYNTHETIC_TOMB_FLOOR_1 = {
   zone: "tomb",
   floorNum: 1,
   mapId: "map:tomb_floor_1_synthetic",
   spawn: { x: 1, y: 1 },
+  enemies: [{ id: "e0", kind: "skeleton", pos: { x: 3, y: 3 }, hp: 4 }],
 };
 
 function enteredTombEvent() {
@@ -268,6 +351,17 @@ function foldThrough(state, world, events) {
   return sim;
 }
 
+// Player melee damage from sword tier (legacy/src/systems/combat.js:13's
+// swordDmg: `[1,2,3,4,6][player.swordLv] + ((player.lv-1)>>1)`). The
+// `player.lv` term is DROPPED here — some-hero's five-tier State has no
+// leveling/xp system yet (PR4 scope; design spec's "Scope boundaries" —
+// no full inventory/progression), so this is the sword-tier table alone,
+// a documented simplification, not a byte-port.
+const SWORD_DAMAGE = [1, 2, 3, 4, 6];
+function attackDamage(swordLv) {
+  return SWORD_DAMAGE[swordLv] ?? SWORD_DAMAGE[0];
+}
+
 export function validate(ctx, cmd) {
   const { state, world } = ctx;
   const [verb, ...rest] = String(cmd).trim().split(/\s+/);
@@ -290,6 +384,18 @@ export function validate(ctx, cmd) {
       // inspect the result, append derived events (design spec, "Events
       // + reducer cases").
       const sim = foldThrough(state, world, events);
+
+      // Tile-entry pickups (design spec's "Pickups / inventory"): landing
+      // on a gold/potion tile appends COLLECTED, independent of
+      // zone/gate/seal logic below. `world.pickupAt` is a Map<"x,y",
+      // {kind,amount}> — empty for every real/derived World today (no
+      // committed map authors pickup tokens yet), populated directly by
+      // tests (tests/helpers/build-state.mjs's makeWorld) — see
+      // deriveWorldFromPack's own header comment.
+      const pickup = world.pickupAt && world.pickupAt.get(`${nx},${ny}`);
+      if (pickup) {
+        events.push({ t: "COLLECTED", kind: pickup.kind, amount: pickup.amount });
+      }
 
       if (world.zone === "ow" && world.gate && atPoint(world.stairsAt, nx, ny)) {
         // The Door Golem of Credential Verification (design spec's
@@ -350,6 +456,34 @@ export function validate(ctx, cmd) {
       const sim = foldThrough(state, world, events);
       if (sim.character.hp <= 0) {
         events.push({ t: "DIED", cause });
+      }
+      return events;
+    }
+    case "attack": {
+      // The player attack verb (design spec's "Combat (skeleton family
+      // for the DoD)": "a new 'attack' verb"). Explicitly id-targeted
+      // (`attack <id>`) — unambiguous and deterministic, unlike an
+      // implicit "nearest enemy" resolution which would need its own
+      // tie-break rule for no added value here (only one enemy family,
+      // PR4 scope). Melee range: same tile or one of the four orthogonal
+      // neighbors (Manhattan distance <= 1) — matches shared/tick.js's
+      // own "on/adjacent-to" contact-damage rule.
+      const id = rest[0];
+      const enemy = state.run.enemies.find((e) => e.id === id);
+      if (!enemy) {
+        return { deny: "There is nothing here by that name to strike." };
+      }
+      const { x, y } = state.character.pos;
+      const dist = Math.abs(enemy.pos.x - x) + Math.abs(enemy.pos.y - y);
+      if (dist > 1) {
+        return { deny: "Too far to strike." };
+      }
+      const amount = attackDamage(state.character.swordLv);
+      const events = [{ t: "ENEMY_HURT", id, amount }];
+      const sim = foldThrough(state, world, events);
+      const survivor = sim.run.enemies.find((e) => e.id === id);
+      if (!survivor || survivor.hp <= 0) {
+        events.push({ t: "ENEMY_KILLED", id, kind: enemy.kind });
       }
       return events;
     }
