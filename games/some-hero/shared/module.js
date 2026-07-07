@@ -45,6 +45,7 @@
    (S3 PR2) instead of resolving a compiled pack.maps entry. See that
    function's own header, further down this file, for the full design. */
 import { evaluate } from "@golem-engine/content";
+import { channel } from "@golem-engine/random";
 import { reduce } from "./reducer.js";
 import { resolveTick } from "./tick.js";
 import { generateFloor } from "./floorgen.js";
@@ -52,6 +53,7 @@ import { missingCredentials } from "../rules/credentials.js";
 import { pack as contentPack } from "../rules/pack.js";
 import { recordDeath } from "../rules/meta.js";
 import { gradeRun } from "../rules/ledger.js";
+import { nextRiddle, answerRiddle } from "../rules/riddle.js";
 
 /** Resolve a map legend entry to a fresh (shallow-cloned) component bag:
  *  either an authored template entity's components (legendEntry.entity)
@@ -285,16 +287,22 @@ const TOMB_MAP_PREFIX = "tomb:";
 
 /** Parses "tomb:<topSeed>:<runs>:<floorNum>" — the mapId shape this
  *  file's own enteredTombEvent() below constructs when a seed is
- *  threaded through. `runs` is carried for legibility/uniqueness (a
- *  future multi-run save-slot concern) but not read back out here —
- *  only `topSeed`/`floorNum` are needed to reproduce the floor, since
- *  generateFloor is a pure function of exactly those two values. */
+ *  threaded through. `runsSegment` (the middle "<runs>" segment, a
+ *  string — not renamed/parsed to a number, it is never arithmetic'd,
+ *  only threaded through verbatim) is carried for legibility/uniqueness
+ *  (a future multi-run save-slot concern) and, as of the riddle-seal
+ *  resolution design, IS read back out by descendedEvent() below (so the
+ *  next floor's mapId keeps the same run segment — only `floorNum`
+ *  advances on a floor-to-floor descent). `topSeed`/`floorNum` are the
+ *  only two fields generateFloor itself needs, since it is a pure
+ *  function of exactly those two values. */
 function parseTombMapId(mapId) {
   const rest = mapId.slice(TOMB_MAP_PREFIX.length);
   const firstColon = rest.indexOf(":");
   const secondColon = rest.indexOf(":", firstColon + 1);
   return {
     topSeed: rest.slice(0, firstColon),
+    runsSegment: rest.slice(firstColon + 1, secondColon),
     floorNum: Number(rest.slice(secondColon + 1)),
   };
 }
@@ -465,6 +473,58 @@ function exitedTombEvent() {
   return { t: "EXITED_TOMB", zone: "ow", floorNum: 0, mapId: "map:guild_hall", spawn: guildHallSpawn() };
 }
 
+/** Builds the DESCENDED event — the riddle-seal resolution's floor-to-
+ *  floor descent (docs/superpowers/specs/2026-07-07-riddle-seal-
+ *  resolution-design.md's "Descend on solve"). Deliberately NOT a re-use
+ *  of enteredTombEvent/ENTERED_TOMB: that event bumps knowledge.runs/day
+ *  (one excursion = one accrued month of interest) and resets
+ *  run.runStats fresh on every call — exactly right for "the first step
+ *  into the tomb this run", exactly wrong for "one floor deeper on the
+ *  SAME run" (would double-accrue interest and wipe kills/gold every
+ *  floor — a determinism/scoring bug, not just cosmetic). This mirrors
+ *  legacy's own descend() (zones.js:83-93), which does neither.
+ *
+ *  Only ever called for a "tomb:"-prefixed `world.mapId` (validate()'s
+ *  own "move" case guards this — the synthetic test fixture's map:
+ *  mapId has no floor 2 to generate). `runsSegment` is threaded through
+ *  UNCHANGED from the current mapId so the run-count segment stays
+ *  stable across floors — only `floorNum` advances. `spawn`/`enemies`/
+ *  `puzzle` are built exactly like enteredTombEvent's own seeded branch
+ *  (same enemyTypes filter, same id-assignment convention) — the two
+ *  functions are intentionally parallel, not shared, since ENTERED_TOMB
+ *  additionally needs the no-seed SYNTHETIC_TOMB_FLOOR_1 branch this one
+ *  has no analog for. */
+function descendedEvent(state, world) {
+  void state; // present for signature parity with the design spec; every field this needs lives on `world.mapId`
+  const { topSeed, runsSegment, floorNum } = parseTombMapId(world.mapId);
+  const next = floorNum + 1;
+  const mapId = `${TOMB_MAP_PREFIX}${topSeed}:${runsSegment}:${next}`;
+  const floor = generateFloor(topSeed, next);
+  const enemyTypes = buildEnemyTypes(contentPack);
+  const enemies = [];
+  for (const e of floor.enemies) {
+    const type = enemyTypes[e.kind];
+    if (!type) continue; // decor, e.g. "cabinet" — not a pack-authored combatant
+    enemies.push({ id: `e${enemies.length}`, kind: e.kind, pos: { x: e.x, y: e.y }, hp: type.hp });
+  }
+  return { t: "DESCENDED", zone: "tomb", floorNum: next, mapId, spawn: floor.spawn, enemies, puzzle: floor.puzzle };
+}
+
+/** The riddle door's live `nextRiddle` recomputation, shared verbatim by
+ *  validate()'s "answer" case and affordances()'s own extension (design
+ *  spec: "recompute nextRiddle (same channel key)") — one source of
+ *  truth for the rng key + gameLike shape so the two can never drift
+ *  apart. rng is a NAMED @golem-engine/random channel keyed on
+ *  `world.mapId` (always present, unlike a would-be `seed` ctx field —
+ *  design spec's own rationale) + the puzzle's own `attempts` count (so
+ *  a wrong answer's next recomputation draws fresh options, not the same
+ *  ones already rejected). */
+function riddleOptions(world, puzzle, runStats) {
+  const rng = channel(world.mapId, "riddle", String(puzzle.attempts));
+  const gameLike = { puzzle, floorNum: world.floorNum, runStats };
+  return nextRiddle(gameLike, rng).options;
+}
+
 /** The Door Golem's `FactLookup` (packages/content's `evaluate()`
  *  contract): resolves the three `unlockCondition` facts content/
  *  entities.mjs's `entity:door_golem` authors (`credential_sword`/
@@ -561,6 +621,22 @@ export function validate(ctx, cmd) {
         atPoint(world.stairsAt, nx, ny) &&
         sim.run.puzzle &&
         sim.run.puzzle.type === "riddle" &&
+        sim.run.puzzle.solved &&
+        typeof world.mapId === "string" &&
+        world.mapId.startsWith(TOMB_MAP_PREFIX)
+      ) {
+        // The riddle-seal resolution (docs/superpowers/specs/
+        // 2026-07-07-riddle-seal-resolution-design.md): a SOLVED riddle
+        // door opens — descend to the next generated floor. Guarded to
+        // "tomb:"-prefixed mapIds only: the synthetic test fixture (map:
+        // tomb_floor_1_synthetic) has no floor 2 to generate. Mutually
+        // exclusive with the unsolved branch below via `.solved`.
+        events.push(descendedEvent(state, world));
+      } else if (
+        world.zone === "tomb" &&
+        atPoint(world.stairsAt, nx, ny) &&
+        sim.run.puzzle &&
+        sim.run.puzzle.type === "riddle" &&
         !sim.run.puzzle.solved
       ) {
         // The sealed riddle door: ask, never toast, never a zone
@@ -586,6 +662,30 @@ export function validate(ctx, cmd) {
         return { deny: "There is no ceremony to proceed from." };
       }
       return [enteredTombEvent(state, seed)];
+    }
+    case "answer": {
+      // The riddle door's answer flow (design spec's "The answer flow" —
+      // NEW verb "answer <index>", 0-based, NOT free-text). Gate is
+      // POSITION-INDEPENDENT (matches legacy's decoupled modal — no tile
+      // check, unlike the "move"-triggered RIDDLE_ASKED/DESCENDED
+      // branches above).
+      if (!(world.zone === "tomb" && state.run.puzzle?.type === "riddle" && !state.run.puzzle.solved)) {
+        return { deny: "There is no riddle here to answer." };
+      }
+      const options = riddleOptions(world, state.run.puzzle, state.run.runStats);
+      const idx = Number(rest[0]);
+      if (!Number.isInteger(idx) || idx < 0 || idx >= options.length) {
+        return { deny: "That is not one of the door's offered answers." };
+      }
+      // Sim-and-inspect discipline: answerRiddle MUTATES its `game.puzzle`
+      // argument, so it is only ever handed a throwaway CLONE — the real
+      // state.run.puzzle is never touched here.
+      const clone = { puzzle: { ...state.run.puzzle } };
+      const result = answerRiddle(clone, options[idx], { sfx() {}, toast() {} });
+      // The whole resulting puzzle is carried wholesale on the event
+      // (design spec: "like ev.enemies") — reduce()'s RIDDLE_ANSWERED
+      // case is a dumb copy of it.
+      return [{ t: "RIDDLE_ANSWERED", result, puzzle: clone.puzzle }];
     }
     case "hurt": {
       // The HURT/DIED bridge (design spec: "Real damage sources are
@@ -825,6 +925,19 @@ export function affordances(observation, actor) {
       target: enemy.id,
       name: enemy.kind,
       enabled: true,
+    });
+  }
+
+  // "answer <index>" — the riddle door's live options (design spec's
+  // "affordances() extension"). Recomputes nextRiddle with the exact
+  // SAME channel key validate()'s own "answer" case uses (riddleOptions
+  // above), so the menu always matches what "answer <index>" will
+  // actually resolve against — same extensible per-item idiom as the
+  // per-enemy "attack" entries above.
+  if (world.zone === "tomb" && state.run.puzzle?.type === "riddle" && !state.run.puzzle.solved) {
+    const options = riddleOptions(world, state.run.puzzle, state.run.runStats);
+    options.forEach((option, i) => {
+      out.push({ verb: "answer", target: String(i), name: option.label, enabled: true });
     });
   }
 

@@ -183,10 +183,15 @@ export function reduce(state, world, ev) {
       };
       accrueInterest(knowledge); // one excursion = one month (credit.js's own doc comment); mutates the FRESH knowledge.credit clone only.
       const enemies = (ev.enemies || []).map((e) => ({ ...e, pos: { ...e.pos } }));
+      // depth backfill (riddle-seal resolution design spec's "Also set
+      // floor-1 depth"): runStats.depth was never set anywhere before
+      // this — gradeRun reads it, so a fresh run's very first floor must
+      // register at least floorNum 1, not the newRunStats() default of 0.
+      const runStats = { ...newRunStats(), depth: Math.max(newRunStats().depth, ev.floorNum) };
       return {
         ...state,
         world: { zone: ev.zone, floorNum: ev.floorNum, mapId: ev.mapId },
-        run: { runStats: newRunStats(), puzzle: ev.puzzle ?? null, enemies },
+        run: { runStats, puzzle: ev.puzzle ?? null, enemies },
         character: { ...state.character, pos: { ...ev.spawn } },
         knowledge,
         pending: null,
@@ -220,6 +225,40 @@ export function reduce(state, world, ev) {
       // (answerRiddle) is the full puzzle system, out of scope (design
       // spec's "Scope boundaries").
       return { ...state, seq: ev.seq };
+
+    // ── Riddle-seal resolution (docs/superpowers/specs/2026-07-07-
+    // riddle-seal-resolution-design.md's "The answer flow" / "Descend on
+    // solve"). RIDDLE_ANSWERED is a dumb copy of the whole `ev.puzzle`
+    // (carried wholesale on the event, like ENTERED_TOMB's own
+    // `ev.enemies`) — the locked field list. DESCENDED is a NEW event,
+    // deliberately never reusing ENTERED_TOMB's case (see shared/
+    // module.js's descendedEvent() header for why: reusing it would
+    // double-accrue knowledge.runs/day/interest and wipe runStats on
+    // every floor transition).
+
+    case "RIDDLE_ANSWERED":
+      return { ...state, run: { ...state.run, puzzle: { ...ev.puzzle } }, seq: ev.seq };
+
+    case "DESCENDED": {
+      const enemies = (ev.enemies || []).map((e) => ({ ...e, pos: { ...e.pos } }));
+      return {
+        ...state,
+        world: { zone: ev.zone, floorNum: ev.floorNum, mapId: ev.mapId },
+        character: { ...state.character, pos: { ...ev.spawn } },
+        run: {
+          ...state.run,
+          puzzle: ev.puzzle ?? null,
+          enemies,
+          // runStats otherwise preserved — kills/gold carry across
+          // floors (design spec: "runStats otherwise preserved"); only
+          // `depth` is bumped, to the max of what it already was and the
+          // new floor number.
+          runStats: { ...state.run.runStats, depth: Math.max(state.run.runStats.depth || 0, ev.floorNum) },
+        },
+        // knowledge untouched; pending untouched (should be null here).
+        seq: ev.seq,
+      };
+    }
 
     case "HURT":
       return {
