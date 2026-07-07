@@ -600,6 +600,27 @@ export function validate(ctx, cmd) {
         events.push({ t: "COLLECTED", kind: pickup.kind, amount: pickup.amount });
       }
 
+      // The traps-seal resolution (docs/superpowers/specs/2026-07-07-
+      // traps-seal-resolution-design.md): landing on an un-hit trap tile
+      // fires it — no damage (legacy: "the traps ran out of darts years
+      // ago"), just the incident counter (`done`) ticking toward `need`.
+      // Independent of the zone/gate/seal if-chain below (same posture as
+      // the pickup check above): a fresh `newPuzzle` object is built here
+      // (fresh `traps` array, fresh puzzle) — `sim`/`state` are never
+      // mutated. Already-hit traps and non-traps/already-solved puzzles
+      // are silently skipped.
+      if (sim.run.puzzle && sim.run.puzzle.type === "traps" && !sim.run.puzzle.solved) {
+        const trapIdx = sim.run.puzzle.traps.findIndex(
+          (tr) => tr.x === sim.character.pos.x && tr.y === sim.character.pos.y && !tr.hit,
+        );
+        if (trapIdx >= 0) {
+          const traps = sim.run.puzzle.traps.map((tr, i) => (i === trapIdx ? { ...tr, hit: true } : tr));
+          const done = sim.run.puzzle.done + 1;
+          const newPuzzle = { ...sim.run.puzzle, traps, done, solved: done >= sim.run.puzzle.need };
+          events.push({ t: "TRAP_TRIGGERED", puzzle: newPuzzle });
+        }
+      }
+
       if (world.zone === "ow" && world.gate && atPoint(world.stairsAt, nx, ny)) {
         // The Door Golem of Credential Verification (design spec's
         // "Content-side: derive the gate").
@@ -620,17 +641,22 @@ export function validate(ctx, cmd) {
         world.zone === "tomb" &&
         atPoint(world.stairsAt, nx, ny) &&
         sim.run.puzzle &&
-        sim.run.puzzle.type === "riddle" &&
         sim.run.puzzle.solved &&
         typeof world.mapId === "string" &&
         world.mapId.startsWith(TOMB_MAP_PREFIX)
       ) {
-        // The riddle-seal resolution (docs/superpowers/specs/
-        // 2026-07-07-riddle-seal-resolution-design.md): a SOLVED riddle
-        // door opens — descend to the next generated floor. Guarded to
-        // "tomb:"-prefixed mapIds only: the synthetic test fixture (map:
-        // tomb_floor_1_synthetic) has no floor 2 to generate. Mutually
-        // exclusive with the unsolved branch below via `.solved`.
+        // The seal-resolution descend trigger (docs/superpowers/specs/
+        // 2026-07-07-riddle-seal-resolution-design.md, generalized by
+        // 2026-07-07-traps-seal-resolution-design.md): ANY solved seal
+        // opens the door — riddle and traps both set `puzzle.solved`, so
+        // dropping the `type==="riddle"` check here is what makes a
+        // fully-stepped traps floor progressable too. This SAFELY
+        // excludes warden/final (no `solved` field at all) and key
+        // (`have`, not `solved`) — no unimplemented seal accidentally
+        // opens. Guarded to "tomb:"-prefixed mapIds only: the synthetic
+        // test fixture (map:tomb_floor_1_synthetic) has no floor 2 to
+        // generate. Mutually exclusive with the unsolved riddle branch
+        // below via `.solved`.
         events.push(descendedEvent(state, world));
       } else if (
         world.zone === "tomb" &&

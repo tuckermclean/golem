@@ -239,6 +239,14 @@ export function reduce(state, world, ev) {
     case "RIDDLE_ANSWERED":
       return { ...state, run: { ...state.run, puzzle: { ...ev.puzzle } }, seq: ev.seq };
 
+    // ── Traps-seal resolution (docs/superpowers/specs/2026-07-07-traps-
+    // seal-resolution-design.md): TRAP_TRIGGERED is a dumb copy of the
+    // whole `ev.puzzle`, same idiom as RIDDLE_ANSWERED above (the fresh
+    // puzzle — including its fresh `traps` array — is built entirely by
+    // shared/module.js's "move" case; reduce() never inspects it).
+    case "TRAP_TRIGGERED":
+      return { ...state, run: { ...state.run, puzzle: { ...ev.puzzle } }, seq: ev.seq };
+
     case "DESCENDED": {
       const enemies = (ev.enemies || []).map((e) => ({ ...e, pos: { ...e.pos } }));
       return {
