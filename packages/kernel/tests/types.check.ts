@@ -9,10 +9,12 @@
  * It exercises: KernelCore's exact three-member shape, GameModule's
  * exact six-member shape (deriveWorld/validate/reduce/observe/
  * affordances/narrativeFacts), the ValidateResult/Denial/isDenial
- * narrowing, and replay()'s generic signature — with a toy in-memory
- * counter "game" standing in for a real game module.
+ * narrowing, replay()'s generic signature, and (DELTA A1) that
+ * `affordances` is tightened to `readonly Affordance[]` — with a toy
+ * in-memory counter "game" standing in for a real game module.
  */
 import type {
+  Affordance,
   Command,
   Denial,
   Event,
@@ -73,7 +75,25 @@ if (isDenial(r)) {
 const fullModule: GameModule<World, State, Cmd, State, string[]> = {
   ...core,
   observe: (state) => state,
-  affordances: () => [],
+  // DELTA A1: affordances must return `readonly Affordance[]` (not
+  // `unknown`) — a genuine Affordance literal here proves the tightened
+  // signature actually type-checks the canonical shape, not just `[]`.
+  affordances: (): readonly Affordance[] => [
+    { verb: "inc", target: "counter", name: "counter", enabled: true },
+  ],
   narrativeFacts: () => [],
 };
 void fullModule;
+
+// Affordance's optional fields (aliases/requirements/reason) must also
+// type-check, exercising the full DELTA superset in one literal.
+const fullAffordance: Affordance = {
+  verb: "unlock",
+  target: "door-1",
+  name: "the door",
+  aliases: ["the gate"],
+  enabled: false,
+  requirements: { fact: "has_key" },
+  reason: "missing: key",
+};
+void fullAffordance;

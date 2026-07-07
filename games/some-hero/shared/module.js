@@ -746,6 +746,103 @@ export function observe(state, world, viewer) {
   };
 }
 
+/* ── A1 PR1: affordances() — the conformance proof for @golem-engine/
+   kernel's `GameModule.affordances(observation, actor)` hook (docs/
+   superpowers/specs/2026-07-07-a1-pr1-affordances-hook-design.md's
+   "some-hero standalone affordances() (the conformance proof)"). A
+   kernel hook only one game implements isn't proven as an API; this
+   proves the canonical `Affordance` shape generalizes across some-hero's
+   very different Obs shape from golem-grid's (deferred to A1 PR2).
+
+   `observation` here is `{state, world}` — the SAME ctx shape validate()
+   above already takes (not observe()'s flattened per-viewer projection,
+   which structurally omits `pending` on purpose — pinned by tests/
+   observe.test.js's exact-key-set assertion; extending observe() itself
+   is out of PR1's scope, see the design doc's "Scope boundaries").
+   `actor` is accepted for structural parity with the kernel's
+   `affordances(observation, actor)` signature but never read — some-hero
+   has exactly one embodiment (no NPC/multiplayer targeting yet), the
+   same "present, deliberately unused" posture observe()'s own `viewer`
+   param documents above.
+
+   Pure: no mutation of `state`/`world`, no Math.random/Date.now/eval,
+   reads only — reuses validate()'s own gate-check idiom
+   (credentialFactLookup + @golem-engine/content's evaluate()) and
+   rules/credentials.js's missingCredentials(), rather than
+   re-implementing either. */
+export function affordances(observation, actor) {
+  void actor; // structurally present, deliberately unused — see header
+  const { state, world } = observation;
+  const out = [];
+
+  // "proceed" — consumes the ceremony half of the unified two-step
+  // pending slot (validate()'s own "proceed" case above). Always listed
+  // (a stable menu entry), enabled only mid-ceremony; `reason` explains
+  // why when it isn't — mirrors validate()'s own Denial text.
+  const ceremonyPending = state.pending?.kind === "ceremony";
+  out.push({
+    verb: "proceed",
+    target: "tomb",
+    name: "the tomb",
+    enabled: ceremonyPending,
+    ...(ceremonyPending ? {} : { reason: "There is no ceremony to proceed from." }),
+  });
+
+  // "resurrect" — consumes the resurrection half of the same pending
+  // slot (validate()'s own "resurrect" case above).
+  const resurrectionPending = state.pending?.kind === "resurrection";
+  out.push({
+    verb: "resurrect",
+    target: "self",
+    name: "resurrection",
+    enabled: resurrectionPending,
+    ...(resurrectionPending ? {} : { reason: "There is nothing to resurrect from." }),
+  });
+
+  // "attack <enemyId>" — one per enemy within melee range (Manhattan
+  // distance <= 1, the SAME range check validate()'s own "attack" case
+  // uses above) of character.pos. run.enemies only ever holds live
+  // enemies (ENEMY_KILLED removes them — shared/reducer.js), so every
+  // listed affordance here is legal by construction; only in-range
+  // enemies are listed at all (no disabled out-of-range entries).
+  const { x, y } = state.character.pos;
+  for (const enemy of state.run.enemies) {
+    const dist = Math.abs(enemy.pos.x - x) + Math.abs(enemy.pos.y - y);
+    if (dist > 1) continue;
+    out.push({
+      verb: "attack",
+      target: enemy.id,
+      name: enemy.kind,
+      enabled: true,
+    });
+  }
+
+  // "descend"/gate — the Door Golem's gate at the guild-hall stairs
+  // (validate()'s own "move" case gate check, mirrored here read-only:
+  // this never simulates a move, only inspects the CURRENT state/world).
+  // Only present when this World actually derives a gate (map:guild_hall
+  // today; deriveWorldFromPack's findGate()). `requirements` carries the
+  // raw unlockCondition (DELTA's opaque-condition idiom); `reason` is
+  // the missing-credentials list (reuses missingCredentials(), the SAME
+  // helper validate()'s GOLEM_DENIED branch builds its own `missing`
+  // field from) when disabled.
+  if (world.zone === "ow" && world.gate) {
+    const passed = evaluate(world.gate.unlockCondition, credentialFactLookup(state));
+    out.push({
+      verb: "descend",
+      target: "gate",
+      name: "Door Golem",
+      enabled: passed,
+      requirements: world.gate.unlockCondition,
+      ...(passed
+        ? {}
+        : { reason: `Missing credentials: ${missingCredentials(state.knowledge, state.character.swordLv).join(", ")}` }),
+    });
+  }
+
+  return out;
+}
+
 /** A partial KernelCore — `{validate, reduce, narrativeFacts, observe}`,
  *  deliberately WITHOUT `deriveWorld` (see this file's header comment:
  *  deriveWorld's Node-side filesystem read lives in shared/pack-
@@ -754,5 +851,7 @@ export function observe(state, world, viewer) {
  *  @golem-engine/kernel's replay(), which only ever reads `.reduce` —
  *  same posture as topdown-puzzle/golem-grid's own `module` export.
  *  `observe` (S4 PR1) rides beside it now — the first game module in the
- *  monorepo to populate this kernel hook. */
-export const module = { validate, reduce, narrativeFacts, observe };
+ *  monorepo to populate this kernel hook. `affordances` (A1 PR1) rides
+ *  beside it too — the conformance proof that the kernel's affordances
+ *  hook generalizes across a second, very different Obs shape. */
+export const module = { validate, reduce, narrativeFacts, observe, affordances };

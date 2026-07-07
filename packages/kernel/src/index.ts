@@ -14,8 +14,12 @@ export type EventBase = { seq: number; t: string };
 export type Event<T extends object = Record<string, unknown>> = EventBase & T;
 
 /** DELTA C3's component vocabulary (Identity/GridPosition/.../Knowledge,
- *  ComponentName, ComponentDataMap, Entity<C>) — see src/components.ts. */
+ *  ComponentName, ComponentDataMap, Entity<C>) — see src/components.ts.
+ *  Also re-exports DELTA A1's `Affordance` (co-located there beside
+ *  Lock/Interactable's opaque-condition idiom, which `Affordance.
+ *  requirements` shares). */
 export * from "./components.js";
+import type { Affordance } from "./components.js";
 
 /** A command is whatever shape a game module's `validate` accepts. The
  *  kernel does not constrain it beyond "some value" — each game module
@@ -62,8 +66,9 @@ export interface GameModule<World, State, Cmd extends Command, Obs, Facts> {
   observe(state: State, world: World, viewer: string): Obs;
   /** observation + actor → legal-verb menu (adventure's affordance
    *  query, VISION.md: "powering text commands, context menus, NPC
-   *  planning, tutorials, and twin grounding"). */
-  affordances(observation: Obs, actor: string): unknown;
+   *  planning, tutorials, and twin grounding"). Return shape is the
+   *  canonical `Affordance` (DELTA A1) — see src/components.ts. */
+  affordances(observation: Obs, actor: string): readonly Affordance[];
   /** state + world + event → facts the narrator (golem) may say aloud.
    *  The only integration point for prose generation (doctrine #4): the
    *  golem is a mouth, and this is the only thing it is allowed to say. */
