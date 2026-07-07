@@ -27,9 +27,20 @@
    `S` container this file's `createHost(S, hooks)` expects (previously
    just `{st, world}`) — the compiled RuntimePack `deriveWorldFromPack`
    needs to resolve `state.world`'s `{zone,floorNum,mapId}` triple into
-   the actual World. */
+   the actual World.
+
+   S3 PR4 (docs/superpowers/specs/2026-07-07-s3-pr4-derive-wiring-
+   design.md) adds `S.seed` — an OPTIONAL top-level field beside `S.st`/
+   `S.world`/`S.pack` (chosen once at game start, never inside reducer
+   State — doctrine #1: never stored, never sent), mirroring golem-
+   grid's own `S.seed`. It is threaded through to `validate`'s ctx (so a
+   seeded ENTERED_TOMB gets a real "tomb:" mapId instead of the no-seed
+   placeholder) and to `deriveWorld` (S3 PR4's additive dispatcher over
+   the old `deriveWorldFromPack`, replacing the direct call below) when
+   re-deriving `S.world`. Omitting `S.seed` reproduces every existing
+   (pre-S3) behavior byte-for-byte — this field is purely additive. */
 import { reduce as shReduce } from "../shared/reducer.js";
-import { validate, deriveWorldFromPack } from "../shared/module.js";
+import { validate, deriveWorld } from "../shared/module.js";
 
 // No legacy fixed-tick constant exists for some-hero (it runs continuous
 // pixel physics — legacy/src/core/update.js's per-frame loop, not a
@@ -50,7 +61,13 @@ export function createHost(S, hooks) {
       // A world-swap event (ENTERED_TOMB/EXITED_TOMB/RESURRECTED-out-of-
       // the-tomb) just committed — re-derive S.world for whatever gets
       // committed next, world-swap-aware fold (see this file's header).
-      S.world = deriveWorldFromPack(S.pack, S.st.world);
+      // deriveWorld (S3 PR4's additive dispatcher) routes a "map:" mapId
+      // through the unchanged pack.maps path and a "tomb:" mapId through
+      // the generated-floor path — S.seed is threaded through so a
+      // "tomb:" mapId (built by shared/module.js's ENTERED_TOMB
+      // construction, when S.seed is set) reproduces the exact same
+      // generated floor here.
+      S.world = deriveWorld(S.pack, S.st.world, S.seed);
     }
     onCommit(ev);
   }
@@ -60,7 +77,7 @@ export function createHost(S, hooks) {
   }
 
   function hostCmd(from, cmd) {
-    const r = validate({ state: S.st, world: S.world, from }, cmd);
+    const r = validate({ state: S.st, world: S.world, from, seed: S.seed }, cmd);
     if (!Array.isArray(r)) return hostDeny(r.deny);
     // Record the LEGAL command stream in order (moves + the clock's ticks
     // alike, since both flow through here) BEFORE it commits — a denied
