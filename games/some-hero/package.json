@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node --test tests/*.test.js",
+    "test": "node --test tests/*.test.js rules/tests/*.test.js rules/tests/ceremony-kernel/*.test.js",
+    "test:ceremony-kernel": "node --test rules/tests/ceremony-kernel/*.kernel.test.js",
     "verify:some-hero-content": "node --test tests/*.test.js"
   },
   "dependencies": {
