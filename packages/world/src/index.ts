@@ -219,3 +219,8 @@ export function chainCorridors(rooms: Room[]): Array<{ x: number; y: number }> {
 export function featureEligibleRooms<T extends { tag?: string }>(rooms: T[]): T[] {
   return rooms.filter((r) => !r.tag);
 }
+
+/* ── A2: regions overlay (region membership + portal topology/FSM) —
+   see regions.ts's header comment for the full design rationale. */
+export type { RegionMap, Portal, PortalStateName } from "./regions.js";
+export { assignRegions, nextPortalState } from "./regions.js";
