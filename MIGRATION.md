@@ -13,9 +13,9 @@ than repeating it.
 | Legacy system | Landed at | Kept | Rewritten/replaced | Explicitly dropped | Status |
 |---|---|---|---|---|---|
 | `golem` (golem-grid.html) | `games/golem-grid/reference/golem-grid.html` (pinned fixture) + `games/golem-grid/` (live Vite app) | Worldgen (h32/channel), THEMES, dungeon generation, reducer logic, game mechanics (light pool, extraction, prize) — all as content of golem-grid, not engine law | Single-file layout → Vite build over `packages/{random,kernel,net,clients,language}`; `applyEvent` → pure `reduce()`; inline NET → `@golem-engine/net`; inline dedup → `@golem-engine/net`'s `makeDeduper` | Nothing at the mechanics level — "dies" per VISION.md means *demotion* (constitution → this game's content), not deletion | **Live and current.** This is the reference kernel game; K1–K6 (Phase 1) are done |
-| `games/some-hero/legacy/` (the flagship) | `games/some-hero/legacy/` (read-only snapshot) + `games/some-hero/ceremony/` (characterization tests) | All writing/content/art/audio/quests/puzzles/bosses/credentials/credit satire/Ledger personality, pinned-room worldgen contract, meta-progression distinction, pure rule helpers — as the future port's spec | Nothing yet — the kernel port (Phase 4, tasks S1–S5) has not started | Mutable game-state aggregate, fx-coupled systems, ambient `Math.random`, localStorage saves (to be replaced by Phase 1/4 equivalents when ported) | **Frozen, not yet ported.** 6 `@ceremony` characterization test files exist and pass in CI (`freeze-verify` job); this is the pre-port spec, not new implementation |
-| `games/topdown-puzzle/legacy/` (Phaser) | `games/topdown-puzzle/legacy/` (read-only snapshot) + `games/topdown-puzzle/` (live kernel port) + `games/topdown-puzzle/levels/*.txt` (ASCII levels, also vendored flat) | ASCII level notation (kept as a supported importer), all 6 authored levels as regression/replay fixtures, push-chain mechanics as the kernel's second consumer, edit→serialize→playtest workflow | Phaser scene code (`KyeScene.js`'s `startMovingBlock`/`updateBaddie`/contact-poll) → `games/topdown-puzzle/shared/tick.js`'s pure `resolveTick`, canonicalized to small documented HP numbers instead of legacy's inconsistent 20/100/10 tuning; sprites → kernel entities (`packages/kernel`'s component vocabulary via C3); ad hoc level parsing → `packages/content`'s compiler (C1/C2) | Phaser runtime itself — not imported anywhere in the live port | **Live and current.** C4 (Phase 2) is done: 6 legacy levels compile and play; 2 have pinned solution-log fixtures |
-| `imported-content/adventure/legacy/` (Python/YAML/eval) | `imported-content/adventure/legacy/` (read-only snapshot) + `imported-content/adventure/AUDIT.md` (compile-target inventory) | Vocabulary only: the semantic world model (regions, portals, containers, characters, conditions), the affordance-query shape (`affordances(observation, actor) → [{verb, target, enabled, reason}]`) | Not yet — A3 (Phase 5, "Adventure import") has not started. The audit inventories every compile target: 15 live `func:` YAML blocks + 1 dead, 3 `eval(`/`exec(` sites in `adventure.py`, plus a dormant `code.InteractiveConsole` eval-equivalent hazard (`items.py`'s `Computer.use()`), all pinned to the imported SHA (`e720d388f`) | The entire Python/Flask runtime; every `func:`/`eval`/`exec` mechanism; `AICharacter`'s live `OpenAIClient.oneoff_prompt()` call (an AI actor with narrative authority) — none of this is ever ported, only re-expressed as data | **Snapshot + audit only, not ported.** A3 is Phase 5 work; today this tree is inert content the compiler has not touched |
+| `games/some-hero/legacy/` (the flagship) | `games/some-hero/legacy/` (read-only snapshot) + `games/some-hero/ceremony/` (legacy characterization tests) + `games/some-hero/{content,rules,shared,src}` (the live kernel port) | All writing/content/art/audio/quests/puzzles/bosses/credentials/credit satire/Ledger personality (S1 content pack, every string byte-identical), pinned-room worldgen contract (S3, generalized into `packages/world`), meta-progression distinction, pure rule helpers (S2a) — all landed in the port, not just recorded as its spec | Mutable single-aggregate game state → the five-tier `State` (world/run/character/knowledge/profile + a `pending` two-step slot) driven by a pure `deriveWorld`/`validate`/`reduce`/`observe`/`affordances`/`narrativeFacts` `GameModule` (S2b/S2c); ambient `Math.random` worldgen → `packages/world`'s named-channel tomb-floor generator (S3); fx-coupled systems → the C4 tick bridge + reducer cases; `hostCmd`-style dispatch → `validate()` | Nothing at the mechanics/content level — the port is a faithful re-expression, not a redesign. `legacy/` itself is untouched: this row's "kept" column describes what the *port* kept, not a rewrite of the legacy tree | **Headless-complete (S1–S5).** All 62 legacy `@ceremony` tests still pass verbatim against `legacy/`; a 60-test kernel-mirrored suite (`rules/tests/ceremony-kernel/`, plus 2 documented scarab divergences) proves the port matches; a scripted whole-route E2E (`tests/e2e-headless/full-route.test.js`) replays bit-identically. The interactive/visual remainder (S4 PR2's two-skin Playwright smoke, S5 checks 3–4, the `engine-v1.0` tag) is **browser-blocked** in this sandbox — deferred, not faked, not skipped by choice |
+| `games/topdown-puzzle/legacy/` (Phaser) | `games/topdown-puzzle/legacy/` (read-only snapshot) + `games/topdown-puzzle/` (live kernel port) + `games/topdown-puzzle/levels/*.txt` (ASCII levels, also vendored flat) | ASCII level notation (kept as a supported importer), all 6 authored levels as regression/replay fixtures, push-chain mechanics as the kernel's second consumer, edit→serialize→playtest workflow | Phaser scene code (`KyeScene.js`'s `startMovingBlock`/`updateBaddie`/contact-poll) → `games/topdown-puzzle/shared/tick.js`'s pure `resolveTick`, canonicalized to small documented HP numbers instead of legacy's inconsistent 20/100/10 tuning; sprites → kernel entities (`packages/kernel`'s component vocabulary via C3); ad hoc level parsing → `packages/content`'s compiler (C1/C2) | Phaser runtime itself — not imported anywhere in the live port | **Live and current.** C4 (Phase 2) is done: 6 legacy levels compile and play; 5 have pinned solution-log fixtures (`games/topdown-puzzle/tests/solutions/`, C4 PR4) |
+| `imported-content/adventure/legacy/` (Python/YAML/eval) | `imported-content/adventure/legacy/` (read-only snapshot) + `imported-content/adventure/AUDIT.md` (compile-target inventory) + `imported-content/adventure/{content,module,bin}` (the live import) | The semantic world model (regions, portals, containers, characters, conditions) as a real C1-compiled content pack (`content/entities.mjs`, hand-transcribed per `DECISION-LOG.md`), the affordance-query shape now a REAL hook (`module/module.js`'s `affordances(observation, actor) → readonly Affordance[]`, not just recorded vocabulary), room descriptions transcribed byte-identical | Every `func:` YAML block and the one live `condition:` → a content-pack component (`OnUse`/`Spawns`/`Portable`/`Interactable`) or a `content`-compiler `ConditionNode` (`all/any/not/fact/cmp`), per `DECISION-LOG.md`'s disposition table; the Flask CLI/HTTP loop → `packages/clients`' `createTerminalSession` (headless, pure) + `bin/play.mjs` (the one untested `node:readline` TTY wrapper around it) | The entire Python/Flask runtime; every `func:`/`eval`/`exec` mechanism; the `subprocess` book and the `Computer`/`InteractiveConsole` hazard (dropped entirely, not even inert); `AICharacter`'s live `OpenAIClient.oneoff_prompt()` call (an AI actor with narrative authority) — none of this is ever ported, only re-expressed as data or explicitly dropped | **Imported and playable (A3 done).** Content pack (A3 PR1), full six-hook `GameModule` + terminal client (A3 PR2), and a scripted, bit-identical-replay sample-world walkthrough E2E (A3 PR3) — the DoD that closed A3 and DELTA Phase 5 |
 
 Each `legacy/` tree carries its own `PROVENANCE.md` (source repo,
 pinned commit SHA, snapshot date, `git archive` method) and is
@@ -54,6 +54,96 @@ across K1–K6:
   them moved into a `packages/*` engine package; they stay exactly
   where they were, in `games/golem-grid/shared/`.
 
+## some-hero → games/some-hero (kernel port, DELTA Phase 4, S1–S5)
+
+`games/some-hero/legacy/` stays exactly as vendored (read-only,
+untouched); the live game is now built alongside it at `games/some-hero/
+{content,rules,shared,src}`, with `games/some-hero/ceremony/*.ceremony.test.js`
+(62 legacy characterization tests) still running against `legacy/`
+verbatim as the port's regression spec:
+
+- **Content (S1)**: the Ceremony-route content — Guild Hall map, Door
+  Golem, three credentials, the stamp, tomb-floor-1 enemies, 16 tables of
+  Ledger/golem/riddle/seal copy — extracted into `games/some-hero/content/`,
+  a C1-compiled, hash-pinned pack whose every string is asserted
+  byte-identical to `legacy/` (`content-review.test.js`).
+- **Rules (S2a)**: `legacy/`'s pure helpers (stairsOpen, sealMsg,
+  credential queries, the credit/APR satire) ported verbatim to
+  `games/some-hero/rules/`, table-fed from S1's content pack rather than
+  hardcoded strings.
+- **State + systems (S2b/S2c)**: the mutable single-aggregate legacy game
+  state → the five-tier `State` (world/run/character/knowledge/profile +
+  a `pending` two-step slot) folded by a pure `deriveWorld`/`validate`/
+  `reduce`/`observe`/`affordances`/`narrativeFacts` `GameModule` — the
+  first complete six-hook implementer in the monorepo. Movement,
+  collision, pickups, one enemy family's combat, the Door Golem gate +
+  two-step ceremony, death→resurrection with knowledge persistence, and
+  Ledger fact emission (`narrativeFacts`, feeding the template-only
+  `src/ledger-render.js` — doctrine #4's "golem is a mouth" still holds:
+  it emits facts, never prose logic) are all reducer/tick cases now,
+  not legacy's fx-coupled systems.
+- **Worldgen (S3)**: `legacy/`'s ambient-`Math.random` floor generator →
+  `games/some-hero/shared/floorgen.js` on named channels
+  (layout/puzzle/spawns/decor) plus `packages/world`'s new pinned-room
+  contract (S3 PR1, generalized from this exact legacy generator); a
+  10K-seed reachability/winnability solver gate replaces "seemed fine in
+  playtesting."
+- **Renderer adapter (S4)**: `legacy/`'s Canvas desert skin is driven by
+  a new `observe()`→view-model adapter (`src/render-adapter.js`) instead
+  of reading mutable game state directly; a headless drawable-hash test
+  proves the skin's own draw functions are unchanged. The Playwright
+  half (visual smoke on both skins) is browser-blocked, not done.
+- **THE CEREMONY (S5)**: the acceptance gate's headless checks (full-route
+  bit-identical replay, the `@ceremony`/`ceremony-kernel` suites, both
+  other games sharing the kernel build) all pass; the interactive
+  checks and the `engine-v1.0` tag remain browser-blocked.
+
+Nothing here was redesigned — every rule, number, and string is asserted
+against the legacy behavior it replaces (that is what the `@ceremony` /
+`ceremony-kernel` reconciliation proves). `legacy/`'s scarab enemy is the
+one deliberate exception: it is dead gen-1 holdover content excluded from
+the live roster by design (2 documented divergences), not a missed spot.
+
+## imported-content/adventure (A3, DELTA Phase 5)
+
+Unlike the other two legacy imports, adventure's disposition needed
+per-item human judgment before any code could be written: `AUDIT.md`
+(P0.2) inventoried every `func:`/`eval`/`exec` occurrence in the legacy
+YAML/Python, and `imported-content/adventure/DECISION-LOG.md` records,
+for each one, whether it became a content-pack component, a condition,
+or was explicitly dropped — never mechanically carried across (DELTA's
+"zero dynamic code" discipline, proven by the pack's own
+`no-dynamic-code.test.js`).
+
+- **Content (A3 PR1)**: `world.yaml`'s 33 rooms hand-transcribed (not
+  YAML-parsed) into `imported-content/adventure/content/entities.mjs`,
+  compiled by C1 into a hash-pinned pack. Room/item descriptions are
+  byte-identical authored content; every `func:` became a declarative
+  component (`OnUse`/`Spawns`/`Portable`/`Interactable`/`Toggle`) or a
+  `ConditionNode`; commented-out YAML (the `payphone`, the `subprocess`
+  book) was not ported at all.
+- **GameModule + terminal client (A3 PR2)**: `imported-content/adventure/
+  module/module.js` implements all six `GameModule` hooks, entirely by
+  evaluating declarative components through `@golem-engine/content`'s
+  `evaluate()` — no per-NPC/per-item bespoke code, unlike the legacy
+  Python's per-character `func:` bodies. The Flask/CLI loop is replaced
+  by `packages/clients`' pure, headless-testable `createTerminalSession`;
+  the one untested surface is `bin/play.mjs`, a thin `node:readline`
+  wrapper (mirroring some-hero's own "I/O at the edges" split).
+- **Sample-world walkthrough (A3 PR3)**: a scripted E2E
+  (`tests/e2e/sample-world.walkthrough.test.js`) proves the whole import
+  is bit-identically replayable end to end — the DoD that closed both A3
+  and DELTA Phase 5.
+
+What never crossed over, by design: the Python/Flask HTTP+CLI runtime;
+every `func:`/`eval`/`exec` mechanism itself (only their *effects*
+survive, re-expressed as data); the dormant `Computer`/
+`code.InteractiveConsole` eval-equivalent hazard (dropped entirely, not
+even inertly present); and `AICharacter`'s live `OpenAIClient.
+oneoff_prompt()` call — an AI actor with narrative authority, which
+VISION.md's "golem is a mouth, never an actor" law rules out on
+principle, not just on porting cost.
+
 ## The drawer (`drawer/*.md`)
 
 VISION.md and DELTA §0.4 record several future systems deliberately
@@ -84,15 +174,22 @@ breaking schema migration when its pull-condition fires.
 ## What's explicitly NOT migrated (by design, per DELTA's deletions list)
 
 - The `adventure` Python/Flask runtime and every `func:`/`eval`/`exec`
-  hook (`imported-content/adventure/AUDIT.md`'s full inventory) — never
-  ported, content-only via a future A3.
+  hook itself (`imported-content/adventure/AUDIT.md`'s full inventory,
+  reconciled row-by-row in `DECISION-LOG.md`) — content and the
+  affordance-query shape ARE imported (A3, done), but the Python
+  runtime, the raw `eval`/`exec` mechanism, and the `AICharacter`
+  AI-with-authority pattern are never ported, only re-expressed as
+  data or explicitly dropped.
 - `topdown-puzzle`'s Phaser engine — not imported into the live port;
   only ASCII levels + rules survive (as `packages/content`-compiled
   data + `shared/tick.js`'s canonicalized movement/contact logic).
-- `some-hero`'s mutable single-aggregate game state, fx-coupled systems,
-  ambient `Math.random`, and localStorage saves — these remain exactly
-  as they are inside the frozen `legacy/` snapshot until Phase 4 (S2)
-  replaces them; nothing has been rewritten yet.
+- `some-hero`'s legacy mutable single-aggregate game state, fx-coupled
+  systems, ambient `Math.random`, and localStorage saves — these remain
+  exactly as they are inside the frozen `legacy/` snapshot (never
+  edited in place); the *live port* (Phase 4, S1–S5, headless-complete)
+  replaces every one of them with kernel equivalents, but `legacy/`
+  itself is not rewritten, only superseded as the thing that actually
+  plays.
 - `golem`'s single-file HTML layout — demoted to a reference fixture,
   not deleted; the mechanics it encoded (light pool, extraction,
   traitor plans) are golem-grid content now, not engine law.
