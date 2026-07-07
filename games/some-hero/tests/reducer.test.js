@@ -22,7 +22,7 @@ test("createState() returns the five-tier State with rules/-sourced defaults", (
   // entity tier) starts empty — seeded only by ENTERED_TOMB. run.boss
   // (the warden-seal boss resolution's own run.boss slot) starts null —
   // seeded only by ENTERED_TOMB/DESCENDED on a warden floor.
-  assert.deepEqual(state.run, { runStats: newRunStats(), puzzle: null, enemies: [], boss: null });
+  assert.deepEqual(state.run, { runStats: newRunStats(), puzzle: null, enemies: [], boss: null, collectedTiles: [] });
   assert.deepEqual(state.character, {
     hp: 10,
     maxhp: 10,

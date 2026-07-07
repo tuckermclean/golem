@@ -88,6 +88,13 @@ export function createState() {
       // seeded from `ev.boss` (shared/module.js's initBoss()) on every
       // ENTERED_TOMB/DESCENDED whose generated floor carries one.
       boss: null,
+      // Tiles whose pickup has been taken this floor ("x,y" strings).
+      // world.pickupAt is a pure function of the seed and can't record
+      // consumption, so — exactly like the traps seal's `hit` flag —
+      // collection state lives HERE, in State (adversarial-review find:
+      // without it, a gold/potion pile could be re-collected infinitely by
+      // stepping off and back on). Reset fresh per floor.
+      collectedTiles: [],
     },
     character: {
       hp: 10,
@@ -203,7 +210,7 @@ export function reduce(state, world, ev) {
       return {
         ...state,
         world: { zone: ev.zone, floorNum: ev.floorNum, mapId: ev.mapId },
-        run: { runStats, puzzle: ev.puzzle ?? null, enemies, boss },
+        run: { runStats, puzzle: ev.puzzle ?? null, enemies, boss, collectedTiles: [] },
         character: { ...state.character, pos: { ...ev.spawn } },
         knowledge,
         pending: null,
@@ -230,7 +237,7 @@ export function reduce(state, world, ev) {
         // live boss/enemy left in `run` kept acting in the guild hall,
         // resolved against the ow world's walls). runStats is preserved (a
         // voluntary exit does NOT end the run — see above).
-        run: { ...state.run, enemies: [], boss: null, puzzle: null },
+        run: { ...state.run, enemies: [], boss: null, puzzle: null, collectedTiles: [] },
         character: { ...state.character, pos: { ...ev.spawn } },
         knowledge,
         seq: ev.seq,
@@ -300,6 +307,7 @@ export function reduce(state, world, ev) {
           puzzle: ev.puzzle ?? null,
           enemies,
           boss,
+          collectedTiles: [], // fresh floor -> fresh pickups (see createState)
           // runStats otherwise preserved — kills/gold carry across
           // floors (design spec: "runStats otherwise preserved"); only
           // `depth` is bumped, to the max of what it already was and the
@@ -368,7 +376,7 @@ export function reduce(state, world, ev) {
       // state too (same adversarial-review find as EXITED_TOMB above: a
       // boss/enemy left live in `run` would keep acting in town). runStats
       // is still preserved (died runs are never reset — see above).
-      const run = { ...state.run, runStats: { ...state.run.runStats, died: true }, enemies: [], boss: null, puzzle: null };
+      const run = { ...state.run, runStats: { ...state.run.runStats, died: true }, enemies: [], boss: null, puzzle: null, collectedTiles: [] };
 
       return { ...state, knowledge, character, world, run, pending: null, seq: ev.seq };
     }
@@ -456,25 +464,34 @@ export function reduce(state, world, ev) {
       // a key seal (shouldn't happen in practice, but no fixture pins
       // that it can't) falls through to the generic `inv` branch below,
       // byte-unchanged.
-      if (ev.kind === "key" && state.run.puzzle?.type === "key") {
+      {
+        // Record the tile as taken so it can't be re-collected (the
+        // move case above skips a tile already in this list). The event
+        // carries x/y (shared/module.js's move case); guarded for any
+        // legacy COLLECTED without a position.
+        const collectedTiles =
+          ev.x != null ? [...(state.run.collectedTiles || []), `${ev.x},${ev.y}`] : state.run.collectedTiles || [];
+        if (ev.kind === "key" && state.run.puzzle?.type === "key") {
+          return {
+            ...state,
+            run: { ...state.run, collectedTiles, puzzle: { ...state.run.puzzle, have: true } },
+            seq: ev.seq,
+          };
+        }
         return {
           ...state,
-          run: { ...state.run, puzzle: { ...state.run.puzzle, have: true } },
+          run: { ...state.run, collectedTiles },
+          character: {
+            ...state.character,
+            ...(ev.kind === "gold"
+              ? { gold: state.character.gold + ev.amount }
+              : ev.kind === "potion"
+                ? { potions: state.character.potions + ev.amount }
+                : { inv: state.character.inv + ev.amount }),
+          },
           seq: ev.seq,
         };
       }
-      return {
-        ...state,
-        character: {
-          ...state.character,
-          ...(ev.kind === "gold"
-            ? { gold: state.character.gold + ev.amount }
-            : ev.kind === "potion"
-              ? { potions: state.character.potions + ev.amount }
-              : { inv: state.character.inv + ev.amount }),
-        },
-        seq: ev.seq,
-      };
 
     default:
       return { ...state, seq: ev.seq };
