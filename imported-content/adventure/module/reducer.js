@@ -39,6 +39,9 @@
  *  layer never have to re-derive this string convention independently —
  *  one source of truth for the `"<itemId>:on"` shape. */
 export const toggleFactName = (itemId) => `${itemId}:on`;
+/** The idempotency guard fact for a Spawns — set by the SPAWNED case,
+ *  checked by module.js's validate so a Spawns fires at most once. */
+export const spawnedFact = (entity) => `spawned_${entity}`;
 
 /** createState(world) — starts the player in the derived World's entry
    room (module.js's deriveWorld: "the first room in pack.entities'
@@ -115,11 +118,17 @@ export function reduce(state, world, ev) {
     }
 
     case "SPAWNED": {
+      const guard = spawnedFact(ev.entity);
+      // Idempotent: once an entity has spawned, its guard fact stays set
+      // forever, so it can never spawn a second time — even after the
+      // player takes the first copy out of the room (which the old
+      // room-membership-only check missed → unbounded duplication).
+      if (state.facts.includes(guard)) return { ...state, seq: ev.seq };
       const there = state.roomItems[ev.region] || [];
-      if (there.includes(ev.entity)) return { ...state, seq: ev.seq };
       return {
         ...state,
-        roomItems: { ...state.roomItems, [ev.region]: [...there, ev.entity] },
+        roomItems: { ...state.roomItems, [ev.region]: there.includes(ev.entity) ? there : [...there, ev.entity] },
+        facts: [...state.facts, guard],
         seq: ev.seq,
       };
     }

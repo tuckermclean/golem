@@ -34,7 +34,7 @@
    exactly as the design spec's "evaluate() against a factLookup over
    state.facts+inventory" phrasing describes). */
 import { evaluate } from "@golem-engine/content";
-import { reduce, createState, serializeState, toggleFactName } from "./reducer.js";
+import { reduce, createState, serializeState, toggleFactName, spawnedFact } from "./reducer.js";
 
 export { reduce, createState, serializeState };
 
@@ -217,6 +217,14 @@ function factLookup(state, world) {
   };
 }
 
+/** True once `entity` has already spawned — its `spawned_<entity>` guard
+ *  fact (set by reducer.js's SPAWNED case) is in state.facts. `spawnedFact`
+ *  lives in reducer.js (imported above) so validate + reduce can't drift
+ *  on the key format. */
+function hasSpawned(state, entity) {
+  return state.facts.includes(spawnedFact(entity));
+}
+
 /** Sim-and-inspect: fold `events` through a throwaway reduce() (seq-
  *  incrementing from `state.seq`), returning the resulting simulated
  *  State without touching the real one — same idiom games/some-hero/
@@ -312,8 +320,15 @@ export function validate(ctx, cmd) {
 
       if (item.spawns) {
         const sim = foldThrough(state, world, events);
-        if (evaluate(item.spawns.when, factLookup(sim, world))) {
-          events.push({ t: "SPAWNED", entity: item.spawns.entity.$ref || item.spawns.entity, region: sim.region });
+        const spawnEntity = item.spawns.entity.$ref || item.spawns.entity;
+        // Fire at most ONCE: a `spawned_<id>` guard fact (set by the
+        // SPAWNED reducer) makes the spawn idempotent. The room-membership
+        // check alone was insufficient — a spawned item the player then
+        // TOOK left the room, re-enabling the spawn (unbounded duplication;
+        // adversarial-review BLOCKER). Generic, so it doesn't depend on the
+        // content's own (dead) guard facts like `wizard_gave_key`.
+        if (!hasSpawned(sim, spawnEntity) && evaluate(item.spawns.when, factLookup(sim, world))) {
+          events.push({ t: "SPAWNED", entity: spawnEntity, region: sim.region });
         }
       }
       return events;
@@ -330,8 +345,13 @@ export function validate(ctx, cmd) {
       const events = [];
       if (npc.spawns) {
         const fl = factLookup(state, world);
-        if (evaluate(npc.spawns.when, fl)) {
-          events.push({ t: "SPAWNED", entity: npc.spawns.entity.$ref || npc.spawns.entity, region: state.region });
+        const spawnEntity = npc.spawns.entity.$ref || npc.spawns.entity;
+        // Fire at most ONCE (see the `use` handler's spawn note) — without
+        // this, talking to the wizard again after pocketing the odd key
+        // spawned a duplicate every time (the `wizard_gave_key` guard the
+        // content's `not` clause expects is never set anywhere).
+        if (!hasSpawned(state, spawnEntity) && evaluate(npc.spawns.when, fl)) {
+          events.push({ t: "SPAWNED", entity: spawnEntity, region: state.region });
         }
       }
       return events;
@@ -400,7 +420,19 @@ export function affordances(observation, actor) {
       out.push({ verb, target: id, name: item.name, enabled, ...(reason ? { reason } : {}) });
     }
     if (item.portable && verb !== "take") {
-      out.push({ verb: "take", target: id, name: item.name, enabled: true });
+      // The auto-added "take" for a Portable item whose own Interactable
+      // verb is something else (e.g. the fish's "catch") must still honor
+      // enabledWhen — validate()'s real `take` handler gates on it, so an
+      // unconditionally-enabled affordance here mis-reports an illegal
+      // action (adversarial-review find: fed false "can-take" signals to
+      // nextHint/affordancesToFacts/terminal).
+      let takeEnabled = true;
+      let takeReason;
+      if (item.interactable && item.interactable.enabledWhen && !evaluate(item.interactable.enabledWhen, fl)) {
+        takeEnabled = false;
+        takeReason = `Not yet — something's missing.`;
+      }
+      out.push({ verb: "take", target: id, name: item.name, enabled: takeEnabled, ...(takeReason ? { reason: takeReason } : {}) });
     }
   }
 

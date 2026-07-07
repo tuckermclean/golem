@@ -631,12 +631,18 @@ export function validate(ctx, cmd) {
         return { deny: "There is nothing to resurrect from." };
       }
       const ev = { t: "RESURRECTED", cause: state.pending.cause };
+      // character.pos ALWAYS resets to the guild-hall spawn — you respawn
+      // at the guild regardless of where you died (legacy respawnAtGuild
+      // sets the village position unconditionally; the spec's RESURRECTED
+      // field list states "character.pos = the ow map's derived
+      // world.spawn" with no zone caveat — that caveat is only on the
+      // `world` tier below). Previously ev.spawn was set only for a tomb
+      // death, so dying while already in "ow" left the player standing
+      // where they died — an adversarial-review find.
+      ev.spawn = guildHallSpawn();
       if (state.world.zone === "tomb") {
-        // Real zone climb-out (design spec's RESURRECTED field list:
-        // "world: if zone==='tomb' -> {zone:'ow',...}; if already ow,
-        // leave" + "character.pos = the ow map's derived world.spawn").
+        // Climbing out of the tomb also resets the world tier back to ow.
         ev.world = { zone: "ow", floorNum: 0, mapId: "map:guild_hall" };
-        ev.spawn = guildHallSpawn();
       }
       return [ev];
     }
