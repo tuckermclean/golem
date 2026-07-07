@@ -10,6 +10,7 @@
   "dependencies": {
     "@golem-engine/content": "*",
     "@golem-engine/kernel": "*",
-    "@golem-engine/random": "*"
+    "@golem-engine/random": "*",
+    "@golem-engine/world": "*"
   }
 }
