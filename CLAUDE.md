@@ -249,12 +249,15 @@ Concise status:
 Doctrine (VISION.md) and sequencing (DELTA.md) are unchanged and still
 govern.
 
-### Update — 2026-07-07 (Phase 4 S1–S2: the some-hero Ceremony rules port)
+### Update — 2026-07-07 (Phase 4: the some-hero Ceremony — headless arc COMPLETE)
 
-DELTA Phase 4 (SOME HERO: The Ceremony) is underway; **S1 and S2 are
-DONE**. Also cleared: **C4 PR4** (5 real topdown-puzzle solution-log
-fixtures, `freeze:verify`-gated) and **Phase 3 L7** (the NPC context
-compiler + `renderStubReply`, in `packages/language`).
+DELTA Phase 4 (SOME HERO: The Ceremony) — **its entire headless-verifiable
+arc is DONE: S1, S2, S3, S4's pure core, and S5's headless acceptance
+checks. The only remainder is browser-blocked (S4 visual smoke, S5
+interactive checks, the `engine-v1.0` tag) — deferred, not faked.** Also
+cleared: **C4 PR4** (5 real topdown-puzzle solution-log fixtures,
+`freeze:verify`-gated) and **Phase 3 L7** (the NPC context compiler +
+`renderStubReply`, in `packages/language`).
 
 - **S1 (content) DONE**: `games/some-hero/content/` — a C1-compiled,
   hash-pinned (`content/pack.json`) Ceremony-route pack: minimal
@@ -283,10 +286,54 @@ compiler + `renderStubReply`, in `packages/language`).
     re-add it). `ceremony-parity.test.js` machine-checks this
     reconciliation. Legacy `test:ceremony` (62) still runs verbatim
     against `legacy/`, untouched.
-- **Remaining Phase 4**: S3 (some-hero worldgen on named channels +
-  pinned-room contract in `packages/world`), S4 (legacy renderer adapter
-  — needs a browser for the visual smoke, CI-only here), S5 (THE
-  CEREMONY acceptance gate → tag `engine-v1.0`).
+- **S3 (worldgen) DONE**: `packages/world`'s first feature (the
+  dependency-free pinned-room contract: `placeRooms`/`placePinnedRooms`/
+  `chainCorridors`/`featureEligibleRooms`) + `games/some-hero/shared/
+  floorgen.js` (legacy `generateFloor` ported onto `layout`/`puzzle`/
+  `spawns`/`decor` named channels + `packages/world`). Wired into the
+  live `deriveWorld` via an additive `mapId`-prefix dispatcher
+  (`map:`=authored pack map; `tomb:<seed>:<runs>:<floor>`=generated) +
+  seed threading (`state.world`'s 3-field shape stays locked; generation
+  key lives in the mapId). Golden-seed tests (`tests/golden/`, regen a
+  no-op) + a reachability/connectivity solver (`shared/solver.js`) with a
+  `make solve-some-hero` 10K-seed gate — **120K floors all winnable**.
+  LIVE roster only throughout (scarab/pigeon/goose/veteran and the rest
+  of the dead gen-1 roster excluded — any appearance is a regression).
+- **S4 (renderer adapter) — pure core DONE, visual smoke BROWSER-BLOCKED**:
+  `observe(state,world,viewer)` (the first `GameModule.observe` in the
+  monorepo — full-visibility, no fog; `viewer` structural/unused) +
+  `src/render-adapter.js` (`adapt(observation)→` a legacy `game`-shaped
+  view-model — grid→pixel, walls→`Uint8Array` TL enum, LIVE-roster enemy
+  visuals; imports nothing from `legacy/`). A HEADLESS drawable-hash test
+  feeds the adapter through the real legacy draw fns (`recordingCtx`→SHA)
+  and pins a golden — proving it drives the desert renderer without a
+  browser. The legacy desert `skin-snapshot` hashes stay byte-unchanged.
+  **S4 PR2 (the DoD's "visual smoke E2E on both skins") is Playwright/
+  Chromium — deferred: no browser in this sandbox, and `make smoke-e2e`
+  is NOT wired into CI either, so it can't be verified anywhere here. Do
+  NOT write+merge it blind (false green).**
+- **S5 (THE CEREMONY acceptance gate) — headless checks DONE, interactive
+  BROWSER-BLOCKED**: check 1 (`tests/e2e-headless/full-route.test.js`, a
+  `freeze:verify` gate) scripts the WHOLE route (Door Golem gate ceremony
+  → seeded generated tomb → tick-driven skeleton contact `HURT`→`DIED` →
+  `resurrect` → ledger) and proves it **replays bit-identically** (hash
+  `645255351`) across live + 2 segmented replays. Checks 2 (@ceremony 62)
+  + 5 (golem-grid + topdown-puzzle on the same kernel) already hold.
+  **Checks 3–4 (fully playable / twin-narrated interactive Playwright) +
+  the `engine-v1.0` tag are browser-blocked — deferred, not faked.** The
+  entire HEADLESS-verifiable arc of Phase 4 is complete; the remainder
+  needs a real browser env (the user's machine, or someone wiring
+  `smoke-e2e` into CI).
+- **Honest gaps** (documented, not blocking): no `GRANT_*` credential
+  event (the full-route arranges credentials on the start state, like
+  every existing credentialed-entry test); `cabinet` (floors 3+) has no
+  content `Actor` stats so `deriveWorld` filters it (floor 1 / the
+  Ceremony route unaffected); interactive seal-puzzle resolution (riddle-
+  answer/plates/traps) was deferred from S2c/S3 (the death-ending route
+  doesn't need it).
+- **Next verifiable**: Phase 5 A1 (affordances as a kernel API, consuming
+  the new `observe()` hook) + A2 (regions overlay) + A3 (adventure
+  import) — all pure/headless. Phase 6 (pipeline/ops) mostly likewise.
 
 Git-auth note: SSH breaks on pod eviction — recover with
 `gh auth setup-git` + an HTTPS `origin` remote (gh's token is valid).
