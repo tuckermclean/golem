@@ -16,12 +16,19 @@
 import { GW, GH } from "../shared/worldgen.js";
 import { isCoarsePointer } from "@golem-engine/clients";
 import { route } from "@golem-engine/language";
-import { computeAffordances, dispatchIntent } from "./language-adapter.js";
+import { dispatchIntent } from "./language-adapter.js";
+import { module } from "../shared/module.js";
+import { observationAt } from "../shared/affordances.js";
 
 const COARSE = isCoarsePointer();
 
 export function createInput(S,deps){
-  const{cmdEl,sendCmd,feedLine,players,getP,itemAt,prizeCarrier,seenT,litT,lookAt,askNpc}=deps;
+  const{cmdEl,sendCmd,feedLine,players,getP,seenT,litT,lookAt,askNpc}=deps;
+  /* itemAt/prizeCarrier used to be hand-rolled dependencies handleTap
+     read directly; A1 PR2 sources the same information through
+     module.affordances() instead (see handleTap below) — main.js still
+     passes them in its deps object (createRenderer still needs them),
+     they're just no longer destructured here. */
 
   /* arrows are feet — always, everywhere, regardless of focus or input
      text. Capture phase so nothing downstream can swallow them. */
@@ -50,7 +57,13 @@ export function createInput(S,deps){
          ordinary chat, exactly as every non-slash message did before
          this wiring (L1 design doc's orchestrator decisions #1/#4). */
       const me=getP(S.me);
-      const result=route(raw,{affordances:me?computeAffordances(S,me.x,me.y):[]});
+      /* A1 PR2: was computeAffordances(S,me.x,me.y) — now calls the real
+         GameModule.affordances() kernel hook directly (module.js's
+         `module.affordances`, sourced from shared/affordances.js),
+         built over an Obs bundle for the player's own tile. Same reach
+         rules, byte-identical take/look output (tests/
+         affordances-menu-parity.test.js). */
+      const result=route(raw,{affordances:me?module.affordances(observationAt(S.st,S.dun,{x:me.x,y:me.y}),S.me):[]});
       if(result.ok)return dispatchIntent(result.intent,{sendCmd,lookAt,me});
       if(result.reason==="ambiguous")
         return feedLine("Did you mean: "+result.candidates.join(", ")+"?","sys");
@@ -113,13 +126,36 @@ export function createInput(S,deps){
     const me=getP(S.me),k=x+","+y,acts=[];
     const adj=me&&Math.abs(me.x-x)<=1&&Math.abs(me.y-y)<=1;
     const occupants=players().filter(p=>p.x===x&&p.y===y&&p.id!==S.me&&litT.has(k));
+    /* A1 PR2: take/read now come from module.affordances() (the real
+       GameModule.affordances() kernel hook) instead of hand-rolled
+       itemAt/prizeCarrier/dun.lore checks — sourced AS IF an actor stood
+       on the clicked tile (x,y), then gated by `adj` here exactly like
+       before, since module.js's take/read commands only ever act on the
+       REAL player's own tile. "walk here" and per-occupant "whisper"
+       stay hand-rolled: they aren't verb/target affordances in the
+       interim source, and backing them would need new walk/whisper
+       verbs (scope expansion beyond A1 — see the PR2 design doc's
+       "Context-menu scope"). "look" ALSO stays hand-rolled and keyed off
+       `litT` (unchanged): unlike the grounding-oriented `look`
+       affordance (which only exists for NAMED targets — an item, the
+       prize, nearby lore), this "look" button is a content-independent
+       examine-this-tile action, legal on any lit tile whether or not
+       anything is there — narrowing it to module.affordances()'s `look`
+       entries would silently drop "look at an empty tile", a real
+       behavior change the menu-parity guarantee forbids. */
+    const tapAffs=module.affordances(observationAt(S.st,S.dun,{x,y}),S.me);
+    const takeAff=tapAffs.find(a=>a.verb==="take");
+    const readAff=tapAffs.find(a=>a.verb==="read"&&a.target===k);
     if(S.dun.grid[y][x]!=="#")acts.push(["walk here",()=>walkTo(x,y)]);
     if(litT.has(k))acts.push(["look",()=>lookAt(x,y)]);
-    if(adj&&itemAt(x,y))acts.push([`take ${itemAt(x,y)}`,()=>sendCmd("take "+itemAt(x,y))]);
-    if(adj&&!prizeCarrier()&&S.dun.prize.x===x&&S.dun.prize.y===y)
-      acts.push([`take ${S.dun.T.prize}`,()=>{if(me.x===x&&me.y===y)sendCmd("take");
-        else{walkTo(x,y);setTimeout(()=>sendCmd("take"),600);}}]);
-    if(adj&&S.dun.lore.has(k))acts.push(["read the inscription",()=>sendCmd("read")]);
+    if(adj&&takeAff){
+      if(takeAff.target===S.dun.T.prize)
+        acts.push([`take ${takeAff.name}`,()=>{if(me.x===x&&me.y===y)sendCmd("take");
+          else{walkTo(x,y);setTimeout(()=>sendCmd("take"),600);}}]);
+      else
+        acts.push([`take ${takeAff.name}`,()=>sendCmd("take "+takeAff.target)]);
+    }
+    if(adj&&readAff)acts.push(["read the inscription",()=>sendCmd("read")]);
     for(const o of occupants)acts.push([`whisper to ${o.name}`,
       ()=>{cmdEl.value=`/w ${o.name} `;cmdEl.focus();}]);
     if(!acts.length)return hideMenu();

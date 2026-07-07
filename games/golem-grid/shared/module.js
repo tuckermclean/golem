@@ -10,6 +10,7 @@ import {
   LIGHT_TIERS, reduce,
   getP, light, itemAt, prizeCarrier, players,
 } from "./reducer.js";
+import { affordances } from "./affordances.js";
 
 export function deriveWorld(seed){ return genDungeon(seed); }
 
@@ -79,5 +80,10 @@ export function validate(ctx,cmd){
 /** Satisfies @golem-engine/kernel's KernelCore<World, State, Cmd> shape
  *  (deriveWorld/validate/reduce) — see packages/kernel/src/index.ts.
  *  No runtime dependency on the kernel package: this object just
- *  happens to structurally match its KernelCore type. */
-export const module={deriveWorld,validate,reduce};
+ *  happens to structurally match its KernelCore type. `affordances`
+ *  (A1 PR2) rides beside it — imported FROM ./affordances.js, never
+ *  implemented here, so this file never references the C3 entity
+ *  overlay directly (tests/entities-not-in-callgraph.test.js's ban)
+ *  while still exposing the full kernel hook to callers (src/input.js,
+ *  src/language-adapter.js). */
+export const module={deriveWorld,validate,reduce,affordances};
