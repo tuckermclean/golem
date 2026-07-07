@@ -581,7 +581,34 @@ export function validate(ctx, cmd) {
         return { deny: "Something solid stops you." };
       }
 
+      // Plates block-push (docs/superpowers/specs/2026-07-07-plates-seal-
+      // resolution-design.md): a block on the target tile is pushed one tile
+      // in the travel direction if the tile beyond it is clear; otherwise the
+      // block is solid and the move is denied. run.puzzle is state (mutable
+      // seal progress), never world — read state.run.puzzle, build a fresh
+      // puzzle (never mutate state/sim). The player still advances onto the
+      // block's OLD tile (the normal MOVED below), so this only adds a derived
+      // BLOCK_PUSHED (like TRAP_TRIGGERED) — it does not replace MOVED.
+      let blockPush = null;
+      const pz = state.run.puzzle;
+      if (pz && pz.type === "plates" && !pz.solved) {
+        const bi = pz.blocks.findIndex((b) => b.x === nx && b.y === ny);
+        if (bi >= 0) {
+          const bx = nx + dx, by = ny + dy;
+          const blocked =
+            !inBounds(world, bx, by) ||
+            isWall(world, bx, by) ||
+            pz.blocks.some((b, i) => i !== bi && b.x === bx && b.y === by);
+          if (blocked) return { deny: "The block won't budge." };
+          const blocks = pz.blocks.map((b, i) => (i === bi ? { x: bx, y: by } : b));
+          const plates = pz.plates.map((p) => ({ ...p, on: blocks.some((b) => b.x === p.x && b.y === p.y) }));
+          const done = plates.filter((p) => p.on).length;
+          blockPush = { ...pz, blocks, plates, done, solved: done >= pz.need };
+        }
+      }
+
       const events = [{ t: "MOVED", x: nx, y: ny }];
+      if (blockPush) events.push({ t: "BLOCK_PUSHED", puzzle: blockPush });
       // Every gate/seal/ascent check below is a sim-and-inspect DERIVED
       // event, exactly like topdown-puzzle's WIN/LOSE (shared/push.js):
       // compute the primary MOVED, fold it through a throwaway reduce,
