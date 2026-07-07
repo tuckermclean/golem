@@ -16,13 +16,16 @@
  * hashes hold through kernel's own fold helper too, mirroring
  * kernel-replay.test.js's relationship to the golem fixtures exactly.
  *
- * PR1 registers exactly one level — a synthetic, hand-crafted,
+ * PR1 registered exactly one level — a synthetic, hand-crafted,
  * mover-free mechanism-proof (see games/topdown-puzzle/tests/fixtures/
- * synthetic-level.mjs's header comment for why no real level qualifies
- * yet: every one of the six shipped levels carries at least one H/V
- * baddie token, and PR1 does not simulate baddies). PR4 extends this to
- * ≥5 real levels once PR2's tick bridge lands — freeze:verify wiring is
- * also PR4's call, not PR1's.
+ * synthetic-level.mjs's header comment for why no real level qualified
+ * then: every one of the six shipped levels carries at least one H/V
+ * baddie token, and PR1 did not simulate baddies). PR2 added the tick
+ * bridge; PR4 registered the five real shipped levels (001–005) with
+ * recorder-captured winning solution logs, and wired
+ * verify:tdp-solutions into freeze:verify so the bit-identical replay
+ * gate runs as a permanent DoD job (see the root package.json
+ * freeze:verify script + .github/workflows/ci.yml).
  *
  * Untouchable: this test must never edit fixtures/index.json to make
  * itself pass. A hash mismatch here means a bug in the port.
