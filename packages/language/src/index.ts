@@ -17,3 +17,9 @@ export type { CanonicalVerb } from "./tables.js";
 // their own unit tests but not re-exported here.
 export { route } from "./router.js";
 export type { ClassifyResult } from "./classify.js";
+
+// L7 (NPC context compiler + memory schema): deterministic engine-state
+// -> truth-envelope -> bounded-reply pipeline. See
+// docs/superpowers/specs/2026-07-07-l7-context-compiler-design.md.
+export { compileEnvelope, envelopeToControlString, renderStubReply } from "./context.js";
+export type { TruthEnvelope, WitnessedEvent } from "./context.js";

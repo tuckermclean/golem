@@ -13,6 +13,7 @@ import { createClient } from "./client.js";
 import { createPerception } from "./perceive.js";
 import { createRenderer } from "./render.js";
 import { createInput } from "./input.js";
+import { askNpc as askDemoNpc } from "./npc.js";
 
 /* ── STATE: page identity + reducer state. Pure logic lives in shared/
    and src/{host,client}.js; these aliases bind it to this page's state
@@ -95,6 +96,9 @@ function lookAt(x,y){ // local, deterministic per tile — the golem inspects
   golemLine(bits.length?`You make out ${bits.join("; ")}.`:
     pick(g,["Stone, dust, and the patience of both.","Nothing that will help. Nothing that will hurt. Yet."]),
     `EVENT:look TILE:${x},${y}`);}
+function askNpc(question){ // L7 demo NPC — client-local, zero wire/event footprint (src/npc.js)
+  const{reply,trace}=askDemoNpc(S.dun,S.seed,question);
+  golemLine(reply,trace);}
 
 /* ── render(ev): the composition point between drawing (render.js),
    perception (perceive.js), and golem prose (this file's PLUG section)
@@ -155,7 +159,7 @@ function sendCmd(c){S.isHost?Host.hostCmd(S.me,c):NET.send({k:"CMD",from:S.me,cm
 const cmdEl=document.getElementById("cmd");
 const Input=createInput(S,{
   cmdEl,sendCmd,feedLine:Render.feedLine,players,getP,itemAt,prizeCarrier,
-  seenT:Perception.seenT,litT:Perception.litT,lookAt,
+  seenT:Perception.seenT,litT:Perception.litT,lookAt,askNpc,
 });
 
 /* ── TOUCH: @golem-engine/clients' shared touch layer (mobile-ergonomics
