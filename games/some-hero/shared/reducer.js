@@ -380,6 +380,24 @@ export function reduce(state, world, ev) {
       // field the amount lands on: "gold"/"potion" are named fields;
       // anything else is a generic inventory count (`inv`) — minimal, no
       // full inventory system (design spec's "Scope boundaries").
+      //
+      // Key-seal resolution (docs/superpowers/specs/2026-07-07-key-seal-
+      // resolution-design.md): a "key" COLLECTED, when the CURRENT floor
+      // is actually key-sealed (`state.run.puzzle?.type === "key"`), is a
+      // seal-opener, not inventory — it flips `run.puzzle.have` (a fresh
+      // copy) and does NOT touch `character.inv` (legacy: pickups.js:
+      // 39-42 sets `game.puzzle.have = true`, never adds the key to
+      // inventory). A "key" COLLECTED that arrives when the puzzle isn't
+      // a key seal (shouldn't happen in practice, but no fixture pins
+      // that it can't) falls through to the generic `inv` branch below,
+      // byte-unchanged.
+      if (ev.kind === "key" && state.run.puzzle?.type === "key") {
+        return {
+          ...state,
+          run: { ...state.run, puzzle: { ...state.run.puzzle, have: true } },
+          seq: ev.seq,
+        };
+      }
       return {
         ...state,
         character: {
