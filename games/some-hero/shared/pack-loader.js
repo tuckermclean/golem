@@ -17,7 +17,7 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { deriveWorldFromPack, validate, reduce } from "./module.js";
+import { deriveWorldFromPack, validate, reduce, narrativeFacts } from "./module.js";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const PACK_PATH = join(HERE, "..", "content", "pack.json");
@@ -38,7 +38,8 @@ export function deriveWorld(worldState) {
   return deriveWorldFromPack(loadPack(), worldState);
 }
 
-/** The full KernelCore (`{deriveWorld,validate,reduce}`) — structurally
- *  satisfies @golem-engine/kernel's GameModule shape. Node-side only,
- *  for the same reason deriveWorld() above is. */
-export const module = { deriveWorld, validate, reduce };
+/** The full KernelCore + narrativeFacts (`{deriveWorld,validate,reduce,
+ *  narrativeFacts}`) — structurally satisfies @golem-engine/kernel's
+ *  GameModule shape (minus observe/affordances, not yet built). Node-
+ *  side only, for the same reason deriveWorld() above is. */
+export const module = { deriveWorld, validate, reduce, narrativeFacts };
