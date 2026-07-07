@@ -1,0 +1,1917 @@
+{
+  "hash": "f9bdc69b6089807c85f7d6520bcf3c2c617c9b83dcde0fd78abfebe8c5cd044d",
+  "entities": {
+    "entity:room_village_square": {
+      "id": "entity:room_village_square",
+      "components": {
+        "Identity": {
+          "name": "village square",
+          "description": "A bustling, open square at the center of the village. Street performers, questionable food carts, and a faint smell of potatoes linger in the air."
+        },
+        "RegionMembership": {
+          "region": "village_square"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_shop"
+            }
+          },
+          {
+            "to": {
+              "$ref": "entity:room_tavern"
+            }
+          },
+          {
+            "to": {
+              "$ref": "entity:room_back_alley"
+            }
+          },
+          {
+            "to": {
+              "$ref": "entity:room_forest_road"
+            }
+          }
+        ],
+        "Contains": {
+          "items": [
+            {
+              "$ref": "entity:item_fountain"
+            }
+          ]
+        }
+      }
+    },
+    "entity:room_shop": {
+      "id": "entity:room_shop",
+      "components": {
+        "Identity": {
+          "name": "shop",
+          "description": "A cramped general store with shelves overflowing with odds and ends. A faint smell of mothballs permeates the stale air."
+        },
+        "RegionMembership": {
+          "region": "shop"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_village_square"
+            }
+          }
+        ],
+        "Contains": {
+          "items": [
+            {
+              "$ref": "entity:item_silver_coins"
+            },
+            {
+              "$ref": "entity:item_dusty_lantern"
+            }
+          ]
+        }
+      }
+    },
+    "entity:room_tavern": {
+      "id": "entity:room_tavern",
+      "components": {
+        "Identity": {
+          "name": "tavern",
+          "description": "A cozy, dimly lit tavern. Wooden tables, a roaring fireplace, and the scent of ale mix with boisterous chatter."
+        },
+        "RegionMembership": {
+          "region": "tavern"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_village_square"
+            }
+          }
+        ],
+        "Contains": {
+          "characters": [
+            {
+              "$ref": "entity:char_stray_dog"
+            }
+          ]
+        }
+      }
+    },
+    "entity:room_back_alley": {
+      "id": "entity:room_back_alley",
+      "components": {
+        "Identity": {
+          "name": "back alley",
+          "description": "A narrow alleyway between tall, leaning buildings. Broken barrels and an old stray cat complete the picture."
+        },
+        "RegionMembership": {
+          "region": "back_alley"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_village_square"
+            }
+          }
+        ],
+        "Contains": {
+          "items": [
+            {
+              "$ref": "entity:item_broken_crate"
+            }
+          ]
+        }
+      }
+    },
+    "entity:room_forest_road": {
+      "id": "entity:room_forest_road",
+      "components": {
+        "Identity": {
+          "name": "forest road",
+          "description": "A winding dirt road that meanders from the village square into the deeper forest. Lantern posts line the way, though most stand unlit."
+        },
+        "RegionMembership": {
+          "region": "forest_road"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_village_square"
+            }
+          },
+          {
+            "to": {
+              "$ref": "entity:room_forest_clearing"
+            }
+          }
+        ],
+        "Contains": {
+          "items": [
+            {
+              "$ref": "entity:item_signpost"
+            }
+          ]
+        }
+      }
+    },
+    "entity:room_old_oak_clearing": {
+      "id": "entity:room_old_oak_clearing",
+      "components": {
+        "Identity": {
+          "name": "old oak clearing",
+          "description": "An ancient oak stands in the center. Its trunk is massive, and a rope swing dangles invitingly from a sturdy branch."
+        },
+        "RegionMembership": {
+          "region": "old_oak_clearing"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_spooky_house"
+            }
+          },
+          {
+            "to": {
+              "$ref": "entity:room_enchanted_pond"
+            }
+          }
+        ],
+        "Contains": {
+          "items": [
+            {
+              "$ref": "entity:item_rope_swing"
+            }
+          ]
+        }
+      }
+    },
+    "entity:room_enchanted_pond": {
+      "id": "entity:room_enchanted_pond",
+      "components": {
+        "Identity": {
+          "name": "enchanted pond",
+          "description": "A shimmering pond reflecting the treetops and sky. Water lilies float serenely, occasionally bobbing with unseen fish below."
+        },
+        "RegionMembership": {
+          "region": "enchanted_pond"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_old_oak_clearing"
+            }
+          },
+          {
+            "to": {
+              "$ref": "entity:room_forest_clearing"
+            }
+          },
+          {
+            "to": {
+              "$ref": "entity:room_deep_forest_path"
+            }
+          }
+        ],
+        "Contains": {
+          "items": [
+            {
+              "$ref": "entity:item_sparkling_stone"
+            }
+          ]
+        }
+      }
+    },
+    "entity:room_deep_forest_path": {
+      "id": "entity:room_deep_forest_path",
+      "components": {
+        "Identity": {
+          "name": "deep forest path",
+          "description": "A narrow footpath winding through towering evergreens. The sunlight barely reaches the mossy ground, and shadows dance in the breeze."
+        },
+        "RegionMembership": {
+          "region": "deep_forest_path"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_enchanted_pond"
+            }
+          },
+          {
+            "to": {
+              "$ref": "entity:room_misty_glen"
+            }
+          }
+        ],
+        "Contains": {
+          "items": [
+            {
+              "$ref": "entity:item_hollow_log"
+            },
+            {
+              "$ref": "entity:item_rare_mushroom"
+            }
+          ]
+        }
+      }
+    },
+    "entity:room_misty_glen": {
+      "id": "entity:room_misty_glen",
+      "components": {
+        "Identity": {
+          "name": "misty glen",
+          "description": "A silent glen shrouded in fog. Pale light filters through the canopy, revealing wispy shapes that vanish when you look twice."
+        },
+        "RegionMembership": {
+          "region": "misty_glen"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_deep_forest_path"
+            }
+          },
+          {
+            "to": {
+              "$ref": "entity:room_fae_circle"
+            }
+          }
+        ],
+        "Contains": {
+          "items": [
+            {
+              "$ref": "entity:item_eerie_lantern"
+            }
+          ]
+        }
+      }
+    },
+    "entity:room_fae_circle": {
+      "id": "entity:room_fae_circle",
+      "components": {
+        "Identity": {
+          "name": "fae circle",
+          "description": "A ring of ancient toadstools glowing faintly in the twilight. A soft chime resonates in the air, beckoning wanderers closer."
+        },
+        "RegionMembership": {
+          "region": "fae_circle"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_misty_glen"
+            }
+          },
+          {
+            "to": {
+              "$ref": "entity:room_haunted_grove"
+            }
+          }
+        ],
+        "Contains": {
+          "items": [
+            {
+              "$ref": "entity:item_moonstone"
+            }
+          ]
+        }
+      }
+    },
+    "entity:room_haunted_grove": {
+      "id": "entity:room_haunted_grove",
+      "components": {
+        "Identity": {
+          "name": "haunted grove",
+          "description": "Twisted trees and gnarled roots give this grove a menacing aura. Faint whispers echo, though no one is visible. The air grows colder."
+        },
+        "RegionMembership": {
+          "region": "haunted_grove"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_fae_circle"
+            }
+          }
+        ],
+        "Contains": {
+          "items": [
+            {
+              "$ref": "entity:item_whispering_skull"
+            }
+          ]
+        }
+      }
+    },
+    "entity:room_ancient_ruin": {
+      "id": "entity:room_ancient_ruin",
+      "components": {
+        "Identity": {
+          "name": "ancient ruin",
+          "description": "Crumbled stone pillars and toppled statues hint at a lost civilization. Vines wrap around broken walls, nature reclaiming what was once grand."
+        },
+        "RegionMembership": {
+          "region": "ancient_ruin"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_hidden_waterfall"
+            }
+          },
+          {
+            "to": {
+              "$ref": "entity:room_arions_tomb"
+            }
+          }
+        ],
+        "Contains": {
+          "items": [
+            {
+              "$ref": "entity:item_stone_tablet"
+            }
+          ]
+        }
+      }
+    },
+    "entity:room_arions_tomb": {
+      "id": "entity:room_arions_tomb",
+      "components": {
+        "Identity": {
+          "name": "arion's tomb",
+          "description": "A hidden tomb shrouded in mist. The air is thick with sorrow, and the ground is littered with broken stones."
+        },
+        "RegionMembership": {
+          "region": "arions_tomb"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_ancient_ruin"
+            }
+          }
+        ],
+        "Contains": {
+          "items": [
+            {
+              "$ref": "entity:item_crypt"
+            },
+            {
+              "$ref": "entity:item_arions_sword"
+            }
+          ]
+        }
+      }
+    },
+    "entity:room_hidden_waterfall": {
+      "id": "entity:room_hidden_waterfall",
+      "components": {
+        "Identity": {
+          "name": "hidden waterfall",
+          "description": "A tumbling cascade of water concealed behind dense foliage. The spray cools the air, creating rainbows in dappled sunlight."
+        },
+        "RegionMembership": {
+          "region": "hidden_waterfall"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_ancient_ruin"
+            }
+          }
+        ],
+        "Contains": {
+          "items": [
+            {
+              "$ref": "entity:item_sparkling_fish"
+            }
+          ]
+        }
+      }
+    },
+    "entity:room_forest_clearing": {
+      "id": "entity:room_forest_clearing",
+      "components": {
+        "Identity": {
+          "name": "forest clearing",
+          "description": "A serene clearing in the woods, dappled with sunlight. Birds chirp overhead, and a gentle breeze rustles the leaves."
+        },
+        "RegionMembership": {
+          "region": "forest_clearing"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_wizards_tower"
+            }
+          },
+          {
+            "to": {
+              "$ref": "entity:room_forest_road"
+            }
+          },
+          {
+            "to": {
+              "$ref": "entity:room_enchanted_pond"
+            }
+          }
+        ],
+        "Contains": {
+          "characters": [
+            {
+              "$ref": "entity:char_raven"
+            }
+          ]
+        }
+      }
+    },
+    "entity:room_wizards_tower": {
+      "id": "entity:room_wizards_tower",
+      "components": {
+        "Identity": {
+          "name": "wizard's tower",
+          "description": "A tall, crooked tower with arcane symbols etched into the stone walls. A faint hum of magical energy fills the air."
+        },
+        "RegionMembership": {
+          "region": "wizards_tower"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_forest_clearing"
+            }
+          }
+        ],
+        "Contains": {
+          "items": [
+            {
+              "$ref": "entity:item_dusty_tome"
+            }
+          ],
+          "characters": [
+            {
+              "$ref": "entity:char_wizard"
+            }
+          ]
+        }
+      }
+    },
+    "entity:room_secret_hideout": {
+      "id": "entity:room_secret_hideout",
+      "components": {
+        "Identity": {
+          "name": "secret hideout",
+          "description": "A hidden room under the alley, filled with contraband potions and bizarre contraptions. Strange runes glow on the walls."
+        },
+        "RegionMembership": {
+          "region": "secret_hideout"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_catacombs"
+            }
+          }
+        ],
+        "Contains": {
+          "items": [
+            {
+              "$ref": "entity:item_forbidden_potion"
+            },
+            {
+              "$ref": "entity:item_loot"
+            },
+            {
+              "$ref": "entity:item_tv"
+            }
+          ]
+        }
+      }
+    },
+    "entity:room_catacombs": {
+      "id": "entity:room_catacombs",
+      "components": {
+        "Identity": {
+          "name": "catacombs",
+          "description": "A labyrinth of ancient tunnels beneath the village. The air is thick with dust and the distant sound of dripping water."
+        },
+        "RegionMembership": {
+          "region": "catacombs"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_secret_hideout"
+            }
+          }
+        ],
+        "Contains": {
+          "items": [
+            {
+              "$ref": "entity:item_sarcophagus"
+            }
+          ]
+        }
+      }
+    },
+    "entity:room_spooky_house": {
+      "id": "entity:room_spooky_house",
+      "components": {
+        "Identity": {
+          "name": "spooky house",
+          "description": "A weirdly spooky, hilariously cursed house. Rumor has it an eccentric alchemist lives here. The front door has a weird, fish-shaped lock."
+        },
+        "RegionMembership": {
+          "region": "spooky_house"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_garden"
+            }
+          },
+          {
+            "to": {
+              "$ref": "entity:room_old_oak_clearing"
+            }
+          }
+        ],
+        "Contains": {
+          "items": [
+            {
+              "$ref": "entity:item_doormat"
+            }
+          ]
+        }
+      }
+    },
+    "entity:room_foyer": {
+      "id": "entity:room_foyer",
+      "components": {
+        "Identity": {
+          "name": "foyer",
+          "description": "A grand foyer with a high ceiling and a dusty whatever-it-is on the ceiling. Goofy footprints in the dust suggest recent paranormal activity."
+        },
+        "RegionMembership": {
+          "region": "foyer"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_living_room"
+            }
+          }
+        ]
+      }
+    },
+    "entity:room_living_room": {
+      "id": "entity:room_living_room",
+      "components": {
+        "Identity": {
+          "name": "living room",
+          "description": "A dingy living room with old furniture. It smells like there was a puking party in here a while ago."
+        },
+        "RegionMembership": {
+          "region": "living_room"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_foyer"
+            }
+          },
+          {
+            "to": {
+              "$ref": "entity:room_dining_room"
+            }
+          },
+          {
+            "to": {
+              "$ref": "entity:room_hallway"
+            }
+          }
+        ],
+        "Contains": {
+          "items": [
+            {
+              "$ref": "entity:item_paintbrush"
+            }
+          ],
+          "characters": [
+            {
+              "$ref": "entity:char_cat"
+            }
+          ]
+        }
+      }
+    },
+    "entity:room_dining_room": {
+      "id": "entity:room_dining_room",
+      "components": {
+        "Identity": {
+          "name": "dining room",
+          "description": "This dining room has rotten food all over. It's disgusting!"
+        },
+        "RegionMembership": {
+          "region": "dining_room"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_kitchen"
+            }
+          },
+          {
+            "to": {
+              "$ref": "entity:room_hallway"
+            }
+          },
+          {
+            "to": {
+              "$ref": "entity:room_living_room"
+            }
+          }
+        ],
+        "Contains": {
+          "items": [
+            {
+              "$ref": "entity:item_old_hot_dog"
+            },
+            {
+              "$ref": "entity:item_spoon"
+            }
+          ]
+        }
+      }
+    },
+    "entity:room_hallway": {
+      "id": "entity:room_hallway",
+      "components": {
+        "Identity": {
+          "name": "hallway",
+          "description": "A dimly lit hallway that smells of dusty old ladies and even older cheese."
+        },
+        "RegionMembership": {
+          "region": "hallway"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_dining_room"
+            }
+          },
+          {
+            "to": {
+              "$ref": "entity:room_bathroom"
+            }
+          },
+          {
+            "to": {
+              "$ref": "entity:room_living_room"
+            }
+          },
+          {
+            "to": {
+              "$ref": "entity:room_library"
+            }
+          }
+        ],
+        "Contains": {
+          "items": [
+            {
+              "$ref": "entity:item_candlestick"
+            },
+            {
+              "$ref": "entity:item_wig"
+            },
+            {
+              "$ref": "entity:item_shoe"
+            }
+          ]
+        }
+      }
+    },
+    "entity:room_bathroom": {
+      "id": "entity:room_bathroom",
+      "components": {
+        "Identity": {
+          "name": "bathroom",
+          "description": "A nasty bathroom that hasn't been cleaned in decades."
+        },
+        "RegionMembership": {
+          "region": "bathroom"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_hallway"
+            }
+          }
+        ],
+        "Contains": {
+          "items": [
+            {
+              "$ref": "entity:item_toilet"
+            },
+            {
+              "$ref": "entity:item_bathtub"
+            },
+            {
+              "$ref": "entity:item_key"
+            }
+          ]
+        }
+      }
+    },
+    "entity:room_kitchen": {
+      "id": "entity:room_kitchen",
+      "components": {
+        "Identity": {
+          "name": "kitchen",
+          "description": "A centuries-old kitchen. The flies have long since died."
+        },
+        "RegionMembership": {
+          "region": "kitchen"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_dining_room"
+            }
+          },
+          {
+            "to": {
+              "$ref": "entity:room_pantry"
+            }
+          }
+        ],
+        "Contains": {
+          "items": [
+            {
+              "$ref": "entity:item_pan"
+            },
+            {
+              "$ref": "entity:item_knife"
+            },
+            {
+              "$ref": "entity:item_quarters"
+            }
+          ]
+        }
+      }
+    },
+    "entity:room_pantry": {
+      "id": "entity:room_pantry",
+      "components": {
+        "Identity": {
+          "name": "pantry",
+          "description": "A dark pantry lined with dusty cans and jars."
+        },
+        "RegionMembership": {
+          "region": "pantry"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_kitchen"
+            }
+          },
+          {
+            "to": {
+              "$ref": "entity:room_basement"
+            }
+          }
+        ],
+        "Contains": {
+          "items": [
+            {
+              "$ref": "entity:item_flashlight"
+            },
+            {
+              "$ref": "entity:item_moldy_bread"
+            }
+          ]
+        }
+      }
+    },
+    "entity:room_basement": {
+      "id": "entity:room_basement",
+      "components": {
+        "Identity": {
+          "name": "basement",
+          "description": "A cold, damp basement. The walls are lined with strange markings."
+        },
+        "RegionMembership": {
+          "region": "basement"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_pantry"
+            }
+          }
+        ],
+        "Contains": {
+          "items": [
+            {
+              "$ref": "entity:item_basement_key"
+            },
+            {
+              "$ref": "entity:item_old_tapestry"
+            },
+            {
+              "$ref": "entity:item_rope"
+            }
+          ]
+        }
+      }
+    },
+    "entity:room_library": {
+      "id": "entity:room_library",
+      "components": {
+        "Identity": {
+          "name": "library",
+          "description": "A quiet library filled with dusty tomes. A ladder on rails runs along massive bookshelves."
+        },
+        "RegionMembership": {
+          "region": "library"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_hallway"
+            }
+          },
+          {
+            "to": {
+              "$ref": "entity:room_tower"
+            }
+          },
+          {
+            "to": {
+              "$ref": "entity:room_secret_study"
+            }
+          }
+        ],
+        "Contains": {
+          "items": [
+            {
+              "$ref": "entity:item_antidote_potion"
+            },
+            {
+              "$ref": "entity:item_ancient_scroll"
+            }
+          ]
+        }
+      }
+    },
+    "entity:room_secret_study": {
+      "id": "entity:room_secret_study",
+      "components": {
+        "Identity": {
+          "name": "secret study",
+          "description": "A hidden room behind a sliding bookshelf. Strange contraptions fill the tables."
+        },
+        "RegionMembership": {
+          "region": "secret_study"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_library"
+            }
+          }
+        ],
+        "Contains": {
+          "items": [
+            {
+              "$ref": "entity:item_tower_key"
+            },
+            {
+              "$ref": "entity:item_dusty_journal"
+            }
+          ]
+        }
+      }
+    },
+    "entity:room_garden": {
+      "id": "entity:room_garden",
+      "components": {
+        "Identity": {
+          "name": "garden",
+          "description": "A dead garden with one mysterious gold flower."
+        },
+        "RegionMembership": {
+          "region": "garden"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_spooky_house"
+            }
+          }
+        ],
+        "Contains": {
+          "items": [
+            {
+              "$ref": "entity:item_gold_flower"
+            },
+            {
+              "$ref": "entity:item_hose"
+            }
+          ]
+        }
+      }
+    },
+    "entity:room_tower": {
+      "id": "entity:room_tower",
+      "components": {
+        "Identity": {
+          "name": "tower",
+          "description": "A towering spire that looms over the entire property. The wind howls ominously at the top."
+        },
+        "RegionMembership": {
+          "region": "tower"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_library"
+            }
+          }
+        ],
+        "Contains": {
+          "items": [
+            {
+              "$ref": "entity:item_doorbell"
+            }
+          ]
+        }
+      }
+    },
+    "entity:room_tower_stairs": {
+      "id": "entity:room_tower_stairs",
+      "components": {
+        "Identity": {
+          "name": "tower stairs",
+          "description": "A narrow, winding staircase that leads up to the tower."
+        },
+        "RegionMembership": {
+          "region": "tower_stairs"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_balcony"
+            }
+          }
+        ],
+        "Contains": {
+          "items": [
+            {
+              "$ref": "entity:item_spiderweb"
+            }
+          ]
+        }
+      }
+    },
+    "entity:room_balcony": {
+      "id": "entity:room_balcony",
+      "components": {
+        "Identity": {
+          "name": "balcony",
+          "description": "A small balcony with a view of the forest and the wizard's tower."
+        },
+        "RegionMembership": {
+          "region": "balcony"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_tower_stairs"
+            }
+          }
+        ],
+        "Contains": {
+          "items": [
+            {
+              "$ref": "entity:item_binoculars"
+            }
+          ]
+        }
+      }
+    },
+    "entity:door_back_door": {
+      "id": "entity:door_back_door",
+      "components": {
+        "Identity": {
+          "name": "back door"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_back_alley"
+            }
+          },
+          {
+            "to": {
+              "$ref": "entity:room_secret_hideout"
+            }
+          }
+        ],
+        "Lock": {
+          "unlockCondition": {
+            "fact": "has_odd_key"
+          },
+          "key": {
+            "$ref": "entity:item_odd_key"
+          }
+        }
+      }
+    },
+    "entity:door_front_door": {
+      "id": "entity:door_front_door",
+      "components": {
+        "Identity": {
+          "name": "front door"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_foyer"
+            }
+          },
+          {
+            "to": {
+              "$ref": "entity:room_spooky_house"
+            }
+          }
+        ],
+        "Lock": {
+          "unlockCondition": {
+            "fact": "has_sparkling_fish"
+          },
+          "key": {
+            "$ref": "entity:item_sparkling_fish"
+          }
+        }
+      }
+    },
+    "entity:door_basement_door": {
+      "id": "entity:door_basement_door",
+      "components": {
+        "Identity": {
+          "name": "basement door"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_living_room"
+            }
+          },
+          {
+            "to": {
+              "$ref": "entity:room_basement"
+            }
+          }
+        ],
+        "Lock": {
+          "unlockCondition": {
+            "fact": "has_basement_key"
+          },
+          "key": {
+            "$ref": "entity:item_basement_key"
+          }
+        }
+      }
+    },
+    "entity:door_tower_door": {
+      "id": "entity:door_tower_door",
+      "components": {
+        "Identity": {
+          "name": "tower door"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_tower_stairs"
+            }
+          },
+          {
+            "to": {
+              "$ref": "entity:room_tower"
+            }
+          }
+        ],
+        "Lock": {
+          "unlockCondition": {
+            "fact": "has_tower_key"
+          },
+          "key": {
+            "$ref": "entity:item_tower_key"
+          }
+        }
+      }
+    },
+    "entity:door_secret_portal": {
+      "id": "entity:door_secret_portal",
+      "components": {
+        "Identity": {
+          "name": "secret portal"
+        },
+        "Exits": [
+          {
+            "to": {
+              "$ref": "entity:room_haunted_grove"
+            }
+          },
+          {
+            "to": {
+              "$ref": "entity:room_ancient_ruin"
+            }
+          }
+        ],
+        "Lock": {
+          "unlockCondition": {
+            "any": [
+              {
+                "fact": "mushroom_insight"
+              },
+              {
+                "fact": "potion_insight"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "entity:item_fountain": {
+      "id": "entity:item_fountain",
+      "components": {
+        "Identity": {
+          "name": "fountain",
+          "description": "An ornate fountain spouting slightly murky water. Town rumor says tossing a coin in grants luck, but nobody looks lucky here."
+        },
+        "Interactable": {
+          "prompt": "You toss some water in the air. Nobody seems impressed.",
+          "verb": "toss"
+        }
+      }
+    },
+    "entity:item_silver_coins": {
+      "id": "entity:item_silver_coins",
+      "components": {
+        "Identity": {
+          "name": "silver coins",
+          "description": "A small stack of tarnished silver coins. The shopkeeper won't mind if you borrow these, right?"
+        },
+        "Portable": {},
+        "ItemStats": {
+          "amount": 1.5
+        }
+      }
+    },
+    "entity:item_dusty_lantern": {
+      "id": "entity:item_dusty_lantern",
+      "components": {
+        "Identity": {
+          "name": "dusty lantern",
+          "description": "An old brass lantern covered in dust. Might brighten your path if it still works."
+        },
+        "Portable": {},
+        "Interactable": {
+          "prompt": "You strike the lantern. After some sputtering, it glows faintly.",
+          "verb": "light"
+        }
+      }
+    },
+    "entity:item_broken_crate": {
+      "id": "entity:item_broken_crate",
+      "components": {
+        "Identity": {
+          "name": "broken crate",
+          "description": "A shattered wooden crate. It's empty, but might hide a roach or two."
+        },
+        "Portable": {}
+      }
+    },
+    "entity:item_signpost": {
+      "id": "entity:item_signpost",
+      "components": {
+        "Identity": {
+          "name": "signpost",
+          "description": "A wooden sign with faded lettering: 'Beware the forest beyond. Mystery abounds.'"
+        }
+      }
+    },
+    "entity:item_rope_swing": {
+      "id": "entity:item_rope_swing",
+      "components": {
+        "Identity": {
+          "name": "rope swing",
+          "description": "A simple rope tied to the thickest branch of the oak. It creaks when you put weight on it."
+        },
+        "Portable": {},
+        "Interactable": {
+          "prompt": "You hop onto the rope swing and push off. For a moment, you're a carefree child again.",
+          "verb": "swing"
+        }
+      }
+    },
+    "entity:item_sparkling_stone": {
+      "id": "entity:item_sparkling_stone",
+      "components": {
+        "Identity": {
+          "name": "sparkling stone",
+          "description": "A small stone that catches the light just right, glinting with a silvery gleam."
+        },
+        "Portable": {}
+      }
+    },
+    "entity:item_hollow_log": {
+      "id": "entity:item_hollow_log",
+      "components": {
+        "Identity": {
+          "name": "hollow log",
+          "description": "A decaying log with a large hollow inside. Something might be lurking within."
+        },
+        "Interactable": {
+          "prompt": "You peer into the log's damp interior. It's dark and smells like rotting leaves.",
+          "verb": "inspect"
+        }
+      }
+    },
+    "entity:item_rare_mushroom": {
+      "id": "entity:item_rare_mushroom",
+      "components": {
+        "Identity": {
+          "name": "rare mushroom",
+          "description": "A peculiar mushroom with swirling purple spots. It looks both delicious and dangerous."
+        },
+        "Portable": {},
+        "Interactable": {
+          "prompt": "You nibble the rare mushroom. A delightful tang tickles your palate, but you sense it might have mystical properties, too.",
+          "verb": "eat"
+        },
+        "OnUse": {
+          "setFact": "mushroom_insight"
+        }
+      }
+    },
+    "entity:item_eerie_lantern": {
+      "id": "entity:item_eerie_lantern",
+      "components": {
+        "Identity": {
+          "name": "eerie lantern",
+          "description": "A ghostly lantern flickering blue. Strange runes adorn its rim."
+        },
+        "Portable": {},
+        "Interactable": {
+          "prompt": "You try to light the lantern. A cold flame sputters to life, illuminating the fog with an otherworldly glow.",
+          "verb": "light"
+        }
+      }
+    },
+    "entity:item_moonstone": {
+      "id": "entity:item_moonstone",
+      "components": {
+        "Identity": {
+          "name": "moonstone",
+          "description": "A smooth, milky-white stone lying among the toadstools. It shines when touched by moonlight."
+        },
+        "Portable": {}
+      }
+    },
+    "entity:item_whispering_skull": {
+      "id": "entity:item_whispering_skull",
+      "components": {
+        "Identity": {
+          "name": "whispering skull",
+          "description": "An animal skull perched on a stump, faintly whispering incomprehensible words. You feel uneasy just being near it."
+        },
+        "Interactable": {
+          "prompt": "You hold the skull and you can hear faint whispers, but you can't quite make them out. Maybe some magical insight would help?",
+          "verb": "listen"
+        }
+      }
+    },
+    "entity:item_stone_tablet": {
+      "id": "entity:item_stone_tablet",
+      "components": {
+        "Identity": {
+          "name": "stone tablet",
+          "description": "A moss-covered tablet with faded carvings, telling a near-forgotten story."
+        },
+        "Portable": {},
+        "Interactable": {
+          "prompt": "You trace the carvings with your fingers, and the story unfolds in your mind:\n-------------\nThe hero Arion, with silver eyes, traveled across distant mountains to slay monsters born from shadow. Alongside him walked his companion Selene—a woman of great wisdom, whose heart knew no fear.\n\nIn forests of crystal, they faced the serpent Rimewyrm whose breath turned rivers into ice. Beneath crimson skies, they defeated the beast Dreamrender whose roar shattered dreams. Their legend grew with every victory, binding their fates tighter.\n\nYet whispers foretold tragedy. A cursed mirror showed Arion glimpses of treachery, twisted reflections he refused to believe.\n\nIn a ruined city cloaked in mist, they faced their final monster—the demon Malachor whose voice sowed seeds of doubt. Arion fought bravely, yet the whispers took root.\n\nIn the decisive moment, his trusted companion Selene turned blade against him. Her tearful eyes revealed the demon Malachor's dark truth: to defeat evil forever required the sacrifice of goodness itself.\n\nHe fell, betrayed but understanding, his silver eyes fading beneath a broken moon.\n\nSelene lingered alone among the ruins, a hero no longer, carrying the weight of a world saved but forever lost.",
+          "verb": "read"
+        }
+      }
+    },
+    "entity:item_crypt": {
+      "id": "entity:item_crypt",
+      "components": {
+        "Identity": {
+          "name": "crypt",
+          "description": "A stone crypt with intricate carvings, hinting at a tragic tale of betrayal and sacrifice."
+        }
+      }
+    },
+    "entity:item_arions_sword": {
+      "id": "entity:item_arions_sword",
+      "components": {
+        "Identity": {
+          "name": "arion's sword",
+          "description": "A magically gleaming sword, strangely preserved. It seems to hum with a forgotten power."
+        },
+        "Portable": {},
+        "ItemStats": {
+          "damage": 3
+        }
+      }
+    },
+    "entity:item_sparkling_fish": {
+      "id": "entity:item_sparkling_fish",
+      "components": {
+        "Identity": {
+          "name": "sparkling fish",
+          "description": "A small fish shimmering with rainbow scales. It leaps through the waterfall spray, impossible to catch by normal means."
+        },
+        "Portable": {},
+        "Interactable": {
+          "prompt": "You catch the shimmering fish. It wriggles in your hands, and you feel a surge of energy. The fish seems to whisper secrets of the forest.",
+          "verb": "catch",
+          "enabledWhen": {
+            "any": [
+              {
+                "fact": "mushroom_insight"
+              },
+              {
+                "fact": "potion_insight"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "entity:item_dusty_tome": {
+      "id": "entity:item_dusty_tome",
+      "components": {
+        "Identity": {
+          "name": "dusty tome",
+          "description": "A thick tome of archaic lore. The pages ruffle as if alive."
+        },
+        "Portable": {},
+        "Interactable": {
+          "prompt": "The tome's letters swirl before your eyes, forming cryptic instructions and half-finished spells.",
+          "verb": "read"
+        }
+      }
+    },
+    "entity:item_forbidden_potion": {
+      "id": "entity:item_forbidden_potion",
+      "components": {
+        "Identity": {
+          "name": "forbidden potion",
+          "description": "This neon-green concoction steams in its flask. You're not quite sure what's in it."
+        },
+        "Portable": {},
+        "Interactable": {
+          "prompt": "You gulp it down. You feel an intense rush of euphoria and dread... best not to dwell on it. You also feel a twinge of insight.",
+          "verb": "drink"
+        },
+        "OnUse": {
+          "setFact": "potion_insight"
+        }
+      }
+    },
+    "entity:item_loot": {
+      "id": "entity:item_loot",
+      "components": {
+        "Identity": {
+          "name": "loot",
+          "description": "A little pile of gold doubloons. It's not yours, but who's counting?"
+        },
+        "Portable": {},
+        "ItemStats": {
+          "amount": 624
+        }
+      }
+    },
+    "entity:item_tv": {
+      "id": "entity:item_tv",
+      "components": {
+        "Identity": {
+          "name": "tv",
+          "description": "A dusty old TV set, flickering with static. It seems to be tuned to a channel of pure static."
+        },
+        "Portable": {},
+        "Interactable": {
+          "prompt": "You watch the static for a while. It's oddly soothing, in a disconcerting way.",
+          "verb": "watch"
+        }
+      }
+    },
+    "entity:item_sarcophagus": {
+      "id": "entity:item_sarcophagus",
+      "components": {
+        "Identity": {
+          "name": "sarcophagus",
+          "description": "A stone sarcophagus covered in cryptic carvings. It's sealed shut, but a faint glow emanates from within."
+        },
+        "Interactable": {
+          "prompt": "You try to open the sarcophagus, but it's stuck. You might need some help.",
+          "verb": "open"
+        },
+        "Spawns": {
+          "when": {
+            "fact": "mutant"
+          },
+          "entity": {
+            "$ref": "entity:item_rusty_sword"
+          }
+        }
+      }
+    },
+    "entity:item_rusty_sword": {
+      "id": "entity:item_rusty_sword",
+      "components": {
+        "Identity": {
+          "name": "rusty sword",
+          "description": "A battered sword with a dull edge. It's seen better days."
+        },
+        "Portable": {},
+        "ItemStats": {
+          "damage": 1
+        }
+      }
+    },
+    "entity:item_doormat": {
+      "id": "entity:item_doormat",
+      "components": {
+        "Identity": {
+          "name": "doormat",
+          "description": "A worn doormat that reads 'Welcome-ish'."
+        },
+        "Portable": {}
+      }
+    },
+    "entity:item_paintbrush": {
+      "id": "entity:item_paintbrush",
+      "components": {
+        "Identity": {
+          "name": "paintbrush",
+          "description": "A very old, antique paintbrush. Looks like it was used by a big ol' hippy."
+        },
+        "Portable": {},
+        "Interactable": {
+          "prompt": "OMG LOOK, A BIG OL' HIPPY!",
+          "verb": "use"
+        },
+        "OnUse": {
+          "setFact": "big_ol_hippy"
+        }
+      }
+    },
+    "entity:item_old_hot_dog": {
+      "id": "entity:item_old_hot_dog",
+      "components": {
+        "Identity": {
+          "name": "old hot dog",
+          "description": "A 300-year-old hot dog. Possibly zombifying if eaten. You've eaten a few dry-aged steaks in your time, but this is ridiculous."
+        },
+        "Portable": {},
+        "Interactable": {
+          "prompt": "You barely choke it down. If not for your well-lubricated esophagus, you'd be dead. You feel your DNA mutating. You might be a superhero now. Or a zombie. Or a zombie superhero. You now have brute strength, and you look horrendous.",
+          "verb": "eat"
+        },
+        "OnUse": {
+          "setFact": "mutant"
+        }
+      }
+    },
+    "entity:item_spoon": {
+      "id": "entity:item_spoon",
+      "components": {
+        "Identity": {
+          "name": "spoon",
+          "description": "A crusty spoon. If you lick it, maybe it gets shiny."
+        },
+        "Portable": {},
+        "Interactable": {
+          "prompt": "Did you like that? Was it satisfying for you?",
+          "verb": "lick"
+        }
+      }
+    },
+    "entity:item_candlestick": {
+      "id": "entity:item_candlestick",
+      "components": {
+        "Identity": {
+          "name": "candlestick",
+          "description": "So burned, it must have been used a hundred times."
+        },
+        "Portable": {}
+      }
+    },
+    "entity:item_wig": {
+      "id": "entity:item_wig",
+      "components": {
+        "Identity": {
+          "name": "wig",
+          "description": "A suspicious wig. You can wear it if you dare."
+        },
+        "Portable": {},
+        "ItemStats": {
+          "wearMsg": "You put on the wig. You look even weirder now.",
+          "removeMsg": "You finally took off the wig. About time!"
+        }
+      }
+    },
+    "entity:item_shoe": {
+      "id": "entity:item_shoe",
+      "components": {
+        "Identity": {
+          "name": "shoe",
+          "description": "Right shoe, size 10 1/2 wide."
+        },
+        "Portable": {},
+        "ItemStats": {
+          "wearMsg": "You cram your foot in with all the might and muster of the prettiest of Cinderella's step sisters. OMG, It actually fits!",
+          "removeMsg": "Relief! Your foot can breathe again. Your big toe might even stop throbbing."
+        }
+      }
+    },
+    "entity:item_toilet": {
+      "id": "entity:item_toilet",
+      "components": {
+        "Identity": {
+          "name": "toilet",
+          "description": "This toilet once stood in the Met as an art installation. Now it's just a toilet. You're afraid to try the flush handle, but you know you want to."
+        },
+        "Portable": {},
+        "Interactable": {
+          "prompt": "You flush the toilet. It makes a sound like a dying whale. You're not sure if it's the toilet or the whale that's dying.",
+          "verb": "flush"
+        }
+      }
+    },
+    "entity:item_bathtub": {
+      "id": "entity:item_bathtub",
+      "components": {
+        "Identity": {
+          "name": "bathtub",
+          "description": "A grimy old bathtub. You can't see the bottom."
+        },
+        "Portable": {},
+        "Interactable": {
+          "prompt": "You climb in and take a bath. It's not as bad as you thought, but it's not great either. You get out feeling a little greasier than when you went in.",
+          "verb": "use"
+        }
+      }
+    },
+    "entity:item_key": {
+      "id": "entity:item_key",
+      "components": {
+        "Identity": {
+          "name": "key",
+          "description": "A rather shiny key. You might need it for something."
+        },
+        "Portable": {}
+      }
+    },
+    "entity:item_pan": {
+      "id": "entity:item_pan",
+      "components": {
+        "Identity": {
+          "name": "pan",
+          "description": "Encrusted with ancient supper remains."
+        },
+        "Portable": {}
+      }
+    },
+    "entity:item_knife": {
+      "id": "entity:item_knife",
+      "components": {
+        "Identity": {
+          "name": "knife",
+          "description": "It's duller than a bag of rocks."
+        },
+        "Portable": {}
+      }
+    },
+    "entity:item_quarters": {
+      "id": "entity:item_quarters",
+      "components": {
+        "Identity": {
+          "name": "quarters",
+          "description": "A small pile of quarters. I didn't say they were clean. Does George Washington look a little green to you?"
+        },
+        "Portable": {},
+        "ItemStats": {
+          "amount": 2.25
+        }
+      }
+    },
+    "entity:item_flashlight": {
+      "id": "entity:item_flashlight",
+      "components": {
+        "Identity": {
+          "name": "flashlight",
+          "description": "An old flashlight, flickering occasionally."
+        },
+        "Portable": {},
+        "Interactable": {
+          "prompt": "You flick the switch, give it a smack, and the flashlight comes on.",
+          "verb": "toggle"
+        },
+        "Toggle": {
+          "on": false
+        }
+      }
+    },
+    "entity:item_moldy_bread": {
+      "id": "entity:item_moldy_bread",
+      "components": {
+        "Identity": {
+          "name": "moldy bread",
+          "description": "Green fuzz covers the crust. Could be penicillin... or death."
+        },
+        "Portable": {},
+        "Interactable": {
+          "prompt": "You swallow a chunk. The taste is indescribable. You feel a bit funny, but you're not sure if it's the bread or the situation.",
+          "verb": "eat"
+        }
+      }
+    },
+    "entity:item_basement_key": {
+      "id": "entity:item_basement_key",
+      "components": {
+        "Identity": {
+          "name": "basement key",
+          "description": "Looks like it might unlock something else around here."
+        },
+        "Portable": {}
+      }
+    },
+    "entity:item_old_tapestry": {
+      "id": "entity:item_old_tapestry",
+      "components": {
+        "Identity": {
+          "name": "old tapestry",
+          "description": "A faded tapestry that depicts a knight fighting a dragon. The knight is losing. Badly. It's a bit sad, but also kind of funny. You start cheering for the dragon, but then you remember you're a human and you're supposed to like the knight. You feel conflicted."
+        },
+        "Portable": {}
+      }
+    },
+    "entity:item_rope": {
+      "id": "entity:item_rope",
+      "components": {
+        "Identity": {
+          "name": "rope",
+          "description": "A sturdy rope. Maybe 10 feet long."
+        },
+        "Portable": {}
+      }
+    },
+    "entity:item_antidote_potion": {
+      "id": "entity:item_antidote_potion",
+      "components": {
+        "Identity": {
+          "name": "antidote potion",
+          "description": "A mysterious potion labeled 'Drink In Case of Mutancy'."
+        },
+        "Portable": {},
+        "Interactable": {
+          "prompt": "*sip*",
+          "verb": "drink"
+        },
+        "OnUse": {
+          "clearFact": "mutant",
+          "when": {
+            "fact": "mutant"
+          }
+        }
+      }
+    },
+    "entity:item_ancient_scroll": {
+      "id": "entity:item_ancient_scroll",
+      "components": {
+        "Identity": {
+          "name": "ancient scroll",
+          "description": "A scroll with cryptic runes. Might hold a secret."
+        },
+        "Portable": {},
+        "Interactable": {
+          "prompt": "Glowing letters briefly light up, then fade away.",
+          "verb": "read"
+        }
+      }
+    },
+    "entity:item_tower_key": {
+      "id": "entity:item_tower_key",
+      "components": {
+        "Identity": {
+          "name": "tower key",
+          "description": "A key with a tower-shaped head."
+        },
+        "Portable": {}
+      }
+    },
+    "entity:item_dusty_journal": {
+      "id": "entity:item_dusty_journal",
+      "components": {
+        "Identity": {
+          "name": "dusty journal",
+          "description": "Leather-bound notes on local legends."
+        },
+        "Portable": {},
+        "Interactable": {
+          "prompt": "Each page crackles with age as you learn about ancient secrets.",
+          "verb": "read"
+        }
+      }
+    },
+    "entity:item_gold_flower": {
+      "id": "entity:item_gold_flower",
+      "components": {
+        "Identity": {
+          "name": "gold flower",
+          "description": "An odd golden flower that smells a bit like pee."
+        },
+        "Portable": {}
+      }
+    },
+    "entity:item_hose": {
+      "id": "entity:item_hose",
+      "components": {
+        "Identity": {
+          "name": "hose",
+          "description": "A very drippy old hose with foul-smelling water."
+        },
+        "Portable": {},
+        "Interactable": {
+          "prompt": "You guzzle brown stuff, telling yourself it's chocolate milk. It's not, but in your mind, it's deliciously gritty.",
+          "verb": "drink"
+        }
+      }
+    },
+    "entity:item_doorbell": {
+      "id": "entity:item_doorbell",
+      "components": {
+        "Identity": {
+          "name": "doorbell",
+          "description": "A doorbell that looks like it's never been rung."
+        },
+        "Portable": {},
+        "Interactable": {
+          "prompt": "*RAAAWWWRRR*",
+          "verb": "ring"
+        }
+      }
+    },
+    "entity:item_spiderweb": {
+      "id": "entity:item_spiderweb",
+      "components": {
+        "Identity": {
+          "name": "spiderweb",
+          "description": "A big, hairy spiderweb. It's sticky and gross."
+        },
+        "Interactable": {
+          "prompt": "You pop the spiderweb into your mouth. It's sticky and gross, but you manage to swallow it. You wonder if you'll get superpowers now. Probably not. I think you just made the spider mad. He was so chill, too.",
+          "verb": "eat"
+        }
+      }
+    },
+    "entity:item_binoculars": {
+      "id": "entity:item_binoculars",
+      "components": {
+        "Identity": {
+          "name": "binoculars",
+          "description": "A pair of binoculars. You can see even farther."
+        },
+        "Interactable": {
+          "prompt": "You scan the horizon, spying on the neighbors:",
+          "verb": "use"
+        }
+      }
+    },
+    "entity:item_odd_key": {
+      "id": "entity:item_odd_key",
+      "components": {
+        "Identity": {
+          "name": "odd key",
+          "description": "A swirling runic key conjured by the wizard. It glows slightly."
+        },
+        "Portable": {}
+      }
+    },
+    "entity:char_wizard": {
+      "id": "entity:char_wizard",
+      "components": {
+        "Identity": {
+          "name": "wizard",
+          "description": "An eccentric wizard with a long beard and glittering eyes. He seems both wise and scatterbrained. But mostly ego-driven."
+        },
+        "Knowledge": {
+          "knows": [
+            "mutant",
+            "potion_insight",
+            "mushroom_insight"
+          ]
+        },
+        "Interactable": {
+          "prompt": "The wizard peers at you with a sour twinkle in his eye, as you factor into his plans. He calls to you, \"Greetings! I sense you have potential. But first, I must ask you to prove your worth. Bring me a rare mushroom, and we shall speak further.\"",
+          "verb": "talk"
+        },
+        "Spawns": {
+          "when": {
+            "all": [
+              {
+                "fact": "has_rare_mushroom"
+              },
+              {
+                "not": {
+                  "fact": "wizard_gave_key"
+                }
+              }
+            ]
+          },
+          "entity": {
+            "$ref": "entity:item_odd_key"
+          }
+        }
+      }
+    },
+    "entity:char_stray_dog": {
+      "id": "entity:char_stray_dog",
+      "components": {
+        "Identity": {
+          "name": "stray dog",
+          "description": "A hungry-looking stray dog that noses around for scraps."
+        }
+      }
+    },
+    "entity:char_raven": {
+      "id": "entity:char_raven",
+      "components": {
+        "Identity": {
+          "name": "raven",
+          "description": "A glossy-feathered raven hopping about, cawing cryptically."
+        }
+      }
+    },
+    "entity:char_cat": {
+      "id": "entity:char_cat",
+      "components": {
+        "Identity": {
+          "name": "cat",
+          "description": "There's a sleek, black cat."
+        }
+      }
+    }
+  },
+  "tables": {},
+  "maps": {}
+}
