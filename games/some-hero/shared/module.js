@@ -772,10 +772,34 @@ export function validate(ctx, cmd) {
       // own "on/adjacent-to" contact-damage rule.
       const id = rest[0];
       const enemy = state.run.enemies.find((e) => e.id === id);
+      const { x, y } = state.character.pos;
+
+      // Torch-seal lighting (docs/superpowers/specs/2026-07-07-torch-seal-
+      // resolution-design.md): a swing lights any un-lit brazier within
+      // Manhattan <= 1, faithful to legacy attack.js's igniteBraziers, which
+      // fires on every tomb attack regardless of the enemy hit. Pure — a
+      // fresh torches array / puzzle, never mutates state. Only engages on an
+      // unsolved torch floor, so every non-torch attack is byte-unchanged.
+      const pz = state.run.puzzle;
+      let torchLit = null;
+      if (pz && pz.type === "torch" && !pz.solved) {
+        const hit = [];
+        pz.torches.forEach((to, i) => {
+          if (!to.lit && Math.abs(to.x - x) + Math.abs(to.y - y) <= 1) hit.push(i);
+        });
+        if (hit.length) {
+          const torches = pz.torches.map((to, i) =>
+            hit.includes(i) ? { ...to, lit: true, tm: pz.time } : to);
+          torchLit = { ...pz, torches, solved: torches.every((to) => to.lit) };
+        }
+      }
+
       if (!enemy) {
+        // A swing that only lights braziers is still a legal swing; otherwise
+        // there is genuinely nothing to strike (unchanged deny).
+        if (torchLit) return [{ t: "TORCH_LIT", puzzle: torchLit }];
         return { deny: "There is nothing here by that name to strike." };
       }
-      const { x, y } = state.character.pos;
       const dist = Math.abs(enemy.pos.x - x) + Math.abs(enemy.pos.y - y);
       if (dist > 1) {
         return { deny: "Too far to strike." };
@@ -787,6 +811,7 @@ export function validate(ctx, cmd) {
       if (!survivor || survivor.hp <= 0) {
         events.push({ t: "ENEMY_KILLED", id, kind: enemy.kind });
       }
+      if (torchLit) events.push({ t: "TORCH_LIT", puzzle: torchLit });
       return events;
     }
     case "resurrect": {
