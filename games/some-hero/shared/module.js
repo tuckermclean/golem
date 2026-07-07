@@ -708,11 +708,51 @@ export function narrativeFacts(state, world, event) {
   }
 }
 
-/** A partial KernelCore — `{validate, reduce, narrativeFacts}`,
+/* ── S4 PR1: observe() — the first real GameModule.observe in the
+   monorepo (docs/superpowers/specs/2026-07-07-s4-pr1-observe-adapter-
+   design.md's "observe() — the first real GameModule.observe"; kernel
+   contract: packages/kernel/src/index.ts's `observe(state, world,
+   viewer): Obs`, "state + world, as seen by one viewer → that viewer's
+   observation. Perception (seen/lit, fog of war) is derived here, not
+   stored.").
+
+   some-hero has NO fog of war / no per-viewer visibility in the port
+   (unlike golem-grid's client-local perceive.js, which computes a real
+   seen/lit set from a room-shaped dungeon — but that's a CLIENT module,
+   not this kernel hook; no game module's `observe` exists yet anywhere
+   in the monorepo). So this is an honest FULL-VISIBILITY projection, not
+   a fog computation: every field of `state` (character/run/knowledge)
+   plus the derived `world` is handed back verbatim, structurally shared
+   (no defensive copy — same "untouched tiers are the same reference"
+   posture shared/reducer.js's own header documents; observe() never
+   mutates state/world, so aliasing is safe).
+
+   `viewer` is present ONLY for structural parity with the kernel
+   contract's signature (future stealth/multiplayer, per the design
+   spec) — it is NEVER read. Calling `observe(state, world, "anyone")`
+   and `observe(state, world, "literally-anything-else")` returns the
+   exact same object shape with the exact same tier references; this is
+   asserted directly by tests/observe.test.js, not just claimed here, so
+   a reviewer doesn't mistake the omission for a forgotten fog feature. */
+export function observe(state, world, viewer) {
+  void viewer; // structurally present, deliberately unused — see header
+  return {
+    zone: state.world.zone,
+    floorNum: state.world.floorNum,
+    character: state.character,
+    run: state.run,
+    knowledge: state.knowledge,
+    world,
+  };
+}
+
+/** A partial KernelCore — `{validate, reduce, narrativeFacts, observe}`,
  *  deliberately WITHOUT `deriveWorld` (see this file's header comment:
  *  deriveWorld's Node-side filesystem read lives in shared/pack-
  *  loader.js, which assembles the FULL `{deriveWorld,validate,reduce,
  *  narrativeFacts}` GameModule subset for Node consumers). Enough for
  *  @golem-engine/kernel's replay(), which only ever reads `.reduce` —
- *  same posture as topdown-puzzle/golem-grid's own `module` export. */
-export const module = { validate, reduce, narrativeFacts };
+ *  same posture as topdown-puzzle/golem-grid's own `module` export.
+ *  `observe` (S4 PR1) rides beside it now — the first game module in the
+ *  monorepo to populate this kernel hook. */
+export const module = { validate, reduce, narrativeFacts, observe };
