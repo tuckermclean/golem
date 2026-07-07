@@ -260,3 +260,49 @@ test("serializeState sorts run.enemies by id — the hash does not depend on arr
   assert.equal(serializeState(a), serializeState(b));
   assert.equal(h32(serializeState(a)), h32(serializeState(b)));
 });
+
+/* ── Adversarial-review corrections (combat/tick review) ─────────────── */
+
+test("review fix: a second enemy's NEWLY-established contact deals damage even when another enemy is already glued to the player", () => {
+  const world = makeWorld({ rows: 10, cols: 10, spawn: { x: 5, y: 5 }, enemyTypes: { skeleton: { aggro: 150, dmg: 3 } }, mapId: "tomb:x:0:1" });
+  let state = floorEnteredState(world);
+  state = {
+    ...state,
+    character: { ...state.character, hp: 10, pos: { x: 5, y: 5 } },
+    run: {
+      ...state.run,
+      enemies: [
+        { id: "e0", kind: "skeleton", pos: { x: 5, y: 5 }, hp: 4 }, // already ON the player (glued, dist 0)
+        { id: "e1", kind: "skeleton", pos: { x: 7, y: 5 }, hp: 4 }, // 2 away — will step to (6,5), NEWLY adjacent
+      ],
+    },
+  };
+
+  const res = resolveTick(state, world, world.mapId);
+  const hurts = res.filter((e) => e.t === "HURT");
+  assert.equal(hurts.length, 1, "e1's fresh contact must land — the glued e0 no longer masks it");
+  assert.equal(hurts[0].amount, 3);
+});
+
+test("review fix: while slain (pending resurrection), only 'resurrect' is legal — move/attack deny, tick no-ops", () => {
+  const world = makeWorld({ rows: 5, cols: 5, spawn: { x: 2, y: 2 }, enemyTypes: { skeleton: { aggro: 150, dmg: 3 } }, mapId: "tomb:x:0:1" });
+  let state = floorEnteredState(world);
+  state = {
+    ...state,
+    character: { ...state.character, hp: 0, pos: { x: 2, y: 2 } },
+    pending: { kind: "resurrection", cause: "skeleton" },
+    run: { ...state.run, enemies: [{ id: "e0", kind: "skeleton", pos: { x: 3, y: 2 }, hp: 4 }] },
+  };
+
+  const move = validate({ state, world }, "move 1 0");
+  assert.ok(!Array.isArray(move) && move.deny, "a dead player cannot move");
+  const attack = validate({ state, world }, "attack e0");
+  assert.ok(!Array.isArray(attack) && attack.deny, "a dead player cannot attack");
+
+  const tick = validate({ state, world }, "tick");
+  assert.deepEqual(tick, [], "tick is a no-op while dead — no enemy moves, no corpse-hurting HURT/DIED");
+
+  const resurrect = validate({ state, world }, "resurrect");
+  assert.ok(Array.isArray(resurrect), "resurrect is still legal");
+  assert.equal(resurrect[0].t, "RESURRECTED");
+});

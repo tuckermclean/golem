@@ -77,26 +77,20 @@ function aggroRangeTiles(actorType) {
   return Math.round((actorType.aggro || 0) / T);
 }
 
-/** Any hostile (non-passive) enemy in `s.run.enemies` within Manhattan
- *  distance 1 of the player ("on/adjacent-to", the design spec's own
- *  contact-damage wording) — first match in `s.run.enemies`' own fixed
- *  array order wins (deterministic; PR4 only ever has one enemy on the
- *  synthetic floor, so this never actually has to arbitrate a tie). Used
- *  both before this tick's enemies act ("was already in contact") and
- *  after ("is in contact now") — comparing the two is what makes
- *  "newly-established contact" fully state-derived, never wall-clock
- *  (mirrors games/topdown-puzzle/shared/tick.js's playerTouchingBaddie
- *  exactly, adjacency instead of exact-tile-match per this port's own
- *  wider contact rule). */
-function playerTouchingHostile(s, enemyTypes) {
+/** The set of non-passive enemy IDs currently touching the player
+ *  (Manhattan <= 1). Contact damage is tracked PER ID (adversarial-review
+ *  find): the old single-`playerTouchingHostile` "is anyone touching"
+ *  before/after test masked a SECOND enemy's brand-new contact whenever a
+ *  DIFFERENT enemy was already glued to the player — so once one enemy sat
+ *  on the player, every other enemy's fresh contact dealt no damage. */
+function touchingHostileIds(s, enemyTypes) {
   const p = s.character.pos;
+  const ids = new Set();
   for (const e of s.run.enemies) {
-    const actorType = enemyTypes[e.kind] || {};
-    if (actorType.passive) continue;
-    const dist = Math.abs(e.pos.x - p.x) + Math.abs(e.pos.y - p.y);
-    if (dist <= 1) return e;
+    if ((enemyTypes[e.kind] || {}).passive) continue;
+    if (Math.abs(e.pos.x - p.x) + Math.abs(e.pos.y - p.y) <= 1) ids.add(e.id);
   }
-  return null;
+  return ids;
 }
 
 /** Greedy one-cell step toward (tx,ty): move along whichever axis has
@@ -131,10 +125,10 @@ export function resolveTick(state, world, seed) {
 
   const enemyTypes = world.enemyTypes || {};
 
-  // Contact state going INTO this tick's own movement resolution — see
-  // playerTouchingHostile's own header for why this is captured before
-  // any enemy steps.
-  const wasContact = playerTouchingHostile(state, enemyTypes);
+  // Contact state going INTO this tick's own movement resolution, tracked
+  // per enemy id (see touchingHostileIds — a single before/after flag
+  // masked other enemies' new contact).
+  const wasTouchingIds = touchingHostileIds(state, enemyTypes);
 
   // Enemies step, in `state.run.enemies`' own fixed scan order (assigned
   // once at ENTERED_TOMB spawn time — "e0","e1",... — never reordered by
@@ -172,14 +166,24 @@ export function resolveTick(state, world, seed) {
   // wasInContact/isInContactNow discipline exactly; see this file's
   // header for why the wider "adjacent-to" rule is used here instead of
   // topdown-puzzle's exact-tile match).
-  const nowContact = playerTouchingHostile(sim, enemyTypes);
-  if (nowContact && !wasContact) {
-    const dmg = (enemyTypes[nowContact.kind] || {}).dmg || 0;
-    commit({ t: "HURT", amount: dmg, cause: nowContact.kind });
+  // Fire for the FIRST enemy (fixed array order) that is NEWLY touching —
+  // i.e. touching now but not at the tick's start — regardless of whether
+  // some OTHER enemy was already in contact (that masking was the bug).
+  // One hit per tick is preserved (the port's contact model); it just
+  // isn't suppressed by an unrelated already-touching enemy anymore.
+  const p = sim.character.pos;
+  const newlyTouching = sim.run.enemies.find((e) => {
+    if ((enemyTypes[e.kind] || {}).passive) return false;
+    const d = Math.abs(e.pos.x - p.x) + Math.abs(e.pos.y - p.y);
+    return d <= 1 && !wasTouchingIds.has(e.id);
+  });
+  if (newlyTouching) {
+    const dmg = (enemyTypes[newlyTouching.kind] || {}).dmg || 0;
+    commit({ t: "HURT", amount: dmg, cause: newlyTouching.kind });
     // Derived DIED: sim-and-inspect, same bridge shared/module.js's own
     // "hurt" verb uses.
     if (sim.character.hp <= 0) {
-      commit({ t: "DIED", cause: nowContact.kind });
+      commit({ t: "DIED", cause: newlyTouching.kind });
     }
   }
 
@@ -214,7 +218,7 @@ export function resolveTick(state, world, seed) {
     const player = sim.character.pos;
     // Contact state going INTO this tick's own boss action — captured
     // before the boss moves, same "newly-established adjacency" idiom
-    // playerTouchingHostile/wasContact use for the skeleton family above.
+    // touchingHostileIds/wasTouchingIds use for the skeleton family above.
     const wasBossContact = Math.abs(boss.pos.x - player.x) + Math.abs(boss.pos.y - player.y) <= 1;
 
     let next = null; // null = no state/pos/timer change this tick (asleep, out of range)

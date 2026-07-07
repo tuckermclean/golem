@@ -599,6 +599,21 @@ function attackDamage(swordLv) {
 export function validate(ctx, cmd) {
   const { state, world, seed } = ctx;
   const [verb, ...rest] = String(cmd).trim().split(/\s+/);
+
+  // Master dead-gate (adversarial-review find): while slain and awaiting
+  // resurrection (`pending.kind === "resurrection"`), the ONLY legal act is
+  // "resurrect". Mirrors legacy's `if (game.state !== ST.PLAY) return`
+  // (legacy/src/core/update.js:27), which skips the entire per-frame update
+  // — movement, attack, enemy AI, pickups — until respawn. Without this, a
+  // corpse could keep moving/attacking/looting, and (because the host fires
+  // "tick" on an unconditional setInterval) autonomous ticks kept animating
+  // enemies into the dead player, re-firing HURT/DIED and overwriting the
+  // recorded death `cause`. "tick" no-ops (the mover/combat resolution is
+  // skipped); every other verb is denied.
+  if (state.pending?.kind === "resurrection" && verb !== "resurrect") {
+    return verb === "tick" ? [] : { deny: "You are slain. Only resurrection remains." };
+  }
+
   switch (verb) {
     case "move": {
       const dx = +rest[0];
