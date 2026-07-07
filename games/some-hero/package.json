@@ -8,6 +8,8 @@
     "verify:some-hero-content": "node --test tests/*.test.js"
   },
   "dependencies": {
-    "@golem-engine/content": "*"
+    "@golem-engine/content": "*",
+    "@golem-engine/kernel": "*",
+    "@golem-engine/random": "*"
   }
 }
