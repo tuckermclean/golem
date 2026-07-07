@@ -621,9 +621,16 @@ export function validate(ctx, cmd) {
       // BLOCK_PUSHED (like TRAP_TRIGGERED) — it does not replace MOVED.
       let blockPush = null;
       const pz = state.run.puzzle;
-      if (pz && pz.type === "plates" && !pz.solved) {
+      if (pz && pz.type === "plates") {
         const bi = pz.blocks.findIndex((b) => b.x === nx && b.y === ny);
         if (bi >= 0) {
+          // A block is a physical obstacle ALWAYS — legacy moveEnt treats
+          // blocks as unconditionally solid, with no `solved` escape hatch
+          // (adversarial-review find: gating solidity on `!solved` let the
+          // player walk THROUGH resting blocks once the seal was satisfied,
+          // since floorgen never records block tiles in world.walls). Once
+          // solved the block is inert scenery but still blocks the tile.
+          if (pz.solved) return { deny: "The block won't budge." };
           const bx = nx + dx, by = ny + dy;
           const blocked =
             !inBounds(world, bx, by) ||
@@ -845,6 +852,13 @@ export function validate(ctx, cmd) {
         // Same melee-range rule as the enemy path below (Manhattan <= 1).
         const dist = Math.abs(boss.pos.x - x) + Math.abs(boss.pos.y - y);
         if (dist > 1) {
+          // The swing still happens even if the named target is out of
+          // reach — a brazier in range lights (legacy: every tomb swing
+          // lights braziers, independent of the enemy hit; adversarial-
+          // review find: this deny previously discarded the computed
+          // torchLit, so an in-range brazier stayed dark). Mirrors the
+          // `!enemy && !boss` branch above.
+          if (torchLit) return [{ t: "TORCH_LIT", puzzle: torchLit }];
           return { deny: "Too far to strike." };
         }
         const amount = attackDamage(state.character.swordLv);
@@ -857,6 +871,9 @@ export function validate(ctx, cmd) {
 
       const dist = Math.abs(enemy.pos.x - x) + Math.abs(enemy.pos.y - y);
       if (dist > 1) {
+        // As in the boss branch above: a swing that can't reach its named
+        // enemy still lights an in-range brazier (adversarial-review find).
+        if (torchLit) return [{ t: "TORCH_LIT", puzzle: torchLit }];
         return { deny: "Too far to strike." };
       }
       const amount = attackDamage(state.character.swordLv);

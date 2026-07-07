@@ -185,6 +185,35 @@ test("both plates solved + moving onto stairsAt emits DESCENDED (not silent): fl
   assert.deepEqual(next.knowledge, knowledgeBefore, "knowledge (runs/day/interest/...) must be entirely untouched by a floor-to-floor descend");
 });
 
+// ── adversarial-review find: a SOLVED plates puzzle's blocks stay solid ─
+
+test("even after the seal is solved, a resting block is still a physical obstacle: walking into it denies (never a walk-through)", () => {
+  const world = deriveTombWorld(PLATES_SEED, 1);
+  let state = platesFloorState(world, { x: 23, y: 7 });
+
+  // Solve both plates (same sequence as the descend test) — ends with the
+  // player at (25,4) and a resting block at (24,4).
+  ({ state } = commit(state, world, "move 1 0"));
+  ({ state } = commit(state, world, "move 1 0"));
+  state = { ...state, character: { ...state.character, pos: { x: 27, y: 4 } } };
+  ({ state } = commit(state, world, "move -1 0"));
+  ({ state } = commit(state, world, "move -1 0"));
+  assert.equal(state.run.puzzle.solved, true, "sanity: solved before the solidity check");
+  assert.ok(
+    state.run.puzzle.blocks.some((b) => b.x === 24 && b.y === 4),
+    "sanity: a block rests on plate (24,4) after the solve",
+  );
+
+  // From (25,4), stepping west onto the resting block (24,4) must DENY —
+  // the block is inert (already on its plate) but still solid. Before the
+  // fix this returned a bare [MOVED] (the player walked onto the block's
+  // tile, two occupants on one cell).
+  state = { ...state, character: { ...state.character, pos: { x: 25, y: 4 } } };
+  const result = validate({ state, world }, "move -1 0");
+  assert.ok(!Array.isArray(result), "walking into a solved-puzzle block must be a Denial, not a legal move");
+  assert.equal(result.deny, "The block won't budge.");
+});
+
 // ── deny: a block pushed against a wall won't budge ─────────────────────
 
 test("pushing a block against a wall denies the whole move: 'The block won't budge.', block and player stay put, plate flips on/off as it transits", () => {
