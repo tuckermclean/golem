@@ -1,6 +1,6 @@
 # Local mirrors of the pipeline stages. CI runs the same commands.
 
-.PHONY: test solve html dev data-batch train-local wasm infra-plan infra-apply lint-bans smoke-e2e html-tdp smoke-e2e-tdp
+.PHONY: test solve solve-some-hero html dev data-batch train-local wasm infra-plan infra-apply lint-bans smoke-e2e html-tdp smoke-e2e-tdp
 
 test:
 	npm test
@@ -11,6 +11,9 @@ lint-bans:
 
 solve:
 	node games/golem-grid/tools/solve.js --seeds 10000
+
+solve-some-hero:
+	node games/some-hero/tools/solve.js --seeds 10000
 
 html:
 	npm run build -w @golem-engine/golem-grid
