@@ -28,17 +28,26 @@
    never-called, lazily-placed reference to one of those builtins' named
    exports is enough to fail a Vite client build at bundle time). The
    actual filesystem read (readFileSync(content/pack.json)) lives in the
-   Node-only shared/pack-loader.js, which imports deriveWorldFromPack FROM
+   Node-only shared/pack-loader.js, which imports deriveWorld FROM
    this file (never the reverse) and exposes the Node-side
-   `deriveWorld(worldState)` convenience wrapper + the full
+   `deriveWorld(worldState, seed?)` convenience wrapper + the full
    `{deriveWorld,validate,reduce}` KernelCore for tests/fixture tooling.
    Tests that need a SYNTHETIC floor (tests/fixtures/synthetic-floor.mjs)
    call deriveWorldFromPack directly with their own compiled pack —
    never touching content/pack.json, never touching this file's (non-
-   existent) fs code. */
+   existent) fs code.
+
+   S3 PR4 (docs/superpowers/specs/2026-07-07-s3-pr4-derive-wiring-
+   design.md) adds `deriveWorld(pack, worldState, seed?)` — an ADDITIVE
+   dispatcher wrapping the original `deriveWorldFromPack` (unchanged,
+   still exported, still the only path a "map:" mapId ever takes) with a
+   new "tomb:" mapId branch that calls shared/floorgen.js's generateFloor
+   (S3 PR2) instead of resolving a compiled pack.maps entry. See that
+   function's own header, further down this file, for the full design. */
 import { evaluate } from "@golem-engine/content";
 import { reduce } from "./reducer.js";
 import { resolveTick } from "./tick.js";
+import { generateFloor } from "./floorgen.js";
 import { missingCredentials } from "../rules/credentials.js";
 import { pack as contentPack } from "../rules/pack.js";
 import { recordDeath } from "../rules/meta.js";
@@ -260,6 +269,90 @@ export function deriveWorldFromPack(pack, worldState) {
 
 export { reduce };
 
+/* ── S3 PR4: the `deriveWorld` dispatcher (docs/superpowers/specs/
+   2026-07-07-s3-pr4-derive-wiring-design.md's "The dispatcher
+   (additive)"). `worldState.mapId`'s own prefix says which generation
+   strategy owns it — the mapId string IS the generation key (doctrine
+   #1: the world is a pure function of a seed, never stored, so every
+   fact this dispatch needs lives entirely inside the mapId it is
+   handed): "map:..." keeps using the existing pack.maps token-grid path
+   (deriveWorldFromPack, byte-for-byte unchanged — this covers BOTH
+   map:guild_hall and the synthetic map:tomb_floor_1_synthetic fixture,
+   exactly as today); "tomb:..." is the NEW path, parsing
+   "tomb:<topSeed>:<runs>:<floorNum>" and calling shared/floorgen.js's
+   generateFloor(topSeed, floorNum) (S3 PR2) instead. */
+const TOMB_MAP_PREFIX = "tomb:";
+
+/** Parses "tomb:<topSeed>:<runs>:<floorNum>" — the mapId shape this
+ *  file's own enteredTombEvent() below constructs when a seed is
+ *  threaded through. `runs` is carried for legibility/uniqueness (a
+ *  future multi-run save-slot concern) but not read back out here —
+ *  only `topSeed`/`floorNum` are needed to reproduce the floor, since
+ *  generateFloor is a pure function of exactly those two values. */
+function parseTombMapId(mapId) {
+  const rest = mapId.slice(TOMB_MAP_PREFIX.length);
+  const firstColon = rest.indexOf(":");
+  const secondColon = rest.indexOf(":", firstColon + 1);
+  return {
+    topSeed: rest.slice(0, firstColon),
+    floorNum: Number(rest.slice(secondColon + 1)),
+  };
+}
+
+/** Builds the SAME derived-World shape deriveWorldFromPack produces
+ *  (see that function's own header), from a freshly-generated floor
+ *  (shared/floorgen.js's generateFloor) instead of a compiled
+ *  pack.maps entry. `enemyTypes` still comes from the PACK
+ *  (buildEnemyTypes(pack), UNCHANGED) — the generated floor only ever
+ *  supplies kind+position, never stats (floorgen.js's own header: "the
+ *  content pack supplies stats at derive time, PR4"). Tomb floors have
+ *  no Door Golem (`gate: null`) and no generator-authored ascent tile
+ *  (`upstairsAt: null` — only the hand-authored synthetic fixture has
+ *  one; S3's generator has no '<' equivalent yet). */
+function deriveWorldFromGeneratedFloor(pack, worldState, floor) {
+  const { zone, floorNum, mapId } = worldState;
+  const pickupAt = new Map();
+  for (const p of floor.pickups) pickupAt.set(`${p.x},${p.y}`, { kind: p.kind, amount: p.amount });
+  return {
+    zone,
+    floorNum,
+    mapId,
+    rows: floor.gridH,
+    cols: floor.gridW,
+    walls: new Set(floor.walls),
+    spawn: floor.spawn,
+    stairsAt: floor.stairsAt,
+    upstairsAt: null,
+    gate: null,
+    enemySpawns: floor.enemies.map((e) => ({ kind: e.kind, pos: { x: e.x, y: e.y } })),
+    enemyTypes: buildEnemyTypes(pack),
+    pickupAt,
+    puzzle: floor.puzzle,
+    pinnedRooms: floor.pinnedRooms,
+  };
+}
+
+/** The `deriveWorld` dispatcher. ADDITIVE over deriveWorldFromPack (see
+ *  above): a "map:" mapId is routed to the unchanged existing path; a
+ *  "tomb:" mapId is routed to the new generated-floor path. `seed` is
+ *  accepted for signature parity with validate's own `ctx.seed` (design
+ *  spec: "add an optional seed param to the derive function's
+ *  signature") but is not itself consulted here — the generation seed
+ *  is already embedded in `mapId` (the one and only generation key, per
+ *  doctrine #1), so re-deriving the SAME mapId always reproduces the
+ *  SAME floor regardless of what `seed` happens to be passed alongside
+ *  it. */
+export function deriveWorld(pack, worldState, seed) {
+  void seed;
+  const { mapId } = worldState;
+  if (typeof mapId === "string" && mapId.startsWith(TOMB_MAP_PREFIX)) {
+    const { topSeed, floorNum } = parseTombMapId(mapId);
+    const floor = generateFloor(topSeed, floorNum);
+    return deriveWorldFromGeneratedFloor(pack, worldState, floor);
+  }
+  return deriveWorldFromPack(pack, worldState);
+}
+
 function inBounds(world, x, y) {
   return x >= 0 && y >= 0 && x < world.cols && y < world.rows;
 }
@@ -317,8 +410,51 @@ const SYNTHETIC_TOMB_FLOOR_1 = {
   enemies: [{ id: "e0", kind: "skeleton", pos: { x: 3, y: 3 }, hp: 4 }],
 };
 
-function enteredTombEvent() {
-  return { t: "ENTERED_TOMB", ...SYNTHETIC_TOMB_FLOOR_1 };
+/** Builds the ENTERED_TOMB event. This is the S3 PR4 backward-compat
+ *  hinge (design spec's "ENTERED_TOMB construction"): with NO seed
+ *  (`seed == null` — every existing caller/test, none of which thread
+ *  one through `ctx`), this returns EXACTLY what it always has —
+ *  SYNTHETIC_TOMB_FLOOR_1 spread verbatim, byte-for-byte — so the 60
+ *  ceremony-kernel tests (which supply their own tomb World directly,
+ *  never re-deriving off this event's mapId — see rules/tests/ceremony-
+ *  kernel/kernel-helpers.mjs's own header) are entirely unaffected.
+ *
+ *  WITH a seed, this builds a real "tomb:<topSeed>:<runs>:<floorNum>"
+ *  mapId (`state.knowledge.runs` — the PRE-event run count, since
+ *  `state` here is validate()'s pre-event state) and generates the
+ *  matching floor via shared/floorgen.js's generateFloor (a pure
+ *  function of (topSeed, floorNum) alone), so `spawn`/`enemies` land the
+ *  player on and among the SAME generated geometry deriveWorld's own
+ *  "tomb:" branch will independently reproduce the next time the world
+ *  is re-derived (src/host.js, after this event commits) — no drift
+ *  between the two, by construction (same pure inputs). Real multi-floor
+ *  descent is not wired yet (S3 PR5+ territory) — every tomb entry, seed
+ *  or not, still starts at floorNum 1, exactly as SYNTHETIC_TOMB_FLOOR_1
+ *  always has.
+ *
+ *  `enemies` filters out any generated kind absent from `enemyTypes`
+ *  (pack-scoped, buildEnemyTypes(contentPack)) — e.g. "cabinet", which
+ *  floorgen.js places but the content pack does not author with an
+ *  Actor stat bag (content/entities.mjs's own comment: "cabinet spawns
+ *  floors 3+ and is excluded"). Those are decor, not live combatants;
+ *  `world.enemySpawns` (deriveWorld's own "tomb:" branch) still lists
+ *  them (raw floor.enemies, unfiltered) since that field is purely
+ *  informational geometry, never fed into run.enemies directly. */
+function enteredTombEvent(state, seed) {
+  if (seed == null) {
+    return { t: "ENTERED_TOMB", ...SYNTHETIC_TOMB_FLOOR_1 };
+  }
+  const floorNum = SYNTHETIC_TOMB_FLOOR_1.floorNum;
+  const mapId = `${TOMB_MAP_PREFIX}${seed}:${state.knowledge.runs}:${floorNum}`;
+  const floor = generateFloor(seed, floorNum);
+  const enemyTypes = buildEnemyTypes(contentPack);
+  const enemies = [];
+  for (const e of floor.enemies) {
+    const type = enemyTypes[e.kind];
+    if (!type) continue; // decor, e.g. "cabinet" — not a pack-authored combatant
+    enemies.push({ id: `e${enemies.length}`, kind: e.kind, pos: { x: e.x, y: e.y }, hp: type.hp });
+  }
+  return { t: "ENTERED_TOMB", zone: "tomb", floorNum, mapId, spawn: floor.spawn, enemies };
 }
 function exitedTombEvent() {
   return { t: "EXITED_TOMB", zone: "ow", floorNum: 0, mapId: "map:guild_hall", spawn: guildHallSpawn() };
@@ -365,7 +501,7 @@ function attackDamage(swordLv) {
 }
 
 export function validate(ctx, cmd) {
-  const { state, world } = ctx;
+  const { state, world, seed } = ctx;
   const [verb, ...rest] = String(cmd).trim().split(/\s+/);
   switch (verb) {
     case "move": {
@@ -413,7 +549,7 @@ export function validate(ctx, cmd) {
           events.push({ t: "GOLEM_APPROVED" });
         } else {
           // Already approved: routine second (and every later) entry.
-          events.push(enteredTombEvent());
+          events.push(enteredTombEvent(state, seed));
         }
       } else if (
         world.zone === "tomb" &&
@@ -444,7 +580,7 @@ export function validate(ctx, cmd) {
       if (!state.pending || state.pending.kind !== "ceremony") {
         return { deny: "There is no ceremony to proceed from." };
       }
-      return [enteredTombEvent()];
+      return [enteredTombEvent(state, seed)];
     }
     case "hurt": {
       // The HURT/DIED bridge (design spec: "Real damage sources are
