@@ -86,17 +86,20 @@ function onGameOver() {
   const won = S.st.outcome === "WIN";
   const payload = JSON.stringify(solution);
   console.log(
-    `[tdp] level ${LEVEL_ID}: ${S.st.outcome} in ${solution.length} commands` +
-      (won ? " — solution below (also at window.__tdp.getSolution()):" : ""),
+    `[tdp] level ${LEVEL_ID}: ${S.st.outcome} in ${solution.length} commands — ` +
+      `sequence below (also at window.__tdp.getSolution()):`,
   );
-  if (won) console.log(payload);
+  console.log(payload);
+  // Show the recorded command stream on BOTH outcomes: a WIN is a solution
+  // fixture, a LOSE is a failure fixture (pins the contact-damage /
+  // memory-hole death paths a winning run deliberately avoids).
   solOutcomeEl.textContent = won
     ? `WIN — level ${LEVEL_ID} solved in ${solution.length} commands. Copy or download this solution:`
-    : `LOSE — level ${LEVEL_ID}. Hit Retry to try again.`;
+    : `LOSE — level ${LEVEL_ID} in ${solution.length} commands. Copy or download this failure log — or Retry:`;
   solTextEl.value = payload;
-  solTextEl.hidden = !won;
-  document.getElementById("sol-copy").hidden = !won;
-  document.getElementById("sol-download").hidden = !won;
+  solTextEl.hidden = false;
+  document.getElementById("sol-copy").hidden = false;
+  document.getElementById("sol-download").hidden = false;
   solutionPanel.hidden = false;
 }
 
@@ -107,7 +110,7 @@ document.getElementById("sol-download").addEventListener("click", () => {
   const blob = new Blob([solTextEl.value], { type: "application/json" });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
-  a.download = `${LEVEL_ID}.moves.json`;
+  a.download = `${LEVEL_ID}.${S.st.outcome === "WIN" ? "moves" : "fail"}.json`;
   a.click();
   URL.revokeObjectURL(a.href);
 });
