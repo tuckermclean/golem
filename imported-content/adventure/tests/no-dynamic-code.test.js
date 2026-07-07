@@ -3,14 +3,20 @@
    packages/**\/src, packages/**\/tools, and tools/** — it does NOT scan
    imported-content/** (confirmed by reading tools/check-bans.mjs's own
    SCAN_SUBDIRS/EXTRA_ROOTS), so this local, redundant-by-design grep is
-   the only thing proving `imported-content/adventure/{content,tests}`
-   carry no eval(/exec(/new Function/Function(/node:vm.
+   the only thing proving `imported-content/adventure/{content,tests,
+   module,bin}` carry no eval(/exec(/new Function/Function(/node:vm.
 
-   Scoped to content/ and tests/ only — NOT legacy/, which is frozen
-   historical evidence (world.yaml's `func:`/`condition:` bodies and
-   adventure.py's/items.py's real exec(/eval(/InteractiveConsole hazard
-   ARE there by design; that is the entire point of AUDIT.md and
-   DECISION-LOG.md). */
+   DELTA A3 PR2 extends SCAN_DIRS with `module/` (the GameModule itself
+   — reducer.js/module.js) and `bin/` (the one TTY wrapper, play.mjs):
+   "generic declarative mechanics ONLY... Zero dynamic code" is exactly
+   as load-bearing for the verb/lock/spawn interpreter as it was for the
+   content pack's own compiler.
+
+   Scoped to content/, tests/, module/, and bin/ only — NOT legacy/,
+   which is frozen historical evidence (world.yaml's `func:`/
+   `condition:` bodies and adventure.py's/items.py's real exec(/eval(/
+   InteractiveConsole hazard ARE there by design; that is the entire
+   point of AUDIT.md and DECISION-LOG.md). */
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -22,7 +28,7 @@ const ADVENTURE_DIR = fileURLToPath(new URL("..", import.meta.url));
 // labels/regex source) — excluded by construction, not a documentation
 // dodge, same as tools/check-bans.mjs's own SELF_PATH exclusion.
 const SELF_PATH = fileURLToPath(import.meta.url);
-const SCAN_DIRS = ["content", "tests"];
+const SCAN_DIRS = ["content", "tests", "module", "bin"];
 const SOURCE_EXTENSIONS = new Set([".js", ".mjs", ".cjs"]);
 
 const BANS = [
@@ -45,7 +51,7 @@ function listFiles(dir) {
     .map((e) => join(dir, e.name));
 }
 
-test("imported-content/adventure/{content,tests} carry no eval(/exec(/new Function/Function(/node:vm", () => {
+test("imported-content/adventure/{content,tests,module,bin} carry no eval(/exec(/new Function/Function(/node:vm", () => {
   const violations = [];
   let scannedFiles = 0;
 
@@ -66,6 +72,6 @@ test("imported-content/adventure/{content,tests} carry no eval(/exec(/new Functi
     }
   }
 
-  assert.ok(scannedFiles > 0, "expected to scan at least one file under content/ and tests/");
+  assert.ok(scannedFiles > 0, "expected to scan at least one file under content/, tests/, module/, and bin/");
   assert.deepEqual(violations, [], `forbidden pattern(s) found:\n${violations.join("\n")}`);
 });

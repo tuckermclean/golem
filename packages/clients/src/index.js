@@ -10,3 +10,4 @@ export {
   TAP_MS,
 } from "./gesture.js";
 export { createTouchControls, isCoarsePointer } from "./touch.js";
+export { createTerminalSession } from "./terminal.js";

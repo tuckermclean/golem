@@ -8,5 +8,11 @@
   },
   "scripts": {
     "test": "node --test"
+  },
+  "dependencies": {
+    "@golem-engine/language": "*"
+  },
+  "devDependencies": {
+    "@golem-engine/adventure": "*"
   }
 }
