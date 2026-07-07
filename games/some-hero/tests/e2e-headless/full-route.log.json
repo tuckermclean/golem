@@ -1,0 +1,23 @@
+{
+  "//": "S5 check 1 (docs/superpowers/specs/2026-07-07-s5-headless-route-design.md) — the scripted command list for the full Ceremony route, exactly as full-route.test.js drives it. This is the AUTHORED input (a command script), not the committed event log itself (that is derived by validate()/reduce() at test time and is what actually gets replayed — see determinism.test.js/kernel-helpers.mjs's own precedent: replay always folds committed EVENTS via reduce(), never re-runs validate() commands). Committed here so the route is a permanent, inspectable artifact per the design spec's 'Where it lives' section.",
+  "seed": "1",
+  "//seed": "generateFloor(\"1\", 1) places an isolated skeleton (id e6, spawned at (24,11)) at least 5 tiles from every other enemy on the floor — found by an offline BFS search over candidate seeds/target cells (see the test's own header comment for the search method), so the scripted tomb walk can reach a clean single-enemy contact without any other enemy interfering.",
+  "arrangedStart": {
+    "//": "No GRANT_* command/event exists in the kernel yet (a real Ceremony-completeness gap — see the test file's own header and the task report). Credentials/swordLv are set directly on the pre-log state, mirroring the already-precedented pattern in rules/tests/ceremony-kernel/kernel-helpers.mjs's enterTombFromGuildHall() and tests/derive-world-dispatch.test.js's own production-flow test. hp is ALSO lowered here (10 -> 1, maxhp left at the default 10) — not to fake anything, but because shared/tick.js's contact damage only fires on NEWLY-established adjacency (it re-arms only after separation), so a single tick-driven contact event deals exactly 1 damage; reaching hp<=0 the 'natural' way would need ~10 scripted retreat/re-approach cycles across procedurally generated geometry, which proves nothing more about determinism than one clean hit does. The HURT/DIED events that follow are genuine engine output, not scripted directly.",
+    "credentials": { "backstory": true, "debt": true },
+    "swordLv": 1,
+    "hp": 1
+  },
+  "commands": [
+    "move 1 0", "move 1 0", "move 0 1", "move 0 1", "move 0 1",
+    "proceed",
+    "move -1 0", "move -1 0", "move -1 0", "move -1 0", "move -1 0", "move -1 0",
+    "move 0 -1", "move 0 -1", "move 0 -1", "move 0 -1", "move 0 -1", "move 0 -1", "move 0 -1", "move 0 -1",
+    "move 1 0", "move 1 0",
+    "move 0 -1", "move 0 -1", "move 0 -1",
+    "move 1 0", "move 1 0", "move 1 0", "move 1 0", "move 1 0", "move 1 0", "move 1 0", "move 1 0", "move 1 0", "move 1 0", "move 1 0", "move 1 0", "move 1 0", "move 1 0", "move 1 0", "move 1 0",
+    "move 0 1",
+    "tick",
+    "resurrect"
+  ]
+}
