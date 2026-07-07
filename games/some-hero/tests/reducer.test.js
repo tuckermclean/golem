@@ -15,7 +15,10 @@ import { makeWorld, floorEnteredState } from "./helpers/build-state.mjs";
 test("createState() returns the five-tier State with rules/-sourced defaults", () => {
   const state = createState();
   assert.deepEqual(state.world, { zone: null, floorNum: 0, mapId: null });
-  assert.deepEqual(state.run, { runStats: newRunStats() });
+  // run.puzzle (PR3: docs/superpowers/specs/2026-07-07-s2b-pr3-ceremony-
+  // machine-design.md's minimal {type,solved,attempts} slot) starts null
+  // — no puzzle exists outside the tomb.
+  assert.deepEqual(state.run, { runStats: newRunStats(), puzzle: null });
   assert.deepEqual(state.character, {
     hp: 10,
     maxhp: 10,
@@ -30,6 +33,8 @@ test("createState() returns the five-tier State with rules/-sourced defaults", (
   // truth, not a re-literalized copy (design spec's locked mapping).
   assert.deepEqual(state.knowledge, createMeta());
   assert.deepEqual(state.profile, {});
+  // pending (PR3: the unified two-step slot) starts null.
+  assert.equal(state.pending, null);
   assert.equal(state.tick, 0);
   assert.equal(state.seq, 0);
 });

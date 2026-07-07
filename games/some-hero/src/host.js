@@ -10,9 +10,26 @@
    Single-player, no DOM: local render/feed side effects are a future
    composition root's job, reached here only through the `hooks`
    callbacks it supplies — same discipline as topdown-puzzle/golem-grid's
-   own host.js. */
+   own host.js.
+
+   PR3 (docs/superpowers/specs/2026-07-07-s2b-pr3-ceremony-machine-
+   design.md's "The real novelty: world-swap mid-session") makes `S.world`
+   MUTABLE: some-hero's ceremony swaps worlds mid-session (`ow` guild_hall
+   ↔ `tomb` floor 1), and @golem-engine/kernel's generic replay() takes
+   ONE world for a whole log — reducing post-transition events against
+   the STALE zone. The locked fix is some-hero-LOCAL (not a kernel
+   change): after every commit whose reduce() call actually changed
+   `state.world` (reference inequality — every reducer case that leaves
+   `world` untouched returns the SAME object reference, per shared/
+   reducer.js's own copy-on-write discipline, so this check is cheap and
+   exact, no deep-equal needed), re-derive `S.world` from the pack BEFORE
+   the next thing gets committed. `S.pack` is a new required field on the
+   `S` container this file's `createHost(S, hooks)` expects (previously
+   just `{st, world}`) — the compiled RuntimePack `deriveWorldFromPack`
+   needs to resolve `state.world`'s `{zone,floorNum,mapId}` triple into
+   the actual World. */
 import { reduce as shReduce } from "../shared/reducer.js";
-import { validate } from "../shared/module.js";
+import { validate, deriveWorldFromPack } from "../shared/module.js";
 
 // No legacy fixed-tick constant exists for some-hero (it runs continuous
 // pixel physics — legacy/src/core/update.js's per-frame loop, not a
@@ -27,7 +44,14 @@ export function createHost(S, hooks) {
 
   function hostCommit(ev) {
     ev.seq = S.st.seq + 1;
+    const prevWorldTier = S.st.world;
     S.st = shReduce(S.st, S.world, ev);
+    if (S.st.world !== prevWorldTier) {
+      // A world-swap event (ENTERED_TOMB/EXITED_TOMB/RESURRECTED-out-of-
+      // the-tomb) just committed — re-derive S.world for whatever gets
+      // committed next, world-swap-aware fold (see this file's header).
+      S.world = deriveWorldFromPack(S.pack, S.st.world);
+    }
     onCommit(ev);
   }
 
