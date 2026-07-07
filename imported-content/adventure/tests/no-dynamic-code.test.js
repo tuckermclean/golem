@@ -45,10 +45,17 @@ function isSourceFile(name) {
   return SOURCE_EXTENSIONS.has(name.slice(dot));
 }
 
+// Recursive — so nested dirs (e.g. tests/e2e/) are covered too; the zero-
+// dynamic-code guarantee must hold for every source file under a scanned
+// root, not just its top level.
 function listFiles(dir) {
-  return readdirSync(dir, { withFileTypes: true })
-    .filter((e) => e.isFile() && isSourceFile(e.name))
-    .map((e) => join(dir, e.name));
+  const out = [];
+  for (const e of readdirSync(dir, { withFileTypes: true })) {
+    const path = join(dir, e.name);
+    if (e.isDirectory()) out.push(...listFiles(path));
+    else if (e.isFile() && isSourceFile(e.name)) out.push(path);
+  }
+  return out;
 }
 
 test("imported-content/adventure/{content,tests,module,bin} carry no eval(/exec(/new Function/Function(/node:vm", () => {
