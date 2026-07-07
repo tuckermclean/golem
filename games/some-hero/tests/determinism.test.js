@@ -11,11 +11,14 @@
    is byte-identical to the live session's final state. */
 import test from "node:test";
 import assert from "node:assert/strict";
+import { compile } from "@golem-engine/content";
 import { replay } from "@golem-engine/kernel";
 import { h32 } from "@golem-engine/random";
 import { createState, reduce, serializeState } from "../shared/reducer.js";
 import { validate, deriveWorldFromPack } from "../shared/module.js";
 import { compileSyntheticFloorPack, SYNTHETIC_MAP_ID } from "./fixtures/synthetic-floor.mjs";
+import { ENTITY_DEFS } from "../content/entities.mjs";
+import { GUILD_HALL_MAP } from "../content/guild-hall-map.mjs";
 
 test("replay() over a live-generated event log reproduces the exact same state hash", () => {
   const compiled = compileSyntheticFloorPack();

@@ -1,18 +1,22 @@
 // Mirror of games/some-hero/ceremony/seal-stairs.ceremony.test.js against
 // rules/ instead of legacy/src.
 //
-// DEFERRED to S2b (1 of 15 tests, a real state-machine test): "sealed
-// riddle stairs ask the door (onRiddle), never toast, and it is not a
-// zone transition" (ceremony/seal-stairs.ceremony.test.js:137-151) needs
-// a real handleStairs() + enterTomb() on a real generated tomb floor —
-// out of S2a's pure-helpers scope. Every other test in this file is a
-// pure-function test and is covered below (14/15).
+// S2b PR3 (docs/superpowers/specs/2026-07-07-s2b-pr3-ceremony-machine-
+// design.md) fills in the 1 real state-machine test S2a deferred:
+// "sealed riddle stairs ask the door (onRiddle), never toast, and it is
+// not a zone transition" (ceremony/seal-stairs.ceremony.test.js:137-151)
+// -> below, RIDDLE_ASKED — via rules/tests/ceremony-kernel/kernel-
+// helpers.mjs's real kernel (shared/module.js/shared/reducer.js) against
+// the synthetic tomb-floor-1 fixture, not blankGame()'s hand-shaped
+// legacy-style game object. Every other test in this file is a
+// pure-function test and is unchanged from S2a (14/15).
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { stairsOpen, sealMsg } from "../../puzzles.js";
 import { nextRiddle, answerRiddle, doorSigh, tombQuestLine } from "../../riddle.js";
 import { blankGame, mulberry32, spyFx } from "./fixtures.js";
+import { tombWorld, floorEnteredState, commit } from "./kernel-helpers.mjs";
 
 // ceremony/seal-stairs.ceremony.test.js:19-23
 test("@ceremony-kernel stairsOpen truth table: null puzzle is always open", () => {
@@ -142,6 +146,30 @@ test("@ceremony-kernel doorSigh escalates in disappointment with attempts 1/2/3+
   assert.equal(doorSigh(2), "\"That is— no. Again, no.\" The hinges creak in a way that means something.");
   assert.equal(doorSigh(3), '"I learned riddles for this." A pause you can stand in.');
   assert.equal(doorSigh(4), doorSigh(3), "disappointment tops out at index 2 (min(attempts-1, 2))");
+});
+
+// ceremony/seal-stairs.ceremony.test.js:137-151
+test("@ceremony-kernel sealed riddle stairs ask the door (RIDDLE_ASKED), never a Denial/toast, and it is not a zone transition", () => {
+  const tomb = tombWorld();
+  let state = floorEnteredState(tomb);
+  state = { ...state, run: { ...state.run, puzzle: { type: "riddle", solved: false, attempts: 0 } } };
+
+  // Walk from spawn (1,1) to one step short of stairsAt (5,5) — the same
+  // route tests/determinism.test.js's own scripted session takes
+  // (minus its interleaved "tick"s), deliberately avoiding the new
+  // upstairsAt tile at (2,1) (tests/fixtures/synthetic-floor.mjs).
+  const approach = ["move 0 1", "move 0 1", "move 1 0", "move 1 0", "move 1 0", "move 1 0", "move 0 1"];
+  for (const cmd of approach) ({ state } = commit(state, tomb, cmd));
+
+  let result;
+  ({ state, result } = commit(state, tomb, "move 0 1"));
+
+  assert.deepEqual(result, [
+    { t: "MOVED", x: tomb.stairsAt.x, y: tomb.stairsAt.y },
+    { t: "RIDDLE_ASKED" },
+  ]);
+  assert.deepEqual(state.run.puzzle, { type: "riddle", solved: false, attempts: 0 }, "puzzle unchanged");
+  assert.equal(state.world.zone, "tomb", "not a zone transition");
 });
 
 // ceremony/seal-stairs.ceremony.test.js:153-162

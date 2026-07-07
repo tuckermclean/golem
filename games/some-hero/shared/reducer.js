@@ -44,15 +44,31 @@
    `seq`/`tick` are sequencing plumbing, not game-domain data, so they
    sit beside the five tiers (not nested in any of them) — same posture
    as topdown-puzzle's own `state.seq`/`state.tick` fields living beside
-   `entities`. */
-import { createMeta } from "../rules/meta.js";
-import { newRunStats } from "../rules/ledger.js";
+   `entities`.
+
+   PR3 (docs/superpowers/specs/2026-07-07-s2b-pr3-ceremony-machine-
+   design.md) adds two more plumbing-not-game-domain fields, beside `seq`/
+   `tick` for the same reason: `pending` (the unified two-step slot —
+   null | {kind:"ceremony"} | {kind:"resurrection",cause}, consumed by
+   the "proceed"/"resurrect" verbs) and `run.puzzle` (a minimal
+   {type,solved,attempts} shape, just enough to drive the riddle-ask
+   branch — the full puzzle system stays S2c/S3). */
+import { createMeta, recordDeath, recordDepth } from "../rules/meta.js";
+import { newRunStats, gradeRun } from "../rules/ledger.js";
+import { accrueInterest, makeDeathPayment } from "../rules/credit.js";
 
 export function createState() {
   return {
     world: { zone: null, floorNum: 0, mapId: null },
     run: {
       runStats: newRunStats(),
+      // Minimal puzzle slot (design spec: "Add a minimal run.puzzle =
+      // {type,solved,attempts} field") — only enough shape to drive the
+      // riddle-ask branch (shared/module.js's "move" case). null outside
+      // the tomb / before any seal is authored on a floor; the full
+      // puzzle system (plates/traps/torch/warden/final, real generation)
+      // is S2c/S3's job. Reset to null on every ENTERED_TOMB.
+      puzzle: null,
     },
     character: {
       hp: 10,
@@ -66,6 +82,11 @@ export function createState() {
     },
     knowledge: createMeta(),
     profile: {},
+    // The unified two-step slot (design spec's "The unified two-step
+    // slot (locked)"): null | {kind:"ceremony"} | {kind:"resurrection",
+    // cause}. "seq"/"tick" plumbing-not-game-domain category — sits
+    // beside the five tiers, not nested in any one of them.
+    pending: null,
     tick: 0,
     seq: 0,
   };
@@ -106,6 +127,140 @@ export function reduce(state, world, ev) {
     }
     case "TICK_ADVANCED":
       return { ...state, tick: ev.tick, seq: ev.seq };
+
+    // ── PR3: the ceremony state machine (docs/superpowers/specs/
+    // 2026-07-07-s2b-pr3-ceremony-machine-design.md's "Events + reducer
+    // cases"). Every case below is deliberately as small as the design
+    // locks it to be — see each case's comment for its exact citation.
+
+    case "GOLEM_DENIED":
+      // BITE: the gate is read-only on denial — a pure no-op besides the
+      // seq bump (mirrors door-golem.ceremony.test.js:93-104's "the gate
+      // is read-only on denial").
+      return { ...state, seq: ev.seq };
+
+    case "GOLEM_APPROVED":
+      // Ceremony played; descent waits for "proceed" (the pending
+      // slot). Does NOT touch `world` — the verdict must not reveal
+      // descent early (door-golem.ceremony.test.js:63-83).
+      return {
+        ...state,
+        knowledge: { ...state.knowledge, golemApproved: true },
+        pending: { kind: "ceremony" },
+        seq: ev.seq,
+      };
+
+    case "ENTERED_TOMB": {
+      // `ev.{zone,floorNum,mapId,spawn}` are supplied by shared/
+      // module.js's enteredTombEvent() (the SYNTHETIC_TOMB_FLOOR_1
+      // placeholder — see that file's own comment on why: this reduce()
+      // call still runs against the STALE ow `world` param, per the
+      // design spec's "The real novelty" section, so the tomb's own
+      // spawn cannot be read off `world` here and is carried on the
+      // event instead).
+      const knowledge = {
+        ...state.knowledge,
+        runs: state.knowledge.runs + 1,
+        day: state.knowledge.day + 1,
+        credit: { ...state.knowledge.credit },
+      };
+      accrueInterest(knowledge); // one excursion = one month (credit.js's own doc comment); mutates the FRESH knowledge.credit clone only.
+      return {
+        ...state,
+        world: { zone: ev.zone, floorNum: ev.floorNum, mapId: ev.mapId },
+        run: { runStats: newRunStats(), puzzle: null },
+        character: { ...state.character, pos: { ...ev.spawn } },
+        knowledge,
+        pending: null,
+        seq: ev.seq,
+      };
+    }
+
+    case "EXITED_TOMB": {
+      // Voluntary ascent: grade the run (died:false — a voluntary exit
+      // is never a death), record depth, then swap back to the ow world
+      // `ev` carries (shared/module.js's exitedTombEvent(), computed via
+      // the REAL map:guild_hall pack — see that function's own comment).
+      // `run.runStats` is deliberately NOT reset (design spec: "does NOT
+      // reset run.runStats"; only a NEW run — ENTERED_TOMB — resets it).
+      const grade = gradeRun(state.knowledge, { ...state.run.runStats, died: false });
+      const knowledge = { ...state.knowledge, grades: [...state.knowledge.grades, grade], credit: { ...state.knowledge.credit } };
+      recordDepth(knowledge, state.run.runStats.depth);
+      return {
+        ...state,
+        world: { zone: ev.zone, floorNum: ev.floorNum, mapId: ev.mapId },
+        character: { ...state.character, pos: { ...ev.spawn } },
+        knowledge,
+        seq: ev.seq,
+      };
+    }
+
+    case "RIDDLE_ASKED":
+      // The sealed riddle door: ask, never toast, never a zone
+      // transition (seal-stairs.ceremony.test.js:137-151). A legal
+      // event with no state effect beyond the seq bump — answering it
+      // (answerRiddle) is the full puzzle system, out of scope (design
+      // spec's "Scope boundaries").
+      return { ...state, seq: ev.seq };
+
+    case "HURT":
+      return {
+        ...state,
+        character: { ...state.character, hp: state.character.hp - ev.amount },
+        seq: ev.seq,
+      };
+
+    case "DIED":
+      // Sets the resurrection half of the pending slot; the actual
+      // respawn effects wait for "resurrect" (RESURRECTED, below) —
+      // mirrors hurtPlayer's own state:=DEAD / respawnAtGuild split
+      // (death-respawn-persistence.ceremony.test.js:106-114).
+      return { ...state, pending: { kind: "resurrection", cause: ev.cause }, seq: ev.seq };
+
+    case "RESURRECTED": {
+      // The exact field list is LOCKED (design spec's "RESURRECTED
+      // reducer — the exact field list"). Mirrors rules/meta.js's
+      // respawnAtGuild ← legacy/src/systems/respawn.js:21-58, adapted:
+      // position uses the derived World's `spawn` (`ev.spawn`, only
+      // present when climbing out of the tomb), NOT legacy's VIL pixel
+      // constant (meaningless against S1's 6x7 map:guild_hall).
+      const knowledge = { ...state.knowledge, credit: { ...state.knowledge.credit } };
+      recordDeath(knowledge, ev.cause); // deaths++/lastCause/repeatCause. Nothing else in knowledge.
+
+      const p = state.character;
+      const deductible = Math.ceil(p.gold / 2);
+      let gold = p.gold - deductible;
+      // Legacy order pinned by the BITE test: deductible FIRST, then
+      // min-payment+fee from what's left (death-respawn-persistence.
+      // ceremony.test.js:126-133).
+      const garnish = makeDeathPayment(knowledge, gold);
+      if (garnish) gold -= garnish.paid + garnish.fee;
+
+      const character = {
+        ...p,
+        gold,
+        potions: Math.min(p.potions, 1),
+        hp: p.maxhp,
+        inv: 0,
+        atkT: 0,
+        // swordLv untouched — equipment, not consumable (persists through death).
+        pos: ev.spawn ? { ...ev.spawn } : p.pos,
+      };
+
+      // world: if zone was "tomb" -> back to ow (ev.world is present);
+      // if already ow, leave state.world exactly as-is (same reference).
+      const world = ev.world ? { ...ev.world } : state.world;
+
+      // Spread-merge, do NOT replace runStats (the "runStats only resets
+      // on new run, not death" invariant — death-respawn-persistence.
+      // ceremony.test.js:116-124). Died runs are never graded: no
+      // gradeRun call here, ever (legacy grades only in the voluntary
+      // exitTomb path) — preserve 1:1, do not "fix" this.
+      const run = { ...state.run, runStats: { ...state.run.runStats, died: true } };
+
+      return { ...state, knowledge, character, world, run, pending: null, seq: ev.seq };
+    }
+
     default:
       return { ...state, seq: ev.seq };
   }
@@ -122,6 +277,7 @@ export function serializeState(state) {
     character: state.character,
     knowledge: state.knowledge,
     profile: state.profile,
+    pending: state.pending,
     tick: state.tick,
     seq: state.seq,
   });

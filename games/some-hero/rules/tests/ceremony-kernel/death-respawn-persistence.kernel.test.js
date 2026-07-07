@@ -1,25 +1,71 @@
 // Mirror of games/some-hero/ceremony/death-respawn-persistence.ceremony.test.js
 // against rules/ instead of legacy/src.
 //
-// DEFERRED to S2b (2 of 10 tests, real-zone tests needing a generated
-// tomb + enterTomb()):
+// S2b PR3 (docs/superpowers/specs/2026-07-07-s2b-pr3-ceremony-machine-
+// design.md) fills in the 2 real-zone tests S2a deferred (they needed a
+// generated tomb + enterTomb(), which did not exist until this PR's
+// ENTERED_TOMB/RESURRECTED events):
 //  - "dying inside the Downstairs climbs back out: same world/npcs
 //    objects..." (ceremony/death-respawn-persistence.ceremony.test.js:
-//    60-72) — exercises respawnAtGuild's real-zone climb-out branch
-//    (restoreSurface), explicitly out of S2a scope per rules/meta.js's
-//    respawnAtGuild doc comment.
+//    60-72) — below, translated per the design spec's "'Same object' ->
+//    byte-identical-serialized (locked)" section: some-hero's kernel
+//    State never stores the derived World at all (doctrine #1), so
+//    "same object reference" becomes "state.world deep-equals the ow
+//    triple + a deriveWorldFromPack() snapshot is byte-identical
+//    before-tomb vs after-climb-out". `game.npcs`/`game.owSave` have no
+//    kernel-State analog (no NPC/entity tier yet; the World is never
+//    stored) — intentionally NOT mirrored, not silently dropped; see the
+//    test's own comment.
 //  - "run-scoped state (runStats.died) is set by respawnAtGuild but
 //    runStats itself is only reset by starting a new run (enterTomb)..."
 //    (ceremony/death-respawn-persistence.ceremony.test.js:116-124).
-// The remaining 8 are pure-object tests and are covered below.
+// Both exercise the REAL kernel (shared/module.js/shared/reducer.js) via
+// rules/tests/ceremony-kernel/kernel-helpers.mjs. The remaining 8 are
+// pure-object tests, unchanged from S2a.
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createMeta, recordDeath, respawnAtGuild, hurtPlayer } from "../../meta.js";
 import { blankGame, spyFx } from "./fixtures.js";
+import { guildHallWorld, tombWorld, floorEnteredState, commit } from "./kernel-helpers.mjs";
 
 const ST_DEAD = 3; // legacy/src/constants.js:33 ST.DEAD
 const ST_PLAY = 1; // legacy/src/constants.js:33 ST.PLAY
+
+// A plain-object, JSON-stringifiable snapshot of a derived World (the
+// design spec's "snapshot deriveWorldFromPack serialized-form" —
+// `walls` is a Set, so plain JSON.stringify(world) would silently drop
+// it; sorted here for a stable byte-form).
+function snapshotWorld(world) {
+  return JSON.stringify({
+    zone: world.zone,
+    floorNum: world.floorNum,
+    mapId: world.mapId,
+    rows: world.rows,
+    cols: world.cols,
+    walls: [...world.walls].sort(),
+    spawn: world.spawn,
+    stairsAt: world.stairsAt,
+    upstairsAt: world.upstairsAt,
+    gate: world.gate,
+  });
+}
+
+// Credentialed entry -> the tomb, via the same two-step dance door-
+// golem.kernel.test.js's own wired tests use.
+function enterTombFromGuildHall(ow) {
+  let state = floorEnteredState(ow);
+  state = {
+    ...state,
+    knowledge: { ...state.knowledge, credentials: { backstory: true, debt: true } },
+    character: { ...state.character, swordLv: 1 },
+  };
+  for (const cmd of ["move 1 0", "move 1 0", "move 0 1", "move 0 1", "move 0 1"]) {
+    ({ state } = commit(state, ow, cmd));
+  }
+  ({ state } = commit(state, ow, "proceed"));
+  return state;
+}
 
 // ceremony/death-respawn-persistence.ceremony.test.js:20-31
 test("@ceremony-kernel respawnAtGuild: deductible is ceil(gold/2), hp restored to full, position reset to the Guild Hall", () => {
@@ -65,6 +111,41 @@ test('@ceremony-kernel persists through death: sword tier (equipment, not consum
   assert.equal(game.player.swordLv, 2);
 });
 
+// ceremony/death-respawn-persistence.ceremony.test.js:60-72
+test("@ceremony-kernel dying inside the Downstairs climbs back out: the ow world persists exactly (no regeneration)", () => {
+  const ow = guildHallWorld();
+  const owWorldStateBefore = { zone: ow.zone, floorNum: ow.floorNum, mapId: ow.mapId };
+  const owSnapshotBefore = snapshotWorld(ow);
+
+  let state = enterTombFromGuildHall(ow);
+  assert.equal(state.world.zone, "tomb");
+
+  const tomb = tombWorld();
+  ({ state } = commit(state, tomb, "hurt 999 spirit"));
+  assert.equal(state.pending?.kind, "resurrection");
+  assert.equal(state.pending?.cause, "spirit");
+
+  ({ state } = commit(state, tomb, "resurrect"));
+  assert.equal(state.world.zone, "ow");
+  assert.deepEqual(
+    state.world,
+    owWorldStateBefore,
+    "exact same world triple: no regeneration on death",
+  );
+  assert.equal(
+    snapshotWorld(guildHallWorld()),
+    owSnapshotBefore,
+    "the derived ow World itself is byte-identical before-tomb vs after-climb-out",
+  );
+  assert.equal(state.run.puzzle, null);
+  // legacy also asserts game.npcs===owNpcs and game.owSave===null.
+  // Intentionally NOT mirrored: some-hero's kernel State has no NPC/
+  // entity tier yet (S2c+), and doctrine #1 means the World is never
+  // stored on State at all (game.owSave's whole job — stashing the ow
+  // World — has no kernel analog to even be null); not a silent
+  // omission, see this file's header.
+});
+
 // ceremony/death-respawn-persistence.ceremony.test.js:74-91
 test("@ceremony-kernel meta (knowledge) survives death untouched except deaths/lastCause/repeatCause: credentials, credit, menace, heist tokens all persist", () => {
   const game = blankGame(), fx = spyFx();
@@ -108,6 +189,20 @@ test("@ceremony-kernel hurtPlayer at hp<=0 sets state DEAD and records lastHitBy
   assert.equal(game.lastHitBy, "mummy");
   respawnAtGuild(game, fx);
   assert.equal(game.meta.lastCause, "mummy");
+});
+
+// ceremony/death-respawn-persistence.ceremony.test.js:116-124
+test("@ceremony-kernel run-scoped state (runStats.died) is set by RESURRECTED but runStats itself is only reset by starting a new run (ENTERED_TOMB), not by death", () => {
+  const ow = guildHallWorld();
+  let state = enterTombFromGuildHall(ow);
+  state = { ...state, run: { ...state.run, runStats: { ...state.run.runStats, kills: 7 } } };
+
+  const tomb = tombWorld();
+  ({ state } = commit(state, tomb, "hurt 999"));
+  ({ state } = commit(state, tomb, "resurrect"));
+
+  assert.equal(state.run.runStats.died, true);
+  assert.equal(state.run.runStats.kills, 7, "death alone does not reset the run stats object");
 });
 
 // ceremony/death-respawn-persistence.ceremony.test.js:126-133
