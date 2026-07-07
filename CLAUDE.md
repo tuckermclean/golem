@@ -335,5 +335,81 @@ cleared: **C4 PR4** (5 real topdown-puzzle solution-log fixtures,
   the new `observe()` hook) + A2 (regions overlay) + A3 (adventure
   import) — all pure/headless. Phase 6 (pipeline/ops) mostly likewise.
 
+### Update — 2026-07-07 (Phase 5+6 done; some-hero tomb: FULL seal arc + warden boss + affordances + a 9-bug review campaign)
+
+The section above ends at Phase 4's headless arc and lists Phase 5 as
+"next"; both Phase 5 and Phase 6's verifiable work then landed, and the
+some-hero tomb — whose "interactive seal-puzzle resolution" the update
+above explicitly listed as a deferred honest-gap — is now fully
+progressable. Concise status:
+
+- **Phase 5 (A1/A2/A3) DONE**: A1 affordances as a kernel API
+  (`Affordance {verb,target,name,aliases?,enabled?,requirements?,reason?}`;
+  per-game `affordances()` in each `shared/`), A2 regions/portals overlay
+  (`packages/world/src/regions.ts` — `assignRegions`/`Portal`/pure
+  `nextPortalState` FSM), A3 adventure import (`imported-content/
+  adventure/` YAML worlds → C1 pack + a `packages/clients` terminal client,
+  zero dynamic code). **Phase 6 O1/O3 DONE** (CI workflow graph documented;
+  ARCHITECTURE.md/MIGRATION.md/README brought current). O2 (Terraform) and
+  the model twin L4-L6 remain infra-blocked.
+
+- **some-hero tomb — the FULL seal arc is now progressable** (the S2c/S3
+  deferral is closed). All five puzzle seals + the boss, each resolving
+  through the single ported `stairsOpen` descend gate (`rules/puzzles.js`):
+  - `riddle` (#65 — `answer <i>` → RIDDLE_ANSWERED → solved),
+  - `traps` (#66 — step every un-hit trap → done==need → solved),
+  - `key` (#67 — COLLECTED{kind:"key"} → have=true),
+  - `plates` (#68 — block-PUSH movement onto pressure plates → all on →
+    solved),
+  - `torch` (#69 — a swing lights adjacent braziers additively; `resolveTick`
+    burns them down 1 tm/tick; all-lit-at-once → solved; time-pressured),
+  - `warden` boss (#70 — the legacy dash boss
+    `sleep→idle→telegraph→dash→idle` canonicalized to grid/tick in
+    `resolveTick`; `run.boss` slot; `attack boss`→WARDEN_HURT/WARDEN_SLAIN;
+    the series' first seeded nondeterminism = post-dash cooldown jitter via
+    `channel(seed,"warden",tick)`+`rint`. The `WARDEN {...}` FEEL constants
+    are playtest-tunable defaults — flagged not headlessly verifiable; the
+    state-machine LOGIC is fully proven).
+  - #71 surfaced the two new in-range ACTIONS (`attack boss`, `attack
+    brazier`) in `affordances()`.
+
+- **Adversarial review campaign — 9 real bugs found+fixed** (all missed by
+  passing tests; #72–#75): plates solved-block walk-through + torch
+  range-deny lighting-drop (#72); warden sleeping-boss zero-retaliation +
+  boss/enemy leak into the ow zone + same-tick double-DIED + dash-graze
+  uncounted (#73); infinite intra-floor pickup re-collection (#74 —
+  `run.collectedTiles` now tracks consumption, mirroring the traps `hit`
+  flag); multi-enemy contact MASKING (a glued enemy made the player immune
+  to every other enemy's contact) + no dead-player guard (a corpse could
+  move/attack/loot and ticks re-fired HURT/DIED) → a **master dead-gate in
+  `validate()`: only `resurrect` is legal while `pending.kind==="resurrection"`,
+  `tick` no-ops** (#75). The **economy/credit** review came back CLEAN
+  (death-payment bounds, interest, grading, `narrativeFacts`, purity all
+  verified). Cross-game check: topdown-puzzle (exact-tile contact + a
+  `state.over` guard) and golem-grid (`st.over` guard) are BOTH clean on
+  the two portable bugs — some-hero was the sole diverger, now fixed.
+
+- **Two decisions HELD for the user** (documented, not guessed):
+  1. **Inter-visit gold re-farming** (flagged in PR #75's body): floor-1
+     regenerates byte-identical gold each tomb re-entry (`runsSegment` isn't
+     threaded into `generateFloor` — the parseTombMapId comment states
+     generation intentionally needs only seed+floor) and `collectedTiles`
+     resets per visit, so gold is farmable via die→resurrect→re-enter
+     (bounded ~8g; economy currently dormant since `borrow()` is unwired).
+     Fix is either **(a)** thread `runsSegment` → genuinely per-run floors
+     (roguelike-faithful, but touches worldgen output) or **(b)** persist
+     collected tiles in `knowledge` → one-time gold (no worldgen change).
+     A real design/versioning call.
+  2. **The final-floor endgame** (`FINAL_FLOOR=12`): NOT a clean "kill
+     boss → win" — legacy opens the **Cancellation Desk**, an UNPORTED
+     heist-token subsystem (`meta.heist`: skull/gregory/signature) + two
+     endings (`applyCancel` cancel-the-apocalypse / `applyTransfer`
+     become-the-account-holder → New-Game+). The final BOSS reuses the #70
+     warden machinery (it's live-but-winless today — a documented LOW gap);
+     the endgame CEREMONY around it is the design-heavy held piece.
+
+- Everything else remaining is infra/browser/cloud-blocked (L4-L6 twin,
+  O2 Terraform, S4-PR2 visual smoke, S5 checks 3–4, the `engine-v1.0` tag).
+
 Git-auth note: SSH breaks on pod eviction — recover with
 `gh auth setup-git` + an HTTPS `origin` remote (gh's token is valid).
