@@ -248,3 +248,45 @@ Concise status:
 
 Doctrine (VISION.md) and sequencing (DELTA.md) are unchanged and still
 govern.
+
+### Update — 2026-07-07 (Phase 4 S1–S2: the some-hero Ceremony rules port)
+
+DELTA Phase 4 (SOME HERO: The Ceremony) is underway; **S1 and S2 are
+DONE**. Also cleared: **C4 PR4** (5 real topdown-puzzle solution-log
+fixtures, `freeze:verify`-gated) and **Phase 3 L7** (the NPC context
+compiler + `renderStubReply`, in `packages/language`).
+
+- **S1 (content) DONE**: `games/some-hero/content/` — a C1-compiled,
+  hash-pinned (`content/pack.json`) Ceremony-route pack: minimal
+  `map:guild_hall`, the Door Golem (`Lock.unlockCondition`), three
+  credentials, the stamp, tomb-floor-1 enemy entities, and 16 tables of
+  Ledger/golem/riddle/seal copy — every string byte-identical to legacy,
+  proven by `content-review.test.js`. `verify:some-hero-content` is a
+  `freeze:verify` gate. Legacy untouched (grep-enforced).
+- **S2 (rules port) DONE**: `games/some-hero/{rules,shared,src}/`.
+  - `rules/` — pure helpers (puzzles/riddle/credentials/credit/ledger/
+    meta), table-fed from S1.
+  - `shared/{reducer,module,tick}.js` + `src/host.js` — the five-tier
+    `State` (world/run/character/knowledge/profile + a `pending` two-step
+    slot), `deriveWorld`/`validate`/`reduce`/`narrativeFacts` KernelCore,
+    the C4 tick bridge, grid movement, the Door Golem gate + two-step
+    ceremony, zone transitions, resurrection-as-reduce, and a
+    run-scoped enemy tier with skeleton combat + pickups. A world-swap-
+    aware fold handles the ow↔tomb zone change (kernel `replay()` can't
+    cross worlds); determinism proven by segmented-replay hash tests.
+  - `src/ledger-render.js` — the twin-disabled template path;
+    `narrativeFacts` stays facts-only (VISION law 5).
+  - **DoD MET**: all 62 `@ceremony` tests pass against the kernel — 60
+    kernel-mirrored (`rules/tests/ceremony-kernel/`, run by
+    `test:ceremony-kernel`, a `freeze:verify` gate) + 2 intentional
+    scarab divergences (scarab is dead gen-1 holdover content — NEVER
+    re-add it). `ceremony-parity.test.js` machine-checks this
+    reconciliation. Legacy `test:ceremony` (62) still runs verbatim
+    against `legacy/`, untouched.
+- **Remaining Phase 4**: S3 (some-hero worldgen on named channels +
+  pinned-room contract in `packages/world`), S4 (legacy renderer adapter
+  — needs a browser for the visual smoke, CI-only here), S5 (THE
+  CEREMONY acceptance gate → tag `engine-v1.0`).
+
+Git-auth note: SSH breaks on pod eviction — recover with
+`gh auth setup-git` + an HTTPS `origin` remote (gh's token is valid).
