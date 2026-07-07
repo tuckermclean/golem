@@ -41,6 +41,8 @@ import { reduce } from "./reducer.js";
 import { resolveTick } from "./tick.js";
 import { missingCredentials } from "../rules/credentials.js";
 import { pack as contentPack } from "../rules/pack.js";
+import { recordDeath } from "../rules/meta.js";
+import { gradeRun } from "../rules/ledger.js";
 
 /** Resolve a map legend entry to a fresh (shallow-cloned) component bag:
  *  either an authored template entity's components (legendEntry.entity)
@@ -515,11 +517,66 @@ export function validate(ctx, cmd) {
   }
 }
 
-/** A partial KernelCore — `{validate, reduce}`, deliberately WITHOUT
- *  `deriveWorld` (see this file's header comment: deriveWorld's Node-side
- *  filesystem read lives in shared/pack-loader.js, which assembles the
- *  FULL `{deriveWorld,validate,reduce}` KernelCore for Node consumers).
- *  Enough for @golem-engine/kernel's replay(), which only ever reads
- *  `.reduce` — same posture as topdown-puzzle/golem-grid's own `module`
- *  export. */
-export const module = { validate, reduce };
+/* ── S2c PR5: narrativeFacts — the golem's only allowed input (doctrine
+   #4; @golem-engine/kernel's GameModule.narrativeFacts). RAW FACTS ONLY,
+   NEVER prose — prose selection stays entirely in rules/ledger.js,
+   consumed by src/ledger-render.js's renderLedger() (the twin-disabled
+   template path; design spec's "The doctrine resolution"). Pure: no
+   mutation of `state`, no Math.random/Date.now.
+
+   `state` here is the PRE-event state — the same state hostCommit
+   (src/host.js) is about to fold `event` through via reduce(), before
+   S.st is reassigned to the post-reduce result. Both facts this PR
+   emits need values computed FROM that pre-event state, not from what
+   state.knowledge looks like after this event's own reduce() case runs:
+
+     - DIED's reduce() case (shared/reducer.js) does NOT call
+       recordDeath at all — that happens later, at RESURRECTED. So
+       state.knowledge.deaths/repeatCause, read at DIED time (pre OR
+       post that event's own reduce), still hold the PREVIOUS death's
+       numbers. deathReport(meta, cause) needs meta AFTER this death
+       (see ledger-text ceremony: recordDeath(m, cause) is always
+       called before deathReport(m, cause)). So this hook computes the
+       would-be post-recordDeath values on a throwaway knowledge clone,
+       exactly the way legacy's own onPlayerDeath (legacy/src/main.js:
+       107-115, "willBeDeaths"/inline repeatCause) does — without
+       waiting for RESURRECTED to actually commit it.
+     - EXITED_TOMB's reduce() case calls gradeRun(state.knowledge, ...)
+       against the PRE-event knowledge — before this run's grade is
+       pushed onto knowledge.grades and before recordDepth bumps
+       bestDepth. Using POST-event knowledge here would silently break
+       the personal-best comparison and produce the wrong grade, so
+       this hook mirrors reduce()'s own call exactly: same inputs, same
+       (pre-event) state. */
+export function narrativeFacts(state, world, event) {
+  switch (event.t) {
+    case "DIED": {
+      const knowledge = { ...state.knowledge };
+      recordDeath(knowledge, event.cause);
+      return { kind: "death", cause: event.cause, deaths: knowledge.deaths, repeatCause: knowledge.repeatCause };
+    }
+    case "EXITED_TOMB": {
+      const runStats = state.run.runStats;
+      const grade = gradeRun(state.knowledge, { ...runStats, died: false });
+      return {
+        kind: "grade",
+        grade,
+        depth: runStats.depth,
+        kills: runStats.kills,
+        killsByKind: runStats.killsByKind,
+        died: runStats.died,
+      };
+    }
+    default:
+      return null;
+  }
+}
+
+/** A partial KernelCore — `{validate, reduce, narrativeFacts}`,
+ *  deliberately WITHOUT `deriveWorld` (see this file's header comment:
+ *  deriveWorld's Node-side filesystem read lives in shared/pack-
+ *  loader.js, which assembles the FULL `{deriveWorld,validate,reduce,
+ *  narrativeFacts}` GameModule subset for Node consumers). Enough for
+ *  @golem-engine/kernel's replay(), which only ever reads `.reduce` —
+ *  same posture as topdown-puzzle/golem-grid's own `module` export. */
+export const module = { validate, reduce, narrativeFacts };
