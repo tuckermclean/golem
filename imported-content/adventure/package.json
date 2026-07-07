@@ -6,6 +6,9 @@
     "test": "node --test tests/*.test.js"
   },
   "dependencies": {
-    "@golem-engine/content": "*"
+    "@golem-engine/clients": "*",
+    "@golem-engine/content": "*",
+    "@golem-engine/kernel": "*",
+    "@golem-engine/random": "*"
   }
 }
