@@ -15,12 +15,16 @@ import { ledgerize } from "./ledger.js";
 // that uses it is built by runtime string concatenation interpolating a
 // resolved kind name (riddle.js:71-78), which content/tables.mjs's own
 // header litmus calls out as logic, not a table candidate (same
-// exclusion rationale as numberOptions). Ported as a plain literal.
+// exclusion rationale as numberOptions). Only the CURRENT enemy roster is
+// carried here. Legacy's gen-1 "desert" kinds (pigeon/goose/veteran/
+// scarab/jackal/spirit/mummy) are dead holdovers — those enemies no
+// longer spawn, so any appearance now would be a regression (per project
+// owner) — and are dropped. KIND_NAMES is only ever keyed by a *killed*
+// kind (killsByKind, riddle.js:71-76), and nextRiddle's `|| k + 's'`
+// fallback covers anything unlisted, so pruning is behaviorally safe.
 const KIND_NAMES = {
   skeleton: "skeletons", mailbat: "mailbats", consultant: "consultants",
   cabinet: "cabinets", slime: "interns (technically)",
-  pigeon: "pigeons", goose: "geese", veteran: "veterans",
-  scarab: "scarabs", jackal: "jackals", spirit: "spirits", mummy: "mummies",
 };
 
 // table:riddle_questions — 4 static question strings, in riddle.js's own

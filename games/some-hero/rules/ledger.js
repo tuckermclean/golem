@@ -31,20 +31,19 @@ const CAUSE_UNKNOWN = tableRows("table:ledger_cause_reports_unknown");
  * <cause>`, falling back to `table:ledger_cause_reports_unknown` when that
  * table doesn't exist.
  *
- * DEVIATION (see S2a PR report): S1's content/tables.mjs deliberately
- * extracted only the four Ceremony-route-reachable pools (skeleton/
- * mailbat/consultant/unknown) — legacy's other causes (scarab/jackal/
- * spirit/mummy/pigeon/goose/veteran/cabinet/"the Reenactor"/"the Middle
- * Manager") were out of S1's locked scope and are simply absent from the
- * committed, hash-pinned pack.json. Because S2a may not edit that frozen
- * artifact, deathReport(meta, 'scarab') here falls back to the `unknown`
- * pool rather than reproducing legacy's real scarab text — the two
- * ledger-text.ceremony.test.js assertions that pin exact scarab-pool
- * strings are therefore NOT reproducible byte-identically yet, and are
- * explicitly deferred (not mirrored) rather than faked. Every other
- * deathReport ceremony assertion (unknown-pool fallback, repeat-cause
- * suffix, deaths>=50 override, the mailbat BITE) only depends on tables
- * that *are* committed and is mirrored below.
+ * INTENTIONAL DIVERGENCE (project owner): legacy's non-tomb cause pools
+ * (scarab/jackal/spirit/mummy/pigeon/goose/veteran) are dead gen-1
+ * holdovers — those enemies no longer spawn, so a scarab-style report
+ * appearing now would be a REGRESSION. S1 committed exactly the current
+ * tomb roster (skeleton/mailbat/consultant/unknown), and
+ * deathReport(meta, 'scarab') correctly falls back to the `unknown` pool:
+ * the port does NOT reproduce the removed content. The two
+ * ledger-text.ceremony.test.js assertions that pin exact scarab-pool text
+ * characterize that removed gen-1 behavior; they are intentionally NOT
+ * mirrored (this is a deliberate divergence, not a gap to be closed by
+ * re-adding scarab). Every other deathReport ceremony assertion
+ * (unknown-pool fallback, repeat-cause suffix, deaths>=50 override, the
+ * mailbat BITE) depends only on the current tables and is mirrored below.
  */
 function causePool(cause) {
   const t = tables[`table:ledger_cause_reports_${cause}`];

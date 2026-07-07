@@ -1,22 +1,21 @@
 // Mirror of games/some-hero/ceremony/ledger-text.ceremony.test.js against
 // rules/ instead of legacy/src.
 //
-// DEFERRED (2 of 11 tests — a content-table gap, NOT a wired-state-
-// machine defer): "deathReport selection is deterministic: pool[(deaths-1)
-// % pool.length], keyed by cause" (ceremony/ledger-text.ceremony.test.js:
+// INTENTIONALLY NOT MIRRORED (2 of 11 tests — a deliberate divergence,
+// NOT a gap): "deathReport selection is deterministic: pool[(deaths-1) %
+// pool.length], keyed by cause" (ceremony/ledger-text.ceremony.test.js:
 // 25-32) and "deathReport selection advances through the pool as deaths
 // accumulate" (ceremony/ledger-text.ceremony.test.js:34-45). Both pin
 // exact text from legacy's CAUSE_REPORTS.scarab pool
-// (legacy/src/systems/ledger.js:70-74). S1's content/tables.mjs
-// deliberately extracted only the four Ceremony-route-reachable cause
-// pools (skeleton/mailbat/consultant/unknown) — scarab was out of S1's
-// locked scope and is absent from the committed, hash-pinned pack.json.
-// S2a may not edit that frozen artifact (would break content-pack.test.js/
-// content-review.test.js/hash-stability.test.js's exact 16-table/golden-
-// hash pins), and hardcoding the scarab strings directly in rules/ledger.js
-// would violate this PR's "read tables, don't hardcode" mandate. See
-// rules/ledger.js's causePool() doc comment for the full explanation.
-// Every other deathReport ceremony assertion is covered below.
+// (legacy/src/systems/ledger.js:70-74) — but scarab is a dead gen-1
+// holdover (those enemies no longer spawn; any appearance now is a
+// regression, per project owner). The current tomb roster
+// (skeleton/mailbat/consultant/unknown) is exactly what S1 committed, and
+// the port correctly falls scarab back to the `unknown` pool rather than
+// reproducing removed content. These two assertions characterize that
+// removed behavior and are therefore not reproduced — see rules/ledger.js's
+// causePool() doc comment. Every other deathReport ceremony assertion is
+// covered below.
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
