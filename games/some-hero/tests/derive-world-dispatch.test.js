@@ -150,6 +150,12 @@ test("production flow: a seeded host's ENTERED_TOMB carries a real \"tomb:\" map
   assert.deepEqual(S.world.stairsAt, floor.stairsAt);
   assert.ok(S.world.walls.size > 0, "a real generated floor has walls");
   assert.ok(S.st.run.enemies.length > 0, "the generated tomb floor is populated with live enemies");
+  // run.puzzle is populated from the generated floor's seal — previously
+  // hardcoded null on ENTERED_TOMB, which left RIDDLE_ASKED dead code in
+  // real play (only reachable via the synthetic test fixture's manual
+  // injection). A pure function of the floor, so it equals generateFloor's.
+  assert.deepEqual(S.st.run.puzzle, floor.puzzle, "run.puzzle carries the generated floor's seal");
+  assert.ok(S.st.run.puzzle && typeof S.st.run.puzzle.type === "string", "run.puzzle is a real seal, not null");
 
   // deriveWorld(pack, state.world, seed) — the exact call the design
   // spec's production-flow test asks for — reproduces the SAME world.

@@ -454,7 +454,12 @@ function enteredTombEvent(state, seed) {
     if (!type) continue; // decor, e.g. "cabinet" — not a pack-authored combatant
     enemies.push({ id: `e${enemies.length}`, kind: e.kind, pos: { x: e.x, y: e.y }, hp: type.hp });
   }
-  return { t: "ENTERED_TOMB", zone: "tomb", floorNum, mapId, spawn: floor.spawn, enemies };
+  // Carry the generated floor's seal on the event (same "carried on the
+  // event" convention as `enemies`) so reduce() can populate run.puzzle.
+  // Without this, run.puzzle stayed null on every real (seeded) floor and
+  // the RIDDLE_ASKED path was dead code outside the synthetic test fixture
+  // — an adversarial-scoping find.
+  return { t: "ENTERED_TOMB", zone: "tomb", floorNum, mapId, spawn: floor.spawn, enemies, puzzle: floor.puzzle };
 }
 function exitedTombEvent() {
   return { t: "EXITED_TOMB", zone: "ow", floorNum: 0, mapId: "map:guild_hall", spawn: guildHallSpawn() };

@@ -186,7 +186,7 @@ export function reduce(state, world, ev) {
       return {
         ...state,
         world: { zone: ev.zone, floorNum: ev.floorNum, mapId: ev.mapId },
-        run: { runStats: newRunStats(), puzzle: null, enemies },
+        run: { runStats: newRunStats(), puzzle: ev.puzzle ?? null, enemies },
         character: { ...state.character, pos: { ...ev.spawn } },
         knowledge,
         pending: null,
