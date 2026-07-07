@@ -14,7 +14,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { compile } from "@golem-engine/content";
-import { affordances, deriveWorldFromPack } from "../shared/module.js";
+import { affordances, deriveWorldFromPack, validate } from "../shared/module.js";
 import { createState } from "../shared/reducer.js";
 import { makeWorld, floorEnteredState } from "./helpers/build-state.mjs";
 import { ENTITY_DEFS } from "../content/entities.mjs";
@@ -124,6 +124,84 @@ test("affordances: one attack affordance per enemy within melee range (adjacent 
     const enemy = state.run.enemies.find((e) => e.id === a.target);
     assert.equal(a.name, enemy.kind);
   }
+});
+
+// ── warden boss + brazier (seal-affordances, docs/superpowers/specs/
+//    2026-07-07-seal-affordances-design.md) ───────────────────────────
+
+/** A minimal live warden in state.run.boss (NOT run.enemies) — affordances()
+ *  reads pos/dead/name; validate()'s attack-boss path also reads id/hp. */
+function withBoss(world, bossPos, overrides = {}) {
+  const base = withState(world);
+  return withState(world, {
+    run: {
+      ...base.run,
+      boss: { id: "boss", kind: "warden", name: "the Warden", pos: { ...bossPos }, hp: 40, dead: false, ...overrides },
+    },
+  });
+}
+
+test("affordances: 'attack boss' is listed only when a live warden is within melee range", () => {
+  const world = makeWorld({ rows: 5, cols: 5, spawn: { x: 2, y: 2 } });
+
+  // adjacent (dist 1) → listed
+  const adjacent = withBoss(world, { x: 3, y: 2 });
+  let bossHits = affordances({ state: adjacent, world }, "player").filter((a) => a.target === "boss");
+  assert.equal(bossHits.length, 1, "a live adjacent boss gets exactly one attack affordance");
+  assert.deepEqual(bossHits[0], { verb: "attack", target: "boss", name: "the Warden", enabled: true });
+
+  // far (dist 4) → absent
+  const farBoss = withBoss(world, { x: 0, y: 0 });
+  assert.equal(affordances({ state: farBoss, world }, "player").filter((a) => a.target === "boss").length, 0, "an out-of-range boss is not listed");
+
+  // dead boss adjacent → absent
+  const dead = withBoss(world, { x: 3, y: 2 }, { dead: true });
+  assert.equal(affordances({ state: dead, world }, "player").filter((a) => a.target === "boss").length, 0, "a slain boss is not listed");
+
+  // no boss → absent
+  assert.equal(affordances({ state: withState(world), world }, "player").filter((a) => a.target === "boss").length, 0);
+});
+
+test("affordances: 'attack brazier' is listed only when an un-lit brazier is adjacent on an unsolved torch floor", () => {
+  const world = makeWorld({ rows: 5, cols: 5, spawn: { x: 2, y: 2 } });
+  const base = withState(world);
+  const torchState = (torches, solved = false) =>
+    withState(world, { run: { ...base.run, puzzle: { type: "torch", n: torches.length, time: 13.4, solved, torches } } });
+
+  // un-lit brazier adjacent → listed once
+  const adjacent = torchState([{ x: 3, y: 2, lit: false, tm: 0 }, { x: 0, y: 0, lit: false, tm: 0 }]);
+  const brazier = affordances({ state: adjacent, world }, "player").filter((a) => a.target === "brazier");
+  assert.equal(brazier.length, 1, "one entry even with two adjacent-or-not braziers (a swing lights all in range)");
+  assert.deepEqual(brazier[0], { verb: "attack", target: "brazier", name: "light the brazier", enabled: true });
+
+  // adjacent brazier already lit → absent
+  const lit = torchState([{ x: 3, y: 2, lit: true, tm: 13.4 }]);
+  assert.equal(affordances({ state: lit, world }, "player").filter((a) => a.target === "brazier").length, 0, "an already-lit brazier is not offered");
+
+  // un-lit but not adjacent → absent
+  const farBrazier = torchState([{ x: 0, y: 0, lit: false, tm: 0 }]);
+  assert.equal(affordances({ state: farBrazier, world }, "player").filter((a) => a.target === "brazier").length, 0);
+
+  // solved torch seal → absent
+  const solved = torchState([{ x: 3, y: 2, lit: true, tm: 13.4 }], true);
+  assert.equal(affordances({ state: solved, world }, "player").filter((a) => a.target === "brazier").length, 0);
+});
+
+test("affordances: the target each new action advertises round-trips through validate() (attack boss strikes; attack brazier lights)", () => {
+  const world = makeWorld({ rows: 5, cols: 5, spawn: { x: 2, y: 2 } });
+
+  const bossState = withBoss(world, { x: 3, y: 2 });
+  const bossResult = validate({ state: bossState, world }, "attack boss");
+  assert.ok(Array.isArray(bossResult), "attack boss must be a legal command, not a Denial");
+  assert.equal(bossResult[0].t, "WARDEN_HURT", "attack boss resolves to a warden strike");
+
+  const base = withState(world);
+  const torchState = withState(world, {
+    run: { ...base.run, puzzle: { type: "torch", n: 1, time: 13.4, solved: false, torches: [{ x: 3, y: 2, lit: false, tm: 0 }] } },
+  });
+  const brazierResult = validate({ state: torchState, world }, "attack brazier");
+  assert.ok(Array.isArray(brazierResult), "attack brazier must be a legal command, not a Denial");
+  assert.equal(brazierResult[0].t, "TORCH_LIT", "attack brazier resolves to lighting");
 });
 
 test("affordances: no attack affordances when run.enemies is empty", () => {

@@ -1067,6 +1067,34 @@ export function affordances(observation, actor) {
     });
   }
 
+  // "attack boss" — the warden (state.run.boss, NOT run.enemies, so the
+  // per-enemy loop above never lists it) within melee range (Manhattan
+  // <= 1, the SAME check validate()'s attack-boss path uses). Listed only
+  // when a live boss is adjacent — parallel to the per-enemy loop; target
+  // "boss" is the id validate() resolves the strike against (docs/
+  // superpowers/specs/2026-07-07-seal-affordances-design.md).
+  const boss = state.run.boss;
+  if (boss && !boss.dead) {
+    const bd = Math.abs(boss.pos.x - x) + Math.abs(boss.pos.y - y);
+    if (bd <= 1) {
+      out.push({ verb: "attack", target: "boss", name: boss.name, enabled: true });
+    }
+  }
+
+  // "attack brazier" — lighting an adjacent un-lit brazier on an unsolved
+  // torch floor (validate()'s #69 torch-lighting path: a swing lights any
+  // un-lit brazier within Manhattan <= 1). One entry when >= 1 is in range
+  // (a single swing lights all adjacent). target "brazier" is a non-enemy/
+  // non-boss id, so validate() routes it to the torch-light path.
+  if (world.zone === "tomb" && state.run.puzzle?.type === "torch" && !state.run.puzzle.solved) {
+    const litable = state.run.puzzle.torches.some(
+      (to) => !to.lit && Math.abs(to.x - x) + Math.abs(to.y - y) <= 1,
+    );
+    if (litable) {
+      out.push({ verb: "attack", target: "brazier", name: "light the brazier", enabled: true });
+    }
+  }
+
   // "answer <index>" — the riddle door's live options (design spec's
   // "affordances() extension"). Recomputes nextRiddle with the exact
   // SAME channel key validate()'s own "answer" case uses (riddleOptions
