@@ -49,6 +49,7 @@ import { channel } from "@golem-engine/random";
 import { reduce } from "./reducer.js";
 import { resolveTick } from "./tick.js";
 import { generateFloor } from "./floorgen.js";
+import { stairsOpen } from "../rules/puzzles.js";
 import { missingCredentials } from "../rules/credentials.js";
 import { pack as contentPack } from "../rules/pack.js";
 import { recordDeath } from "../rules/meta.js";
@@ -641,22 +642,27 @@ export function validate(ctx, cmd) {
         world.zone === "tomb" &&
         atPoint(world.stairsAt, nx, ny) &&
         sim.run.puzzle &&
-        sim.run.puzzle.solved &&
+        sim.run.puzzle.type !== "warden" &&
+        sim.run.puzzle.type !== "final" &&
+        stairsOpen({ puzzle: sim.run.puzzle, boss: null }) &&
         typeof world.mapId === "string" &&
         world.mapId.startsWith(TOMB_MAP_PREFIX)
       ) {
         // The seal-resolution descend trigger (docs/superpowers/specs/
         // 2026-07-07-riddle-seal-resolution-design.md, generalized by
-        // 2026-07-07-traps-seal-resolution-design.md): ANY solved seal
-        // opens the door — riddle and traps both set `puzzle.solved`, so
-        // dropping the `type==="riddle"` check here is what makes a
-        // fully-stepped traps floor progressable too. This SAFELY
-        // excludes warden/final (no `solved` field at all) and key
-        // (`have`, not `solved`) — no unimplemented seal accidentally
-        // opens. Guarded to "tomb:"-prefixed mapIds only: the synthetic
-        // test fixture (map:tomb_floor_1_synthetic) has no floor 2 to
-        // generate. Mutually exclusive with the unsolved riddle branch
-        // below via `.solved`.
+        // 2026-07-07-traps-seal-resolution-design.md, generalized again
+        // by 2026-07-07-key-seal-resolution-design.md): the single
+        // source of truth is now rules/puzzles.js's ported `stairsOpen`
+        // — riddle/traps/plates/torch open on `.solved`, key opens on
+        // `.have` (COLLECTED{kind:"key"} flips it — see the reducer's
+        // COLLECTED case). `warden`/`final` are explicitly excluded here
+        // even though stairsOpen would otherwise resolve them (its warden
+        // branch returns true when `game.boss` is null, since boss combat
+        // isn't modeled yet, and final has no down-stairs at all) — both
+        // stay sealed until boss combat lands. Guarded to "tomb:"-
+        // prefixed mapIds only: the synthetic test fixture (map:
+        // tomb_floor_1_synthetic) has no floor 2 to generate. Mutually
+        // exclusive with the unsolved riddle branch below via `.solved`.
         events.push(descendedEvent(state, world));
       } else if (
         world.zone === "tomb" &&
